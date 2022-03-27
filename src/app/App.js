@@ -5,7 +5,7 @@ import { useEffect } from "react";
 function App() {
 
   let navigate = useNavigate();
-  var localUser = localStorage.getItem('localUser');
+  var localUser = sessionStorage.getItem('localUser');
   var user;
 
   //esto se ejecuta despues de cargar la pagina

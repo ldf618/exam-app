@@ -15,7 +15,7 @@ export default function Login() {
         if (authUser===undefined)
             alert ("No existe el usuario o la clave es incorrecta");
         else{
-            localStorage.setItem('localUser',JSON.stringify(authUser));
+            sessionStorage.setItem('localUser',JSON.stringify(authUser));
             navigate("/app");
         }
 
