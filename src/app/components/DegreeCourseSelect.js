@@ -1,4 +1,4 @@
-import { Card, Form, Container, Col, Row, Button } from 'react-bootstrap';
+import { Card, Form, Container, Col, Row, Button, Alert } from 'react-bootstrap';
 import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import { getDegrees, getCourses } from "./../data";
@@ -7,21 +7,29 @@ function DegreeCurseSelect() {
     let degrees = getDegrees();
     let navigate = useNavigate();
     //let courses = [];
-    const [selectedDegree, setSelectedDegree] = useState(0);
-    const [selectedCourse, setSelectedCourse] = useState(0);
+    const [selectedDegree, setSelectedDegree] = useState(-1);
+    const [selectedCourse, setSelectedCourse] = useState(-1);
     const [courses, setCourses] = useState([]);
+    const [show, setShow] = useState(true);
+
 
     function selectDegree(event){
         setSelectedDegree(event.target.value);
         //courses=getCourses(event.target.value);
         setCourses(getCourses(event.target.value));
-        setSelectedCourse(0);
+        setSelectedCourse(-1);
         courses.map(course=>console.log(course.id ))
     }
 
-    function submit (event) {        
-        event.preventDefault();        
-        navigate("/app/initial"); 
+    function submit (event) {
+        event.preventDefault();  
+        if (selectedCourse!=-1){        
+            setShow(true);      
+            navigate("/app/initial");             
+        }
+        else{
+            setShow(false);
+        }
      }
   
 
@@ -31,11 +39,13 @@ function DegreeCurseSelect() {
             <Card.Body>
                 <Form onSubmit={submit}>
                     <Container>
+                    <Alert show={show}>Seleccione titulación y asignatura</Alert>
+                    <Alert variant="danger" show={!show}>Por favor seleccione titulación y asignatura</Alert>
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3">
                                     <Form.Select value={selectedDegree} onChange={selectDegree}>
-                                        <option disabled value={0}>Titulación</option>
+                                        <option disabled value={-1}>Titulación</option>
                                         {degrees.map(degree=>
                                             (
                                             <option key={degree.id} value={degree.id}>{degree.name}</option>
@@ -49,7 +59,7 @@ function DegreeCurseSelect() {
                             <Col>
                                 <Form.Group className="mb-3">
                                     <Form.Select value={selectedCourse} onChange={event => setSelectedCourse(event.target.value)}>
-                                        <option disabled value={0}>Asignatura</option>
+                                        <option disabled value={-1}>Asignatura</option>
                                         {courses.map(course=>
                                             (
                                             <option key={course.id} value={course.id}>{course.name}</option>
