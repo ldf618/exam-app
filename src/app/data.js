@@ -55,6 +55,71 @@ let users = [
   }  
 ];
 
+let degrees = [
+  {
+    id:1,
+    name: "Ingenieria informatica",
+    courses:[
+    {
+        id:1,
+        name: "Programacion 1",
+        credits:12,
+    },
+    {
+        id:2,
+        name: "Programacion 2",
+        credits:12,
+    },
+    {
+        id:3,
+        name: "Matematicas 1",
+        credits:12,
+    },
+    {
+        id:4,
+        name: "Fisica 1",
+        credits:12,
+    },
+    {
+        id:5,
+        name: "Logica ",
+        credits:12,
+    },
+    ]
+  },
+  {
+    id:2,
+    name: "Arquitectura",
+    courses:[
+      {
+        id:6,
+        name: "Dibujo 1",
+        credits:12,
+      },
+      {
+        id:7,
+        name: "Dibujo 2",
+        credits:12,
+      },
+      {
+        id:8,
+        name: "Matematicas 1",
+        credits:12,
+      },
+      {
+        id:9,
+        name: "Fisica 1",
+        credits:12,
+      },
+      {
+        id:10,
+        name: "Calculo ",
+        credits:12,
+      }
+    ]    
+  }
+];
+
 export function getUsers() {
   return users;
 }
@@ -75,6 +140,22 @@ export function authenticate (uName,uPass) {
   return users.find(user=>(user.userName===uName && user.userPassword===uPass));
 }
 
+//-------------------------------------------------------
+export function getDegrees() {
+  return degrees;
+}
+
+export function getDegree(id) {
+  return degrees.filter(degree=>degree.id==id);
+}
+
+export function getCourses(id) {
+  let degree = degrees.find(degree=>degree.id==id);
+  if (typeof degree != 'undefined')
+    return degree.courses;
+  else 
+    return [];
+}
 
 //no se usa
 export function plainObject (object) {

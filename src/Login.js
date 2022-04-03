@@ -1,34 +1,48 @@
 
-import { Button, Form, Row, Col, Container,Stack } from 'react-bootstrap';
-import React from 'react';
+import { Button, Form, Row, Col, Container, Alert } from 'react-bootstrap';
+import React, { useState, useEffect }    from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { faAngry } from '@fortawesome/free-regular-svg-icons';
-import 'App.css';
 import {useNavigate} from "react-router-dom";
 import { authenticate } from "./app/data";
 
 
-function Loging() {
+function Login() {
 
   let navigate = useNavigate();
   const [userName, setUserName] = useState("Usuario");
   const [userPass, setUserPass] = useState("Clave");
+  const [incorrectUser, setIncorrectUser] = useState(false);
 
   function submit (event) {
       event.preventDefault();        
       //alert('A user and password were submitted: '+userName+" "+userPass);
       var authUser = authenticate(userName,userPass);
-      if (authUser===undefined)
-          alert ("No existe el usuario o la clave es incorrecta");
+      if (authUser===undefined){
+          setIncorrectUser(true);
+          setTimeout(() => {setIncorrectUser(false)}, 5000);
+      }
       else{
+          setIncorrectUser(false);
           sessionStorage.setItem('localUser',JSON.stringify(authUser));
-          navigate("/app");
+          navigate("/app/degreeselect");
       }
 
     }
+/*
+    function handleVisible () { 
+      setTimeout(() => {setIncorrectUser(false)}, 5000);
+    }     
 
+    
+    useEffect(() => {
+      return () => {
+        handleVisible();
+      }
+    });
+*/
 /*d-flex justify-content-center*/
 const longw = {width: '400px'}
   return (
@@ -42,6 +56,8 @@ const longw = {width: '400px'}
       <Form  onSubmit={submit}>
         <br></br>
         <Container className="p-3 bg-light border border-primary rounded">
+        {incorrectUser&&<UserAlert/>}
+        {!incorrectUser&&<Alert>Introduzca clave y usuario</Alert>}
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="formUser">
@@ -69,13 +85,21 @@ const longw = {width: '400px'}
       </Form>
     </div>
 
-
 <FontAwesomeIcon icon={solid('user-secret')} />
 <FontAwesomeIcon icon={faAngry} />                
 <FontAwesomeIcon icon={regular('angry')} />
 <FontAwesomeIcon icon={brands('twitter')} />
 
     </>    
+  );
+}
+
+function UserAlert (){
+
+  return (
+    <Alert variant='danger' >
+      No existe el usuario o la clave es incorrecta
+    </Alert>
   );
 }
 

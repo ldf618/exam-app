@@ -1,7 +1,11 @@
 import { Table } from 'react-bootstrap';
 import React from 'react';
 
-function HeaderUserInfo() {
+function HeaderUserInfo(props) {
+
+    const user = props.user;
+    var colspan = user.userClass === "Student" ? 3 : 0;
+    const courseName = "Asignatura 1";
 
     return (
         /*
@@ -14,22 +18,25 @@ function HeaderUserInfo() {
                         <tbody >
                             <tr>
                                 <td className="fw-bold fs-6" width="26%" >Usuario:</td>
-                                <td width="74%" colSpan={3}>
-                                    {/*user.firstName + " " + user.surname1 + " " + user.surname2*/}
-                                    Alberto Perez Alonso
+                                <td width="74%" colSpan={colspan}>
+                                    {user.firstName + " " + user.surname1 + " " + user.surname2}
                                 </td>
                             </tr>
                             <tr>
                                 <td className="fw-bold">Perfil:</td>
-                                <td colSpan={3}>
-                                    Estudiante{/*user.userClass*/}
+                                <td colSpan={colspan}>
+                                    {user.userClass}
                                 </td>
                             </tr>
                             <tr>
                                 <td className="fw-bold">Aula:</td>
-                                <td >{/*user.classroom.name*/} Aula 1</td>
-                                <td className="fw-bold">Grupo:</td>
-                                <td >Grupo 2{/*user.group.name*/}</td>
+                                <td >{user.classroom.name}</td>
+                                {user.userClass === "Student" &&
+                                <>
+                                    <td className="fw-bold">Grupo:</td>
+                                    <td >{user.group.name}</td>
+                                </>                                    
+                                }
                             </tr>
                         </tbody>
                     </Table>

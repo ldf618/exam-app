@@ -1,17 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './app/App';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import Login from "./Login"
+import App from './app/App';
+import Initial from './app/components/Initial';
+import DegreeCurseSelect from './app/components/DegreeCourseSelect';
 
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/app" element={<App />} />
+        <Route path="/app" element={<App />}>
+          <Route path="/app/degreeselect" element={<DegreeCurseSelect/>}/>
+          <Route path="/app/initial" element={<Initial/>}/>
+        </Route>
         <Route
           path="*"
           element={
