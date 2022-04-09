@@ -4,8 +4,9 @@ import React from 'react';
 function HeaderUserInfo(props) {
 
     const user = props.user;
-    var colspan = user.userClass === "Student" ? 3 : 0;
-    const courseName = "Asignatura 1";
+    //const colspan = user.userClass === "Student" ? 3 : 0;
+    const degree = sessionStorage.getItem('degree');
+    const course = sessionStorage.getItem('course');
 
     return (
         /*
@@ -17,27 +18,43 @@ function HeaderUserInfo(props) {
                     <Table bordered size="sm">
                         <tbody >
                             <tr>
-                                <td className="fw-bold fs-6" width="26%" >Usuario:</td>
-                                <td width="74%" colSpan={colspan}>
+                                <td className="fw-bold" width="10%">Usuario:</td>
+                                <td width="40%">
                                     {user.firstName + " " + user.surname1 + " " + user.surname2}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td className="fw-bold">Perfil:</td>
-                                <td colSpan={colspan}>
+                                <td className="fw-bold" width="10%">Perfil:</td>
+                                <td width="40%">
                                     {user.userClass}
                                 </td>
                             </tr>
                             <tr>
-                                <td className="fw-bold">Aula:</td>
+                                <td className="fw-bold" width="10%">Aula:</td>
                                 <td >{user.classroom.name}</td>
                                 {user.userClass === "Student" &&
                                 <>
-                                    <td className="fw-bold">Grupo:</td>
+                                    <td className="fw-bold" width="10%">Grupo:</td>
                                     <td >{user.group.name}</td>
                                 </>                                    
                                 }
+                                {user.userClass === "Consultant" &&
+                                <>
+                                    <td ></td>
+                                    <td ></td>
+                                </>                                    
+                                }                                
                             </tr>
+                            {course !=='undefined' && course!==null &&
+                            <tr>
+                                <td className="fw-bold" width="10%">Titulacion:</td>
+                                <td >
+                                    {degree}
+                                </td>
+                                <td className="fw-bold" width="10%">Asignatura:</td>
+                                <td >
+                                    {course}
+                                </td>
+                            </tr>  
+                            }                          
                         </tbody>
                     </Table>
 /*

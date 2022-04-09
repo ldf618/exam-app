@@ -3,8 +3,9 @@ import React, {useEffect} from 'react';
 import { useNavigate, Outlet } from "react-router-dom";
 import HeaderUserInfo from './components/HeaderUserInfo';
 import MainMenu from './components/MainMenu';
-import CustomAlert from './components/CustomAlert';
+import TimeoutAlert from './components/TimeoutAlert';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Alert } from 'react-bootstrap';
 
 
 function App() {
@@ -34,7 +35,14 @@ function App() {
       }
       <br/>
       <Outlet/>
-      <CustomAlert show={true} timeout={5000} variant='danger' dismissible >mostramos una alerta</CustomAlert>
+      <TimeoutAlert show={true} timeout={5000} variant='danger'>
+      <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+        <p>
+          Change this and that and try again. Duis mollis, est non commodo
+          luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+          Cras mattis consectetur purus sit amet fermentum.
+        </p>
+      </TimeoutAlert>
     </div>
   );
 }

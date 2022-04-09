@@ -7,8 +7,8 @@ import React from 'react';
 function MainMenu(props) {
 
     const userClass = props.userClass;
-    let navigate = useNavigate();
-
+    const navigate = useNavigate();
+    const course = sessionStorage.getItem('course');
 
     return (
         <Navbar className="p-1" bg="dark" variant="dark" expand="lg">
@@ -16,11 +16,10 @@ function MainMenu(props) {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">        
-                        <Nav.Link href="#href">Cambio usuario</Nav.Link>
-                        {userClass === "Student" &&
+                        {userClass === "Student" && course!=null &&
                             <StudentMenu/>                     
                         }
-                        {userClass === "Consultant" &&
+                        {userClass === "Consultant" && course!=null &&
                             <ConsultantMenu/>                     
                         }
                         <Nav.Link onClick={() => {  sessionStorage.clear(); navigate("/");}} >Salir</Nav.Link>

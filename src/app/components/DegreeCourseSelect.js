@@ -6,25 +6,26 @@ import { getDegrees, getCourses } from "./../data";
 function DegreeCurseSelect() {
     let degrees = getDegrees();
     let navigate = useNavigate();
-    //let courses = [];
     const [selectedDegree, setSelectedDegree] = useState(-1);
     const [selectedCourse, setSelectedCourse] = useState(-1);
     const [courses, setCourses] = useState([]);
     const [show, setShow] = useState(true);
 
 
-    function selectDegree(event){
+    function selectDegree(event){     
         setSelectedDegree(event.target.value);
-        //courses=getCourses(event.target.value);
         setCourses(getCourses(event.target.value));
         setSelectedCourse(-1);
-        courses.map(course=>console.log(course.id ))
     }
 
     function submit (event) {
         event.preventDefault();  
         if (selectedCourse!=-1){        
-            setShow(true);      
+            setShow(true);
+            const degree = degrees.find(degree=>degree.id==selectedDegree);
+            const course = courses.find(course=>course.id==selectedCourse);
+            sessionStorage.setItem('degree',degree.name);     
+            sessionStorage.setItem('course',course.name);     
             navigate("/app/initial");             
         }
         else{

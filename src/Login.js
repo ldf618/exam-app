@@ -1,6 +1,6 @@
 
 import { Button, Form, Row, Col, Container, Alert } from 'react-bootstrap';
-import React, { useState, useEffect }    from 'react';
+import React, { useState }    from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -77,7 +77,7 @@ const longw = {width: '400px'}
           <Row>
             <Col className="row justify-content-center">
               <Button className="w-50 mb-3" variant="primary" type="submit">
-                Login <FontAwesomeIcon icon={faAngry} />    
+                Login <FontAwesomeIcon icon={solid('right-to-bracket')} />    
               </Button>
             </Col>
           </Row>

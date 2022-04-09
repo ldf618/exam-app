@@ -1,17 +1,47 @@
-import { NavDropdown } from 'react-bootstrap';
+import { NavDropdown, Container, Row, Col } from 'react-bootstrap';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass, faBook, faFile } from '@fortawesome/free-solid-svg-icons';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
+import {useNavigate} from "react-router-dom";
 
 function StudentMenu() {
+    const navigate = useNavigate();
+
     return (
         <>
             <NavDropdown title="Informes">
-                <NavDropdown.Item href="#action/3.1">Crear informe</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Buscar informes</NavDropdown.Item>
+                <NavDropdown.Item href="./createexam">
+                    <Container>
+                        <Row style={{flexWrap: 'nowrap'}}>
+                            <Col xs={1}  ><FontAwesomeIcon icon={faFile} /></Col>
+                            <Col>Crear informe</Col>
+                        </Row>
+                    </Container> 
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                <Container>
+                        <Row style={{flexWrap: 'nowrap'}}>
+                            <Col xs={1} ><FontAwesomeIcon icon={faMagnifyingGlass} /></Col>
+                            <Col>Buscar informes</Col>
+                        </Row>
+                </Container> 
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.3">Cambiar de asignatura</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { 
+                        sessionStorage.removeItem('degree'); 
+                        sessionStorage.removeItem('course'); 
+                        navigate('./degreeSelect');}}>
+                <Container>
+                        <Row style={{flexWrap: 'nowrap'}}>
+                            <Col xs={1}><FontAwesomeIcon icon={solid('right-left')} /></Col>
+                            <Col>Cambiar de asignatura</Col>
+                        </Row>
+                </Container> 
+                </NavDropdown.Item>
             </NavDropdown>
         </>
     );
-}    
+}
 
 export default StudentMenu;
