@@ -70,7 +70,7 @@ const longw = {width: '400px'}
             <Col>
               <Form.Group className="mb-3" controlId="formPassword">
                 <Form.Label>Clave:</Form.Label>
-                <Form.Control type="password" placeholder="Password" onChange={event => setUserPass(event.target.value)} />
+                <Form.Control type="password" placeholder="Password" autoComplete="on" onChange={event => setUserPass(event.target.value)} />
               </Form.Group>
             </Col>
           </Row>

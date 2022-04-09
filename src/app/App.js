@@ -2,8 +2,8 @@
 import React, {useEffect} from 'react';
 import { useNavigate, Outlet } from "react-router-dom";
 import HeaderUserInfo from './components/HeaderUserInfo';
-import DegreeCourseSelect from './components/DegreeCourseSelect';
 import MainMenu from './components/MainMenu';
+import CustomAlert from './components/CustomAlert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -34,6 +34,7 @@ function App() {
       }
       <br/>
       <Outlet/>
+      <CustomAlert show={true} timeout={5000} variant='danger' dismissible >mostramos una alerta</CustomAlert>
     </div>
   );
 }
