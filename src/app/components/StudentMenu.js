@@ -19,7 +19,7 @@ function StudentMenu() {
                         </Row>
                     </Container> 
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
+                <NavDropdown.Item href="./formikexample">
                 <Container>
                         <Row style={{flexWrap: 'nowrap'}}>
                             <Col xs={1} ><FontAwesomeIcon icon={faMagnifyingGlass} /></Col>
