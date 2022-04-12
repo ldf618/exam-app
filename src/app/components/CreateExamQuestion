@@ -2,7 +2,7 @@ import { Card, Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { Formik, ErrorMessage } from 'formik';
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
-
+/*
 const validationSchema = Yup.object().shape({
     type: Yup.string()
     .required("*Debe seleccionar el tipo de plantilla"),
@@ -20,8 +20,8 @@ const validationSchema = Yup.object().shape({
     .min(new Date()+1, "debe ser posterior a la fecha actual")
 
   });
-
-function CreateExam() {
+*/
+function CreateExamQuestion() {
     
     let navigate = useNavigate();
     
@@ -53,7 +53,6 @@ function CreateExam() {
         >
             {({errors, touched, handleChange, handleSubmit, handleBlur, isSubmitting}) => (
                 <Card >
-                    {console.log("RE-RENDER!")}
                     <Card.Header><div className="mx-auto fw-bold">Crear una plantilla</div></Card.Header>
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
@@ -123,4 +122,4 @@ function CreateExam() {
 
 }
 
-export default CreateExam;
+export default CreateExamQuestion;
