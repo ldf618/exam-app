@@ -1,4 +1,4 @@
-import { Card, Container, Row, Col } from 'react-bootstrap';
+import { Card, Table, Button } from 'react-bootstrap';
 import React from 'react';
 import Exam from './Exam';
 
@@ -12,38 +12,52 @@ function ExamHeader(props) {
         default: type ='';
     }
 
+    function changeEditable(){
+
+        props.changeEditable(false);
+    }
+
     return (
-        <Card >
+        <Card>
             <Card.Body>
                 <Card.Title className="text-primary text-center">Examen: {exam.name}</Card.Title>
-                <Card.Text>
-                    <Container>
-                        <Row>
-                            <Col xs={2} className="fw-bold">
+                <hr/>
+                <Card.Body>
+                <table>
+                        <tbody>
+                        <tr>
+                            <td className="fw-bold">
                                 Tipo examen:
-                            </Col>
-                            <Col>
+                            </td>
+                            <td>
                                 {type}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={2} className="fw-bold">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="fw-bold">
                                 Descripción:
-                            </Col>
-                            <Col>
+                            </td>
+                            <td>
                                 {exam.instructions}
-                            </Col>
-                        </Row>                                                
-                        <Row>
-                            <Col xs={2} className="fw-bold">
+                            </td>
+                        </tr>                                                
+                        <tr>
+                            <td className="fw-bold">
                                 Fecha límite:
-                            </Col>
-                            <Col>
+                            </td>
+                            <td>
                                 {exam.publicationDate}
-                            </Col>
-                        </Row>                                                                        
-                    </Container>
-                </Card.Text>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td colSpan={2}>
+                                
+                            </td>
+                        </tr>  
+                        </tbody>                      
+                    </table>
+                </Card.Body>
+                <Button className="table justify-content-center" variant="primary" size="sm" onClick={changeEditable}>Modificar</Button>                
             </Card.Body>
         </Card>
     );
