@@ -1,6 +1,5 @@
-import { Card, Table, Button } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import React from 'react';
-import Exam from './Exam';
 
 function ExamHeader(props) {
 
@@ -13,8 +12,7 @@ function ExamHeader(props) {
     }
 
     function changeEditable(){
-
-        props.changeEditable(false);
+        props.changeEditable(true);
     }
 
     return (
@@ -22,7 +20,6 @@ function ExamHeader(props) {
             <Card.Body>
                 <Card.Title className="text-primary text-center">Examen: {exam.name}</Card.Title>
                 <hr/>
-                <Card.Body>
                 <table>
                         <tbody>
                         <tr>
@@ -49,16 +46,14 @@ function ExamHeader(props) {
                                 {exam.publicationDate}
                             </td>
                         </tr> 
-                        <tr>
+                        <tr >
                             <td colSpan={2}>
-                                
+                            <Button className="table justify-content-center w-50" variant="primary" size="sm" onClick={changeEditable}>Modificar</Button>                                                
                             </td>
                         </tr>  
                         </tbody>                      
                     </table>
                 </Card.Body>
-                <Button className="table justify-content-center" variant="primary" size="sm" onClick={changeEditable}>Modificar</Button>                
-            </Card.Body>
         </Card>
     );
 }

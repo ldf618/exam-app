@@ -2,7 +2,7 @@ import { Card, Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { Formik, ErrorMessage } from 'formik';
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
-/*
+
 const validationSchema = Yup.object().shape({
     type: Yup.string()
     .required("*Debe seleccionar el tipo de plantilla"),
@@ -20,14 +20,23 @@ const validationSchema = Yup.object().shape({
     .min(new Date()+1, "debe ser posterior a la fecha actual")
 
   });
-*/
-function CreateExamQuestion() {
+
+function ExamForm(props) {
     
     let navigate = useNavigate();
-    
+    const exam = props.exam;
+    const modify = props.modify;
+    var initial=new Object();
+
+    if (exam==null)
+        initial={ type: '', name: '', instructions: '', publicationDate: '' };
+    else 
+        initial=exam;
+
     return (
         <Formik
-            initialValues={{ type: '', name: '', instructions: '', publicationDate: null }}
+            initialValues={initial}
+            enableReinitialize={true}
             validationSchema={validationSchema}
 /*            validate={(values) => {
                 let errors = {};
@@ -42,18 +51,21 @@ function CreateExamQuestion() {
                 return errors;
             }}*/
 
-            onSubmit=
-                {(values,{setSubmitting}) => {
+            onSubmit={
+                    (values,{setSubmitting}) => {
                     setSubmitting(true);
-                    console.log(values);
                     sessionStorage.setItem('exam',JSON.stringify(values));
-                    navigate("/app/exam");
+                    if (modify){
+                        props.changeEditable(false);
+                    }else{
+                        navigate("/app/exam");
                     }
                 }
+            }
         >
-            {({errors, touched, handleChange, handleSubmit, handleBlur, isSubmitting}) => (
+            {({values,errors, touched, handleChange, handleSubmit, handleBlur, isSubmitting}) => (
                 <Card >
-                    <Card.Header><div className="mx-auto fw-bold">Crear una plantilla</div></Card.Header>
+                    <Card.Header><div className="mx-auto fw-bold">{modify?"Modificar":"Crear"} una plantilla</div></Card.Header>
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <Container>
@@ -62,10 +74,10 @@ function CreateExamQuestion() {
                                         Tipo:
                                     </Col>
                                     <Col>
-                                        <Form.Check type="radio" name="type" value="I" inline label="Plantilla individual"
-                                            onChange={handleChange} onBlur={handleBlur}   />
-                                        <Form.Check type="radio" name="type" value="G" inline label="Plantilla grupal" 
-                                            onChange={handleChange} onBlur={handleBlur} />
+                                        <Form.Check type="radio" name="type" value="I" checked={values.type=='I'?true:false}
+                                             inline label="Plantilla individual" onChange={handleChange} onBlur={handleBlur}   />
+                                        <Form.Check type="radio" name="type" value="G" checked={values.type=='G'?true:false} 
+                                              inline label="Plantilla grupal" onChange={handleChange} onBlur={handleBlur} />
                                         <ErrorMessage name="type">
                                             { msg => <Form.Text className="text-danger">{msg}</Form.Text>}</ErrorMessage>
                                     </Col>
@@ -76,7 +88,7 @@ function CreateExamQuestion() {
                                     </Col>
                                     <Col>
                                         <Form.Control id="name" name="name" type="text" placeholder="Escribe el título de la plantilla"
-                                            maxLength={100}  onChange={handleChange} onBlur={handleBlur}/>
+                                            maxLength={100} value={values.name} onChange={handleChange} onBlur={handleBlur} />
                                             <ErrorMessage name="name">
                                             { msg => <Form.Text className="text-danger">{msg}</Form.Text>}</ErrorMessage>
                                         {/*errors.name&&touched.name&&<Form.Text className="text-danger">{errors.name}</Form.Text>*/}
@@ -88,7 +100,7 @@ function CreateExamQuestion() {
                                     </Col>
                                     <Col>
                                         <Form.Control id="instructions" name="instructions" type="text" as="textarea"
-                                            rows={5} maxLength={500} placeholder="instrucciones de la plantilla"
+                                            rows={5} maxLength={500} value={values.instructions} placeholder="instrucciones de la plantilla" 
                                             onChange={handleChange} onBlur={handleBlur}/>
                                         {errors.instructions&&touched.instructions&&<Form.Text className="text-danger">{errors.instructions}</Form.Text>}
                                     </Col>
@@ -98,7 +110,7 @@ function CreateExamQuestion() {
                                         Fecha límite:
                                     </Col>
                                     <Col>
-                                        <Form.Control name="publicationDate" id="publicationDate" type="date"
+                                        <Form.Control name="publicationDate" id="publicationDate" type="date" value={values.publicationDate}
                                             onChange={handleChange} onBlur={handleBlur} />
                                         {errors.publicationDate&&touched.publicationDate&&<Form.Text className="text-danger">{errors.publicationDate}</Form.Text>}
                                     </Col>
@@ -106,9 +118,16 @@ function CreateExamQuestion() {
                                 <Row>
                                     <Col className="row justify-content-center">
                                         <Button className="w-50 mb-3" variant="primary" type="submit" disabled={isSubmitting}>
-                                            Crear Plantilla
+                                            {modify?"Modificar":"Crear"} Plantilla
                                         </Button>
                                     </Col>
+                                    {modify&&
+                                    <Col className="row justify-content-center">
+                                        <Button className="w-50 mb-3" variant="primary" onClick={()=>props.changeEditable(false)}>
+                                           Cancelar
+                                        </Button>
+                                    </Col>   
+                                    }                                 
                                 </Row>
                             </Container>
                         </Form>
@@ -122,4 +141,4 @@ function CreateExamQuestion() {
 
 }
 
-export default CreateExamQuestion;
+export default ExamForm;

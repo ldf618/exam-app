@@ -7,7 +7,7 @@ import Login from "./Login"
 import App from './app/App';
 import Initial from './app/components/Initial';
 import DegreeCurseSelect from './app/components/DegreeCourseSelect';
-import CreateExam from './app/components/CreateExam';
+import ExamForm from './app/components/ExamForm';
 import Exam from './app/components/Exam';
 
 
@@ -18,7 +18,7 @@ ReactDOM.render(
         <Route path="/app" element={<App />}>
           <Route path="/app/degreeselect" element={<DegreeCurseSelect/>}/>
           <Route path="/app/initial" element={<Initial/>}/>
-          <Route path="/app/createexam" element={<CreateExam/>}/>
+          <Route path="/app/examForm" element={<ExamForm/>}/>
           <Route path="/app/exam" element={<Exam/>}/>          
         </Route>
         <Route

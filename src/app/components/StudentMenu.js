@@ -11,7 +11,7 @@ function StudentMenu() {
     return (
         <>
             <NavDropdown title="Informes">
-                <NavDropdown.Item href="./createexam">
+                <NavDropdown.Item href="./examform">
                     <Container>
                         <Row style={{flexWrap: 'nowrap'}}>
                             <Col xs={1}  ><FontAwesomeIcon icon={faFile} /></Col>
