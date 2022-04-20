@@ -30,7 +30,7 @@ function ExamQuestionForm({question, handleSubmit}) {
                                 <Row className="mb-3">
                                     <Col className="fw-bold">
                                     <Form.Label>Enunciado</Form.Label>
-                                    <Form.Control id="enunciado" name="enunciado" type="text" as="textarea"
+                                    <Form.Control autoFocus={true} id="enunciado" name="enunciado" type="text" as="textarea"
                                             rows={5} maxLength={500} placeholder="Enunciado de la pregunto o apartado" 
                                             onChange={(e)=>setEnunciado(e.target.value)}/>
                                     </Col>

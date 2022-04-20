@@ -22,6 +22,19 @@ function reducer(questions, question) {
 }
 */
 
+/*move questions up and down circular*/
+function move(arr, item, increment){
+    let index = arr.indexOf(item);
+    arr.splice(index,1);    
+    if (index==0 && increment<0)
+        index=arr.length+1;
+    if (index==arr.length && increment>0)
+        index=-1;       
+    arr.splice(index+increment,0,item);
+    //clone array for re-render
+    return arr.slice();
+}
+
 function reducer(questions, action) {
     switch (action.type) {
       case actions.ADD:
@@ -29,9 +42,9 @@ function reducer(questions, action) {
       case actions.REMOVE: 
         return questions.filter( (question) => question !== action.payload);      
       case actions.MOVE_UP:
-        return questions;
+        return move(questions,action.payload,-1);
       case actions.MOVE_DOWN:
-        return questions;        
+        return move(questions,action.payload,+1);
       default:
         return questions;
     }
@@ -87,7 +100,7 @@ function Exam() {
                     <Stack className="m-2" gap={3}>
                         {questions.map((question, index) => {
                             return (
-                                <QuestionHeader question={question} index={index}/>
+                                <QuestionHeader question={question} index={index} key={index}/>
                             )
                         })}
                         <DropdownButton title="Añadir Apartado" drop="end" >
