@@ -14,44 +14,44 @@ export const actions = {
     REMOVE: "REMOVE",
     MOVE_UP: "MOVE_UP",
     MOVE_DOWN: "MOVE_DOWN"
-  };
+};
 
-  /*
+/*
 function reducer(questions, question) {
-    return [...questions, question]
+  return [...questions, question]
 }
 */
 
 /*move questions up and down circular*/
-function move(arr, item, increment){
+function move(arr, item, increment) {
     let index = arr.indexOf(item);
-    arr.splice(index,1);    
-    if (index==0 && increment<0)
-        index=arr.length+1;
-    if (index==arr.length && increment>0)
-        index=-1;       
-    arr.splice(index+increment,0,item);
+    arr.splice(index, 1);
+    if (index == 0 && increment < 0)
+        index = arr.length + 1;
+    if (index == arr.length && increment > 0)
+        index = -1;
+    arr.splice(index + increment, 0, item);
     //clone array for re-render
     return arr.slice();
 }
 
 function reducer(questions, action) {
     switch (action.type) {
-      case actions.ADD:
-        return [...questions, action.payload]
-      case actions.REMOVE: 
-        return questions.filter( (question) => question !== action.payload);      
-      case actions.MOVE_UP:
-        return move(questions,action.payload,-1);
-      case actions.MOVE_DOWN:
-        return move(questions,action.payload,+1);
-      default:
-        return questions;
+        case actions.ADD:
+            return [...questions, action.payload]
+        case actions.REMOVE:
+            return questions.filter((question) => question !== action.payload);
+        case actions.MOVE_UP:
+            return move(questions, action.payload, -1);
+        case actions.MOVE_DOWN:
+            return move(questions, action.payload, +1);
+        default:
+            return questions;
     }
-  };
+};
 
 function Exam() {
-   // let navigate = useNavigate();
+    // let navigate = useNavigate();
 
     const [editableHeader, setEditableHeader] = useState(false);
     //    const [questions, setQuestions] = useState([]);
@@ -68,22 +68,15 @@ function Exam() {
 
     function handleShowModal(type) {
         setModalTitle(type);
-        setShowModal(true);        
+        setShowModal(true);
     }
-/*
-    function addQuestion(value) {
-        const data = "Pregunta " + value;
-        console.log(data);
-        setQuestions([...questions, data]);
-    }
-*/
-    function addQuestion(question) {
-        dispatch({type: actions.ADD,payload:question});
-    }
-
-    function removeQuestion(question) {
-        dispatch({type: actions.REMOVE,payload:question});
-    }    
+    /*
+        function addQuestion(value) {
+            const data = "Pregunta " + value;
+            console.log(data);
+            setQuestions([...questions, data]);
+        }
+    */
 
     if (exam != undefined)
         exam = JSON.parse(exam);
@@ -97,13 +90,14 @@ function Exam() {
             <Card className="mt-2">
                 <Card.Body>
                     <Card.Title className="text-primary text-center">Preguntas</Card.Title>
+                    <hr />
                     <Stack className="m-2" gap={3}>
                         {questions.map((question, index) => {
                             return (
-                                <QuestionHeader question={question} index={index} key={index}/>
+                                <QuestionHeader question={question} index={index} key={index} />
                             )
                         })}
-                        <DropdownButton title="Añadir Apartado" drop="end" >
+                        <DropdownButton size="sm" title="Añadir Apartado" drop="end" >
                             <Dropdown.Item onClick={() => handleShowModal("Tipo Texto")}>Tipo Texto</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta")}>Tipo Test Unirespuesta</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta")}>Tipo Test Multirespuesta</Dropdown.Item>

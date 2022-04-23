@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import ExamQuestionForm from './ExamQuestionForm';
+import './modal.css'
 
 function ModalQuestion(props) {
     console.log(props.show);
@@ -14,8 +15,9 @@ function ModalQuestion(props) {
         handleClose();
     }
 
+    /*dialogClassName="modal"*/
     return (
-        <Modal show={props.show} onHide={handleClose} backdrop="static" keyboard={false} centered size="lg" scrollable={true}>
+        <Modal show={props.show} onHide={handleClose} backdrop="static" keyboard={false} centered size="lg" scrollable>
             <Modal.Header closeButton>
                 <Modal.Title>Añadir pregunta / apartado</Modal.Title>
             </Modal.Header>

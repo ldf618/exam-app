@@ -1,6 +1,7 @@
 import { Card, Container, Row, Col, Button, Form } from 'react-bootstrap';
 import {useState, useContext  } from 'react';
 import { QuestionsContext, actions } from './Exam';
+import OptionsForm from './OptionsForm';
 
 function ExamQuestionForm({question, handleSubmit}) {
    
@@ -35,6 +36,7 @@ function ExamQuestionForm({question, handleSubmit}) {
                                             onChange={(e)=>setEnunciado(e.target.value)}/>
                                     </Col>
                                 </Row>
+                                <OptionsForm/>
                                 {/*<Row>
                                     <Col className="row justify-content-center">
                                         <Button className="w-50 mb-3" variant="primary" type="submit">
