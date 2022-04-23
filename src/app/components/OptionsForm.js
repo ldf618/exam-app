@@ -1,19 +1,39 @@
-import { Button, Stack, Form, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
-import { useState } from 'react';
+import { useState, createContext } from 'react';
 import OptionForm from './OptionForm';
 
 const initOptions = [
-    {id:1,text:'opcion 1',isTrue:true},
+    {id:1,text:'opcion 1',isTrue:false},
     {id:2,text:'opcion 2',isTrue:false},
-    {id:3,text:'Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde commodi aspernatur enim, consectetur. Cumque deleniti temporibus',isTrue:false}
+    {id:3,text:'Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde commodi aspernatur enim, consectetur. Cumque deleniti temporibus',isTrue:true}
 ]
+
+export const OptionContext = createContext();
+
+export const actions = {
+    ADD: "ADD",
+    REMOVE: "REMOVE"
+};
+
+
+function reducer(options, action) {
+    switch (action.type) {
+        case actions.ADD:
+            return [...options, action.payload]
+        case actions.REMOVE:
+            return options.filter((question) => question !== action.payload);  //Revisar
+        default:
+            return options;
+    }
+};
 
 function OptionsForm() {
 
     
     const [options, setOptions] = useState(initOptions);
+    //const [options, dispatch] = useReducer(reducer, initOptions);
 
     function addOption (){
         setOptions([...options,{text:'',isTrue:false}])
@@ -44,7 +64,13 @@ function OptionsForm() {
                     </tr>
                 </thead>
                 <tbody>
-                {options.map((option, index) => {return (<OptionForm onDelete={deleteOption} checkType="radio" option={option} key={index} index={index}/>)})}
+                {options
+                    .map((option, index) => 
+                        {
+                            return (<OptionForm onDelete={deleteOption} checkType="radio" option={option} key={index} index={index}/>)
+                        }
+                        )
+                }
 
                 </tbody>
             </Table>

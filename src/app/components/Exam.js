@@ -6,6 +6,34 @@ import ModalQuestion from './ModalQuestion';
 import QuestionHeader from './QuestionHeader';
 //import { useNavigate } from "react-router-dom";
 
+const questionType = {
+    TEXT_ONLY: 1,
+    TEST_SINGLE_CHOICE: 2,
+    TEST_MULTIPLE_CHOICE: 3,
+    INDIVIDUAL_SCORE: 4,
+    GRUPAL_SCORE:5
+};
+
+const initQuestions =[
+    {
+     text:'Texto de la pregunta 1',
+     type:questionType.TEST_SINGLE_CHOICE, 
+     options:[
+        {id:1,text:'opcion 1',isTrue:false},
+        {id:2,text:'opcion 2',isTrue:false},
+        {id:3,text:'opcion 3',isTrue:true}
+     ]
+    },
+    {
+     text:'Texto de la pregunta 2',
+     type:questionType.TEST_MULTIPLE_CHOICE, 
+     options:[
+       {id:1,text:'opcion 1',isTrue:false},
+       {id:2,text:'opcion 2',isTrue:true},
+       {id:3,text:'opcion 3',isTrue:true}
+     ]
+   }
+]
 
 export const QuestionsContext = createContext();
 

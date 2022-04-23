@@ -7,6 +7,7 @@ function OptionForm({ option, checkType, index, onDelete, edited = false }) {
 
     const [showEdit, setShowEdit] = useState(edited); 
     const [text, setText] = useState(option.text); 
+    const [isTrue, setIsTrue] = useState(option.isTrue); 
 
     return (
         <tr>
@@ -27,7 +28,7 @@ function OptionForm({ option, checkType, index, onDelete, edited = false }) {
                 {!showEdit && text}
             </td>
             <td align="center">
-                <Form.Check type={checkType} name="true"></Form.Check>
+                <Form.Check type={checkType} name="true" checked={isTrue} onChange={()=>setIsTrue(!isTrue)}></Form.Check>
             </td>
         </tr>
     );
