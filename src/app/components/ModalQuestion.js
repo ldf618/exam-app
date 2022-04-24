@@ -22,7 +22,7 @@ function ModalQuestion(props) {
                 <Modal.Title>Añadir pregunta / apartado de {props.title.toLowerCase()}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <ExamQuestionForm handleSubmit={handleSubmit} question={props.title} />
+            <ExamQuestionForm handleSubmit={handleSubmit} questionType={props.type} />
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Cerrar</Button>

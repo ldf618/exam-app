@@ -6,7 +6,7 @@ import ModalQuestion from './ModalQuestion';
 import QuestionHeader from './QuestionHeader';
 //import { useNavigate } from "react-router-dom";
 
-const questionType = {
+export const ExamQuestionType = {
     TEXT_ONLY: 1,
     TEST_SINGLE_CHOICE: 2,
     TEST_MULTIPLE_CHOICE: 3,
@@ -17,7 +17,7 @@ const questionType = {
 const initQuestions =[
     {
      text:'Texto de la pregunta 1',
-     type:questionType.TEST_SINGLE_CHOICE, 
+     type:ExamQuestionType.TEST_SINGLE_CHOICE, 
      options:[
         {id:1,text:'opcion 1',isTrue:false},
         {id:2,text:'opcion 2',isTrue:false},
@@ -26,7 +26,7 @@ const initQuestions =[
     },
     {
      text:'Texto de la pregunta 2',
-     type:questionType.TEST_MULTIPLE_CHOICE, 
+     type:ExamQuestionType.TEST_MULTIPLE_CHOICE, 
      options:[
        {id:1,text:'opcion 1',isTrue:false},
        {id:2,text:'opcion 2',isTrue:true},
@@ -84,9 +84,10 @@ function Exam() {
     const [editableHeader, setEditableHeader] = useState(false);
     //    const [questions, setQuestions] = useState([]);
     //const [questions, setQuestions] = useReducer(reducer, []);
-    const [questions, dispatch] = useReducer(reducer, []);
+    const [questions, dispatch] = useReducer(reducer, initQuestions);
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
+    const [modalType, setModalType] = useState();
 
     var exam = sessionStorage.getItem('exam');
 
@@ -94,8 +95,9 @@ function Exam() {
         setEditableHeader(value);
     }
 
-    function handleShowModal(type) {
-        setModalTitle(type);
+    function handleShowModal(title, type) {
+        setModalTitle(title);
+        setModalType(type);
         setShowModal(true);
     }
     /*
@@ -128,16 +130,16 @@ function Exam() {
                             )
                         })}
                         <DropdownButton size="sm" title="Añadir Apartado" drop="end" >
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Texto")}>Tipo Texto</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta")}>Tipo Test Unirespuesta</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta")}>Tipo Test Multirespuesta</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual")}>Tipo Valoracion Individual</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo")}>Tipo Valoracion Grupo</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Texto",ExamQuestionType.TEXT_ONLY)}>Tipo Texto</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta",ExamQuestionType.TEST_SINGLE_CHOICE)}>Tipo Test Unirespuesta</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta",ExamQuestionType.TEST_MULTIPLE_CHOICE)}>Tipo Test Multirespuesta</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual",ExamQuestionType.INDIVIDUAL_SCORE)}>Tipo Valoracion Individual</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo",ExamQuestionType.GRUPAL_SCORE)}>Tipo Valoracion Grupo</Dropdown.Item>
                         </DropdownButton >
                     </Stack>
                 </Card.Body>
             </Card>
-            <ModalQuestion show={showModal} title={modalTitle} onHide={() => setShowModal(false)} />
+            <ModalQuestion show={showModal} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
         </QuestionsContext.Provider>
     );
 }

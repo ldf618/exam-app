@@ -1,9 +1,9 @@
 import { Card, Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { useState, useContext } from 'react';
-import { QuestionsContext, actions } from './Exam';
+import { QuestionsContext, actions, ExamQuestionType } from './Exam';
 import OptionsForm from './OptionsForm';
 
-function ExamQuestionForm({ question, handleSubmit }) {
+function ExamQuestionForm({ handleSubmit, questionType }) {
 
     //const { setQuestions } = useContext(QuestionsContext);
     const { dispatch } = useContext(QuestionsContext);
@@ -16,9 +16,8 @@ function ExamQuestionForm({ question, handleSubmit }) {
     function submit(e) {
         e.preventDefault();
         console.log("submit from form");
-        console.log(question);
-        //setQuestions(enunciado);
-        addQuestion(enunciado);
+         //setQuestions(enunciado);
+        addQuestion({text:enunciado,type:questionType});
         handleSubmit();
     }
 
@@ -33,7 +32,7 @@ function ExamQuestionForm({ question, handleSubmit }) {
                             onChange={(e) => setEnunciado(e.target.value)} />
                     </Col>
                 </Row>
-                <OptionsForm />
+                {(questionType!==ExamQuestionType.TEXT_ONLY)&&<OptionsForm />}
             </Container>
         </Form>
     )

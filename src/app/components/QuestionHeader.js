@@ -63,7 +63,7 @@ function QuestionHeader({moveButtons, question, index }) {
                     <tbody>
                         <tr >
                             <td>
-                                <p>{question}</p>
+                                <p>{question.text}</p>
                             </td>
                             <td align="right">
                                 <OverlayTrigger placement="bottom" overlay={<Tooltip>...</Tooltip>}>
