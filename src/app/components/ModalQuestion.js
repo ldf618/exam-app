@@ -19,7 +19,7 @@ function ModalQuestion(props) {
     return (
         <Modal show={props.show} onHide={handleClose} backdrop="static" keyboard={false} centered size="lg" scrollable>
             <Modal.Header closeButton>
-                <Modal.Title>Añadir pregunta / apartado</Modal.Title>
+                <Modal.Title>Añadir pregunta / apartado de {props.title.toLowerCase()}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <ExamQuestionForm handleSubmit={handleSubmit} question={props.title} />

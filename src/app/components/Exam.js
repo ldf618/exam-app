@@ -111,6 +111,8 @@ function Exam() {
     else
         exam = null;
 
+    var num = questions.length;
+
     return (
         <QuestionsContext.Provider value={{ questions, dispatch /*setQuestions*/ }}>
             {!editableHeader && <ExamHeader exam={exam} changeEditable={changeEditableHeader} />}
@@ -122,7 +124,7 @@ function Exam() {
                     <Stack className="m-2" gap={3}>
                         {questions.map((question, index) => {
                             return (
-                                <QuestionHeader question={question} index={index} key={index} />
+                                <QuestionHeader moveButtons={num==1?true:false} question={question} index={index} key={index} />
                             )
                         })}
                         <DropdownButton size="sm" title="Añadir Apartado" drop="end" >
