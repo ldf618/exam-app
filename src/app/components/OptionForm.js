@@ -2,7 +2,7 @@ import { Button, Stack, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { useState, useContext } from 'react';
-import { OptionsContext } from './OptionsForm';
+import { OptionsContext } from './ExamQuestionForm';
 import { examQuestionType } from "./Exam";
 
 function OptionForm({ /*option,*/ questionType, index, onDelete, edited = false }) {

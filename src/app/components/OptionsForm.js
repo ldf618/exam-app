@@ -1,10 +1,11 @@
 import { Button, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
-import { useReducer, createContext } from 'react';
+import { /*useReducer, createContext*/ useContext } from 'react';
+import { OptionsContext } from './ExamQuestionForm';
 import OptionForm from './OptionForm';
 import { examQuestionType } from "./Exam";
-
+/*
 const initOptions = [
     { id: 1, text: 'opcion 1', isTrue: false },
     { id: 2, text: 'opcion 2', isTrue: false },
@@ -12,10 +13,7 @@ const initOptions = [
 ]
 
 export const OptionsContext = createContext();
-
-function reducer(options) {
-    return [...options];
-}
+*/
 
 /*
 export const actions = {
@@ -37,9 +35,18 @@ function reducer(options, action) {
 */
 
 function OptionsForm({questionType}) {
+    
+    /* lo llevamos a ExamQuestionForm
+    function reducer(options) {
+        return [...options];
+    }
 
     //const [options, setOptions] = useState(initOptions);
     const [options, setOptions] = useReducer(reducer, initOptions);
+    */
+
+    //añadimos esto:
+    const { options, setOptions } = useContext(OptionsContext);
 
     function addOption() {
         options.push({ text: '', isTrue: false })
@@ -53,7 +60,7 @@ function OptionsForm({questionType}) {
     }
 
     return (
-        <OptionsContext.Provider value={{ options, setOptions }}>
+<>
             <Table>
                 <thead>
                     <tr>
@@ -91,7 +98,7 @@ function OptionsForm({questionType}) {
             </Table>
 
             <Button className="mt-2" onClick={addOption}>Añadir opción</Button>
-        </OptionsContext.Provider>
+            </>
     );
 }
 
