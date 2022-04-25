@@ -1,7 +1,8 @@
-import { Card, Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useState, useContext } from 'react';
-import { QuestionsContext, actions, ExamQuestionType } from './Exam';
+import { QuestionsContext, actions } from './Exam';
 import OptionsForm from './OptionsForm';
+import { examQuestionType } from "./Exam";
 
 function ExamQuestionForm({ handleSubmit, questionType }) {
 
@@ -32,7 +33,7 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
                             onChange={(e) => setEnunciado(e.target.value)} />
                     </Col>
                 </Row>
-                {(questionType!==ExamQuestionType.TEXT_ONLY)&&<OptionsForm />}
+                {(questionType!==examQuestionType.TEXT_ONLY)&&<OptionsForm questionType={questionType}/>}
             </Container>
         </Form>
     )

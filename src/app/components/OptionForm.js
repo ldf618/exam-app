@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { useState, useContext } from 'react';
 import { OptionsContext } from './OptionsForm';
+import { examQuestionType } from "./Exam";
 
-function OptionForm({ /*option,*/ checkType, index, onDelete, edited = false }) {
+function OptionForm({ /*option,*/ questionType, index, onDelete, edited = false }) {
 
     /*
     const [text, setText] = useState(option.text); 
@@ -15,7 +16,16 @@ function OptionForm({ /*option,*/ checkType, index, onDelete, edited = false }) 
     const [initialText, setInitialText] = useState(''); 
 
     const { options, setOptions } = useContext(OptionsContext);
-
+    
+    var checkType = ''
+    switch (questionType){
+        case examQuestionType.TEST_MULTIPLE_CHOICE: 
+            checkType="checkbox";
+            break;
+        case examQuestionType.TEST_SINGLE_CHOICE: 
+            checkType="radio";
+            break;
+    }
 
     function setText(value){
         options[index].text=value;
@@ -26,6 +36,9 @@ function OptionForm({ /*option,*/ checkType, index, onDelete, edited = false }) 
         if (checkType=='radio'){
             options.forEach(option=>option.isTrue=false)
             options[index].isTrue=true;
+        }
+        else{ //checkbox
+            options[index].isTrue=!options[index].isTrue;
         }
         setOptions(...options);
     }
@@ -59,9 +72,11 @@ function OptionForm({ /*option,*/ checkType, index, onDelete, edited = false }) 
                 }
                 {!showEdit && options[index].text /*text*/}
             </td>
-            <td align="center">
-                <Form.Check type={checkType} name="true" checked={options[index].isTrue /*isTrue*/} onChange={()=>setIsTrue(/*!isTrue*/)}></Form.Check>
-            </td>
+            {!(questionType==examQuestionType.GRUPAL_SCORE||questionType==examQuestionType.INDIVIDUAL_SCORE)&&
+                <td align="center">
+                    <Form.Check type={checkType} name="true" checked={options[index].isTrue /*isTrue*/} onChange={()=>setIsTrue(/*!isTrue*/)}></Form.Check>
+                </td>
+            }
         </tr>
     );
 }

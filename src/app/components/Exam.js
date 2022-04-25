@@ -6,7 +6,7 @@ import ModalQuestion from './ModalQuestion';
 import QuestionHeader from './QuestionHeader';
 //import { useNavigate } from "react-router-dom";
 
-export const ExamQuestionType = {
+export const examQuestionType = {
     TEXT_ONLY: 1,
     TEST_SINGLE_CHOICE: 2,
     TEST_MULTIPLE_CHOICE: 3,
@@ -17,7 +17,7 @@ export const ExamQuestionType = {
 const initQuestions =[
     {
      text:'Texto de la pregunta 1',
-     type:ExamQuestionType.TEST_SINGLE_CHOICE, 
+     type:examQuestionType.TEST_SINGLE_CHOICE, 
      options:[
         {id:1,text:'opcion 1',isTrue:false},
         {id:2,text:'opcion 2',isTrue:false},
@@ -26,7 +26,7 @@ const initQuestions =[
     },
     {
      text:'Texto de la pregunta 2',
-     type:ExamQuestionType.TEST_MULTIPLE_CHOICE, 
+     type:examQuestionType.TEST_MULTIPLE_CHOICE, 
      options:[
        {id:1,text:'opcion 1',isTrue:false},
        {id:2,text:'opcion 2',isTrue:true},
@@ -130,11 +130,11 @@ function Exam() {
                             )
                         })}
                         <DropdownButton size="sm" title="Añadir Apartado" drop="end" >
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Texto",ExamQuestionType.TEXT_ONLY)}>Tipo Texto</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta",ExamQuestionType.TEST_SINGLE_CHOICE)}>Tipo Test Unirespuesta</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta",ExamQuestionType.TEST_MULTIPLE_CHOICE)}>Tipo Test Multirespuesta</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual",ExamQuestionType.INDIVIDUAL_SCORE)}>Tipo Valoracion Individual</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo",ExamQuestionType.GRUPAL_SCORE)}>Tipo Valoracion Grupo</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Texto",examQuestionType.TEXT_ONLY)}>Tipo Texto</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta",examQuestionType.TEST_SINGLE_CHOICE)}>Tipo Test Unirespuesta</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta",examQuestionType.TEST_MULTIPLE_CHOICE)}>Tipo Test Multirespuesta</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual",examQuestionType.INDIVIDUAL_SCORE)}>Tipo Valoracion Individual</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo",examQuestionType.GRUPAL_SCORE)}>Tipo Valoracion Grupo</Dropdown.Item>
                         </DropdownButton >
                     </Stack>
                 </Card.Body>

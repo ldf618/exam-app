@@ -1,8 +1,9 @@
 import { Button, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
-import { useState, useReducer, createContext } from 'react';
+import { useReducer, createContext } from 'react';
 import OptionForm from './OptionForm';
+import { examQuestionType } from "./Exam";
 
 const initOptions = [
     { id: 1, text: 'opcion 1', isTrue: false },
@@ -35,8 +36,7 @@ function reducer(options, action) {
 };
 */
 
-function OptionsForm() {
-
+function OptionsForm({questionType}) {
 
     //const [options, setOptions] = useState(initOptions);
     const [options, setOptions] = useReducer(reducer, initOptions);
@@ -70,17 +70,19 @@ function OptionsForm() {
                         <th width="70%">
                             Enunciado opción
                         </th>
+                        {!(questionType==examQuestionType.GRUPAL_SCORE||questionType==examQuestionType.INDIVIDUAL_SCORE)&&
                         <th className="text-center" width="10%">
                             <OverlayTrigger placement="top" overlay={<Tooltip>Marcar pregunta verdadera</Tooltip>}>
                                 <div><FontAwesomeIcon icon={solid('check')} /></div>
                             </OverlayTrigger>
                         </th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
                     {options
                         .map((option, index) => {
-                            return (<OptionForm onDelete={deleteOption} checkType="radio" option={option} key={index} index={index} />)
+                            return (<OptionForm onDelete={deleteOption} questionType={questionType} option={option} key={index} index={index} />)
                         }
                         )
                     }
