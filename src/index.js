@@ -18,7 +18,7 @@ ReactDOM.render(
         <Route path="/app" element={<App />}>
           <Route path="/app/degreeselect" element={<DegreeCurseSelect/>}/>
           <Route path="/app/initial" element={<Initial/>}/>
-          <Route path="/app/examForm" element={<ExamForm/>}/>
+          <Route path="/app/examform" element={<ExamForm/>}/>
           <Route path="/app/exam" element={<Exam/>}/>          
         </Route>
         <Route
