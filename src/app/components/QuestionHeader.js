@@ -1,24 +1,25 @@
-import { Card, DropdownButton, Dropdown, Button, Stack, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Card, DropdownButton, Dropdown, Button, Stack, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import { QuestionsContext, actions } from './Exam';
-import ConfirmDialog  from './ConfirmDialog';
+import ConfirmDialog from './ConfirmDialog';
+import OptionForm from './OptionForm';
 
-function QuestionHeader({moveButtons, question, index }) {
+function QuestionHeader({ moveButtons, question, index }) {
 
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState();
 
     const { dispatch } = useContext(QuestionsContext);
 
-    function handleConfirm (){
+    function handleConfirm() {
         setSelectedQuestion();
         setShowConfirm(false);
         dispatch({ type: actions.REMOVE, payload: selectedQuestion });
     }
 
-    function handleCancel (){
+    function handleCancel() {
         console.log("handleCancel");
         setSelectedQuestion();
         setShowConfirm(false);
@@ -29,7 +30,7 @@ function QuestionHeader({moveButtons, question, index }) {
         //dispatch({ type: actions.REMOVE, payload: selectedQuestion });
 
         //mostrar confirm  
-        setSelectedQuestion(question);   
+        setSelectedQuestion(question);
         setShowConfirm(true);
     }
 
@@ -63,7 +64,7 @@ function QuestionHeader({moveButtons, question, index }) {
                     <tbody>
                         <tr >
                             <td>
-                                <p>{question.text}</p>
+                                {question.text}
                             </td>
                             <td align="right">
                                 <OverlayTrigger placement="bottom" overlay={<Tooltip>...</Tooltip>}>
@@ -72,16 +73,31 @@ function QuestionHeader({moveButtons, question, index }) {
                                             <Dropdown.Item onClick={() => removeQuestion(question)}>Borrar Pregunta</Dropdown.Item>
                                             <Dropdown.Item onClick={() => changeEditable}>Modificar Pregunta</Dropdown.Item>
                                         </DropdownButton >
-                                        <ConfirmDialog show={showConfirm} message="¿Seguro que desea borrar la pregunta?" onConfirm={handleConfirm} onCancel={handleCancel}/>
+                                        <ConfirmDialog show={showConfirm} message="¿Seguro que desea borrar la pregunta?" onConfirm={handleConfirm} onCancel={handleCancel} />
                                     </span>
                                 </OverlayTrigger>
                             </td>
                         </tr>
+                        <tr>
+                            <td colSpan={2}>
+                                <Table>
+                                    <thead>
+                                        <tr>
+                                            <th>Enunciado:</th>
+                                            <th>¿Verdadero?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {question.options.map((option, index) => { return (<tr><td>{option.text}</td><td>{option.isTrue}</td></tr>) })}
+                                    </tbody>
+                                </Table>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-            </Card.Body >            
+            </Card.Body >
         </Card >
-        
+
     );
 }
 

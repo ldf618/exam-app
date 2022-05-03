@@ -5,47 +5,10 @@ import { /*useReducer, createContext*/ useContext } from 'react';
 import { OptionsContext } from './ExamQuestionForm';
 import OptionForm from './OptionForm';
 import { examQuestionType } from "./Exam";
-/*
-const initOptions = [
-    { id: 1, text: 'opcion 1', isTrue: false },
-    { id: 2, text: 'opcion 2', isTrue: false },
-    { id: 3, text: 'Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde commodi aspernatur enim, consectetur. Cumque deleniti temporibus', isTrue: true }
-]
 
-export const OptionsContext = createContext();
-*/
-
-/*
-export const actions = {
-    ADD: "ADD",
-    REMOVE: "REMOVE"
-};
-
-
-function reducer(options, action) {
-    switch (action.type) {
-        case actions.ADD:
-            return [...options, action.payload]
-        case actions.REMOVE:
-            return options.filter((question) => question !== action.payload);  //Revisar
-        default:
-            return options;
-    }
-};
-*/
 
 function OptionsForm({questionType}) {
-    
-    /* lo llevamos a ExamQuestionForm
-    function reducer(options) {
-        return [...options];
-    }
 
-    //const [options, setOptions] = useState(initOptions);
-    const [options, setOptions] = useReducer(reducer, initOptions);
-    */
-
-    //añadimos esto:
     const { options, setOptions } = useContext(OptionsContext);
 
     function addOption() {

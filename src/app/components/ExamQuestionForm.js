@@ -23,7 +23,7 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
     }
 
     //const [options, setOptions] = useState(initOptions);
-    const [options, setOptions] = useReducer(reducer, initOptions);
+    const [options, setOptions] = useReducer(reducer, []);
 
     function addQuestion(question) {
         dispatch({ type: actions.ADD, payload: question });
@@ -33,22 +33,8 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
         e.preventDefault();
         console.log("submit from form");
          //setQuestions(enunciado);
-         /*
-
-
-
-
-
-
-
-REVISAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-         */
         addQuestion({text:enunciado,type:questionType,options:[...options]});
+        setOptions([]);
         handleSubmit();
     }
 
