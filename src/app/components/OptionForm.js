@@ -93,7 +93,7 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
                     editedOptions[index] &&
                     <Stack className="align-items-start" direction="horizontal" gap={2}>
                         <Form noValidate validated={validatedForm} id={'optionForm'+index} onSubmit={confirmModify}>
-                            <Form.Control as="textarea" rows={1} size="sm" cols="70" required value={options[index].text/*text*/} onChange={(e)=>setText(e.target.value)}></Form.Control>
+                            <Form.Control autoFocus as="textarea" rows={1} size="sm" cols="70" required value={options[index].text/*text*/} onChange={(e)=>setText(e.target.value)}></Form.Control>
                             <Form.Control.Feedback type="invalid">Debe escribir una opción</Form.Control.Feedback>
                         </Form>
                         <Button size="sm" variant="secondary" onClick={cancelModify}><FontAwesomeIcon icon={solid('xmark')} /></Button>

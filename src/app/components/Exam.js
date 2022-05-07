@@ -1,4 +1,4 @@
-import { Stack, DropdownButton, Dropdown, Card } from 'react-bootstrap';
+import { Stack, DropdownButton, Dropdown, Card, Container, Navbar } from 'react-bootstrap';
 import React, { useReducer, createContext, useState } from 'react';
 import ExamHeader from './ExamHeader';
 import ExamForm from './ExamForm';
@@ -11,28 +11,28 @@ export const examQuestionType = {
     TEST_SINGLE_CHOICE: 2,
     TEST_MULTIPLE_CHOICE: 3,
     INDIVIDUAL_SCORE: 4,
-    GRUPAL_SCORE:5
+    GRUPAL_SCORE: 5
 };
 
-const initQuestions =[
+const initQuestions = [
     {
-     text:'Texto de la pregunta 1',
-     type:examQuestionType.TEST_SINGLE_CHOICE, 
-     options:[
-        {id:1,text:'opcion 1',isTrue:false},
-        {id:2,text:'opcion 2',isTrue:false},
-        {id:3,text:'opcion 3',isTrue:true}
-     ]
+        text: 'Texto de la pregunta 1',
+        type: examQuestionType.TEST_SINGLE_CHOICE,
+        options: [
+            { id: 1, text: 'opcion 1', isTrue: false },
+            { id: 2, text: 'opcion 2', isTrue: false },
+            { id: 3, text: 'opcion 3', isTrue: true }
+        ]
     },
     {
-     text:'Texto de la pregunta 2',
-     type:examQuestionType.TEST_MULTIPLE_CHOICE, 
-     options:[
-       {id:1,text:'opcion 1',isTrue:false},
-       {id:2,text:'opcion 2',isTrue:true},
-       {id:3,text:'opcion 3',isTrue:true}
-     ]
-   }
+        text: 'Texto de la pregunta 2',
+        type: examQuestionType.TEST_MULTIPLE_CHOICE,
+        options: [
+            { id: 1, text: 'opcion 1', isTrue: false },
+            { id: 2, text: 'opcion 2', isTrue: true },
+            { id: 3, text: 'opcion 3', isTrue: true }
+        ]
+    }
 ]
 
 export const QuestionsContext = createContext();
@@ -126,19 +126,21 @@ function Exam() {
                     <Stack className="m-2" gap={3}>
                         {questions.map((question, index) => {
                             return (
-                                <QuestionHeader moveButtons={num==1?true:false} question={question} index={index} key={index} />
+                                <QuestionHeader moveButtons={num == 1 ? true : false} question={question} index={index} key={index} />
                             )
                         })}
-                        <DropdownButton size="sm" title="Añadir Apartado" drop="end" >
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Texto",examQuestionType.TEXT_ONLY)}>Tipo Texto</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta",examQuestionType.TEST_SINGLE_CHOICE)}>Tipo Test Unirespuesta</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta",examQuestionType.TEST_MULTIPLE_CHOICE)}>Tipo Test Multirespuesta</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual",examQuestionType.INDIVIDUAL_SCORE)}>Tipo Valoracion Individual</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo",examQuestionType.GRUPAL_SCORE)}>Tipo Valoracion Grupo</Dropdown.Item>
-                        </DropdownButton >
-                    </Stack>
+                       </Stack>
                 </Card.Body>
             </Card>
+            <Navbar className="p-4 position-sticky bottom-0 end 0" expand="lg">
+                <DropdownButton size="sm" title="Añadir Apartado" drop="up" >
+                    <Dropdown.Item onClick={() => handleShowModal("Tipo Texto", examQuestionType.TEXT_ONLY)}>Tipo Texto</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta", examQuestionType.TEST_SINGLE_CHOICE)}>Tipo Test Unirespuesta</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta", examQuestionType.TEST_MULTIPLE_CHOICE)}>Tipo Test Multirespuesta</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual", examQuestionType.INDIVIDUAL_SCORE)}>Tipo Valoracion Individual</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo", examQuestionType.GRUPAL_SCORE)}>Tipo Valoracion Grupo</Dropdown.Item>
+                </DropdownButton >
+            </Navbar>
             <ModalQuestion show={showModal} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
         </QuestionsContext.Provider>
     );

@@ -103,7 +103,7 @@ function ExamForm(props) {
                                     </Col>
                                 </Row>
                                 <Row className="mb-3">
-                                    <Col>
+                                    <Col lg="2">
                                         <Form.Label as="strong">Fecha Límite:&nbsp; </Form.Label>
                                         <Form.Control name="publicationDate" id="publicationDate" type="date" value={values.publicationDate}
                                             onChange={handleChange} onBlur={handleBlur} />

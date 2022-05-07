@@ -1,5 +1,5 @@
-import { Container, Row, Col, Form, Toast, Overlay, Tooltip, Alert } from 'react-bootstrap';
-import { useState, useContext, useReducer, createContext } from 'react';
+import { Container, Row, Col, Form, Toast } from 'react-bootstrap';
+import { useState, useContext, useReducer, createContext, useRef, useEffect } from 'react';
 import { QuestionsContext, actions } from './Exam';
 import OptionsForm from './OptionsForm';
 import { examQuestionType } from "./Exam";
@@ -13,6 +13,13 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
         { id: 2, text: 'opcion 2', isTrue: false },
         { id: 3, text: 'Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde commodi aspernatur enim, consectetur. Cumque deleniti temporibus', isTrue: true }
     ]
+    
+    const inputEnunciado = useRef(null);
+    useEffect(() => {
+      if (inputEnunciado.current) {
+        inputEnunciado.current.focus();
+      }
+    }, []);
 
     //const { setQuestions } = useContext(QuestionsContext);
     const { dispatch } = useContext(QuestionsContext);
@@ -38,7 +45,7 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.stopPropagation();
-        } else if (options.length === 0) {
+        } else if ((options.length === 0) && (questionType !== examQuestionType.TEXT_ONLY)) {
             console.log(showAlert);
             setShowAlert(true);
             console.log(showAlert);
@@ -58,9 +65,9 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
             <Container>
                 <Row className="mb-3">
                     <Col>
-                        <Form noValidate validated={validatedForm} onSubmit={submit} id="questionForm">
+                        <Form  noValidate validated={validatedForm} onSubmit={submit} id="questionForm">
                             <Form.Label className="fw-bold">Enunciado</Form.Label>
-                            <Form.Control required minLength={5} autoFocus={true} id="enunciado" name="enunciado" type="text" as="textarea"
+                            <Form.Control ref={inputEnunciado} required minLength={5}  id="enunciado" name="enunciado" type="text" as="textarea"
                                 rows={5} maxLength={500} placeholder="Enunciado de la pregunto o apartado"
                                 onChange={(e) => setEnunciado(e.target.value)} />
                             <Form.Control.Feedback type="invalid">Debe escribir una pregunta de al menos 5 caracteres</Form.Control.Feedback>
@@ -68,20 +75,21 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
                     </Col>
                 </Row>
                 {(questionType !== examQuestionType.TEXT_ONLY) &&
-                    <Row className="mb-3">
-                        <Col > <OptionsForm questionType={questionType} /></Col>
-                    </Row>
+                    <>
+                        <Row className="mb-3">
+                            <Col > <OptionsForm questionType={questionType} /></Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Toast show={showAlert} bg='danger' onClose={() => setShowAlert(false)} delay={5000} autohide>
+                                    <Toast.Header >
+                                        <div className="me-auto">Por favor, añada alguna opción</div>
+                                    </Toast.Header>
+                                </Toast>
+                            </Col>
+                        </Row>
+                    </>
                 }
-                <Row>
-                    <Col>
-                        <Toast show={showAlert}  bg='danger' onClose={() => setShowAlert(false)} delay={3000} autohide>
-                            <Toast.Header >
-                                Por favor, añada alguna opción
-                            </Toast.Header>
-                            
-                        </Toast>
-                    </Col>
-                </Row>
             </Container>
         </OptionsContext.Provider>
     )

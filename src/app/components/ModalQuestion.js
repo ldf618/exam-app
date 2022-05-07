@@ -25,7 +25,7 @@ function ModalQuestion(props) {
             <ExamQuestionForm handleSubmit={handleSubmit} questionType={props.type} />
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>Cerrar</Button>
+                <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
                 <Button variant="primary"  type="submit" form="questionForm">Añadir</Button>
             </Modal.Footer>
         </Modal>

@@ -13,7 +13,7 @@ function MainMenu(props) {
     return (
         <Navbar  sticky="top" className="p-1" bg="dark" variant="dark" expand="lg">
                 <Navbar.Brand>Informes de trabajo en grupo</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">        
                         {userClass === "Student" && course!=null &&

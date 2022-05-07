@@ -48,11 +48,12 @@ function ExamHeader(props) {
                         </tr> 
                         <tr >
                             <td colSpan={2}>
-                            <Button className="table justify-content-center w-50" variant="primary" size="sm" onClick={changeEditable}>Modificar</Button>                                                
+
                             </td>
                         </tr>  
                         </tbody>                      
                     </table>
+                    <Button  variant="primary" size="sm" onClick={changeEditable}>Modificar</Button>                                                
                 </Card.Body>
         </Card>
     );
