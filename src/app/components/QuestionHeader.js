@@ -12,6 +12,7 @@ function QuestionHeader({ moveButtons, question, index }) {
     const [selectedQuestion, setSelectedQuestion] = useState();
 
     const { dispatch } = useContext(QuestionsContext);
+    const optionHeader = (question.options!==undefined&&question.options.length>0)?true:false;
 
     function handleConfirm() {
         setSelectedQuestion();
@@ -20,7 +21,7 @@ function QuestionHeader({ moveButtons, question, index }) {
     }
 
     function handleCancel() {
-        console.log("handleCancel");
+        //console.log("handleCancel");
         setSelectedQuestion();
         setShowConfirm(false);
     }
@@ -78,21 +79,23 @@ function QuestionHeader({ moveButtons, question, index }) {
                                 </OverlayTrigger>
                             </td>
                         </tr>
+                        {optionHeader&&
                         <tr>
                             <td colSpan={2}>
                                 <Table>
                                     <thead>
                                         <tr>
                                             <th>Enunciado:</th>
-                                            <th>¿Verdadero?</th>
+                                            <th width="5%">¿Verdadero?</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {question.options.map((option, index) => { return (<tr><td>{option.text}</td><td>{option.isTrue}</td></tr>) })}
+                                        {question.options.map((option, index) => { return (<tr key={index}><td>{option.text}</td><td align='center'>{option.isTrue&&<FontAwesomeIcon icon={solid('check')} />}</td></tr>) })}
                                     </tbody>
                                 </Table>
                             </td>
                         </tr>
+                        }
                     </tbody>
                 </table>
             </Card.Body >

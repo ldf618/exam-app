@@ -4,14 +4,14 @@ import ExamQuestionForm from './ExamQuestionForm';
 import './modal.css'
 
 function ModalQuestion(props) {
-    console.log(props.show);
+    //console.log(props.show);
  
     function handleClose () {
         props.onHide();
     }
 
     function handleSubmit(){      
-        console.log("submit from modal");
+       // console.log("submit from modal");
         handleClose();
     }
 

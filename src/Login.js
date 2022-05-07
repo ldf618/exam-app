@@ -7,13 +7,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { faAngry } from '@fortawesome/free-regular-svg-icons';
 import {useNavigate} from "react-router-dom";
 import { authenticate } from "./app/data";
-
+/*
+<FontAwesomeIcon icon={solid('user-secret')} />
+<FontAwesomeIcon icon={faAngry} />                
+<FontAwesomeIcon icon={regular('angry')} />
+<FontAwesomeIcon icon={brands('twitter')} />
+*/
 
 function Login() {
 
   let navigate = useNavigate();
-  const [userName, setUserName] = useState("Usuario");
-  const [userPass, setUserPass] = useState("Clave");
+  const [userName, setUserName] = useState();
+  const [userPass, setUserPass] = useState();
   const [incorrectUser, setIncorrectUser] = useState(false);
 
   function submit (event) {
@@ -55,14 +60,14 @@ const longw = {width: '400px'}
     <div className="mx-auto" style={longw}>  
       <Form  onSubmit={submit}>
         <br></br>
-        <Container className="p-3 bg-light border border-primary rounded">
+        <Container className="m-1 p-2 bg-light border border-primary rounded">
         {incorrectUser&&<UserAlert/>}
         {!incorrectUser&&<Alert>Introduzca clave y usuario</Alert>}
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="formUser">
                 <Form.Label>Usuario:</Form.Label>
-                <Form.Control type="text" placeholder="usuario" onChange={event => setUserName(event.target.value)}/>
+                <Form.Control type="text" placeholder="Usuario" onChange={event => setUserName(event.target.value)}/>
               </Form.Group>
             </Col>
           </Row>
@@ -84,12 +89,6 @@ const longw = {width: '400px'}
         </Container>      
       </Form>
     </div>
-
-<FontAwesomeIcon icon={solid('user-secret')} />
-<FontAwesomeIcon icon={faAngry} />                
-<FontAwesomeIcon icon={regular('angry')} />
-<FontAwesomeIcon icon={brands('twitter')} />
-
     </>    
   );
 }

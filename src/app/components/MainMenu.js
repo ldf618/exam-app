@@ -11,7 +11,7 @@ function MainMenu(props) {
     const course = sessionStorage.getItem('course');
 
     return (
-        <Navbar className="p-1" bg="dark" variant="dark" expand="lg">
+        <Navbar  sticky="top" className="p-1" bg="dark" variant="dark" expand="lg">
                 <Navbar.Brand>Informes de trabajo en grupo</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

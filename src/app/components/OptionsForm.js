@@ -1,19 +1,29 @@
-import { Button, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button, Table, OverlayTrigger, Tooltip } from "react-bootstrap"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
-import { /*useReducer, createContext*/ useContext } from 'react';
-import { OptionsContext } from './ExamQuestionForm';
-import OptionForm from './OptionForm';
-import { examQuestionType } from "./Exam";
+import { useState, useContext } from 'react'
+import { OptionsContext } from './ExamQuestionForm'
+import OptionForm from './OptionForm'
+import { examQuestionType } from "./Exam"
 
 
 function OptionsForm({questionType}) {
 
-    const { options, setOptions } = useContext(OptionsContext);
+    const { options, setOptions, editedOptions, setEditedOptions, disabledButtons, setDisabledButtons } = useContext(OptionsContext);
+    const arr = [];
+    options.map(()=>arr.push(false))
 
-    function addOption() {
+    const [disableAddButton, setDisableAddButton] = useState(false);
+    //const [editedOption, setEditedOption] = useState(false);
+    //const [editedOption, setEditedOption] = useState(arr);
+
+    function addOption() {   
+        disabledButtons.forEach((v,i,a)=>a[i] = true)
+        setDisabledButtons(disabledButtons.push(true));
+        console.log(editedOptions)
+        setEditedOptions(editedOptions.push(true));
         options.push({ text: '', isTrue: false })
-        setOptions(options);
+        setDisableAddButton(true);
     }
 
     //callback from OptionForm
@@ -21,6 +31,12 @@ function OptionsForm({questionType}) {
         options.splice(index, 1);
         setOptions([...options]);
     }
+
+  
+    /*
+    function changeAddButton(disabled){
+        setDisableAddButton(disabled)
+    }*/
 
     return (
 <>
@@ -50,9 +66,14 @@ function OptionsForm({questionType}) {
                     </tr>
                 </thead>
                 <tbody>
+
                     {options
                         .map((option, index) => {
-                            return (<OptionForm onDelete={deleteOption} questionType={questionType} option={option} key={index} index={index} />)
+                            return (<OptionForm deleteCallback={deleteOption}
+                                                editCallback={(disabled)=>setDisableAddButton(disabled)} 
+                                                questionType={questionType} option={option} 
+                                                key={index} index={index} 
+                                                /*edited={editedOption[index]}*/ />)
                         }
                         )
                     }
@@ -60,7 +81,7 @@ function OptionsForm({questionType}) {
                 </tbody>
             </Table>
 
-            <Button className="mt-2" onClick={addOption}>Añadir opción</Button>
+            <Button disabled={disableAddButton} className="mt-2" onClick={addOption}>Añadir opción</Button>
             </>
     );
 }
