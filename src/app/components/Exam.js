@@ -1,4 +1,4 @@
-import { Stack, DropdownButton, Dropdown, Card, Container, Navbar } from 'react-bootstrap';
+import { Stack, DropdownButton, Dropdown, Card, Navbar } from 'react-bootstrap';
 import React, { useReducer, createContext, useState } from 'react';
 import ExamHeader from './ExamHeader';
 import ExamForm from './ExamForm';
@@ -7,17 +7,24 @@ import QuestionHeader from './QuestionHeader';
 //import { useNavigate } from "react-router-dom";
 
 export const examQuestionType = {
-    TEXT_ONLY: 1,
-    TEST_SINGLE_CHOICE: 2,
-    TEST_MULTIPLE_CHOICE: 3,
-    INDIVIDUAL_SCORE: 4,
-    GRUPAL_SCORE: 5
+    TEXT_ONLY: {id:1,desc:"Tipo Texto"},
+    TEST_SINGLE_CHOICE: {id:2,desc:"Tipo Test Unirespuesta"},
+    TEST_MULTIPLE_CHOICE: {id:3,desc:"Tipo Test Multirespuesta"},
+    INDIVIDUAL_SCORE: {id:4,desc:"Tipo Valoracion Individual"},
+    GRUPAL_SCORE: {id:5,desc:"Tipo Valoracion Grupo"},
+    getDescById: function(id){
+        let value = Object.values(this).find(v => v.id === id);
+        if (value===undefined)
+            return '';
+        else
+            return value.desc;
+    }
 };
 
 const initQuestions = [
     {
         text: 'Texto de la pregunta 1',
-        type: examQuestionType.TEST_SINGLE_CHOICE,
+        type: examQuestionType.TEST_SINGLE_CHOICE.id,
         options: [
             { id: 1, text: 'opcion 1', isTrue: false },
             { id: 2, text: 'opcion 2', isTrue: false },
@@ -26,7 +33,7 @@ const initQuestions = [
     },
     {
         text: 'Texto de la pregunta 2',
-        type: examQuestionType.TEST_MULTIPLE_CHOICE,
+        type: examQuestionType.TEST_MULTIPLE_CHOICE.id,
         options: [
             { id: 1, text: 'opcion 1', isTrue: false },
             { id: 2, text: 'opcion 2', isTrue: true },
@@ -54,9 +61,9 @@ function reducer(questions, question) {
 function move(arr, item, increment) {
     let index = arr.indexOf(item);
     arr.splice(index, 1);
-    if (index == 0 && increment < 0)
+    if (index === 0 && increment < 0)
         index = arr.length + 1;
-    if (index == arr.length && increment > 0)
+    if (index === arr.length && increment > 0)
         index = -1;
     arr.splice(index + increment, 0, item);
     //clone array for re-render
@@ -108,7 +115,7 @@ function Exam() {
         }
     */
 
-    if (exam != undefined)
+    if (exam !== undefined)
         exam = JSON.parse(exam);
     else
         exam = null;
@@ -126,7 +133,7 @@ function Exam() {
                     <Stack className="m-2" gap={3}>
                         {questions.map((question, index) => {
                             return (
-                                <QuestionHeader moveButtons={num == 1 ? true : false} question={question} index={index} key={index} />
+                                <QuestionHeader moveButtons={num === 1 ? true : false} question={question} index={index} key={index} />
                             )
                         })}
                        </Stack>
@@ -134,14 +141,14 @@ function Exam() {
             </Card>
             <Navbar className="p-4 position-sticky bottom-0 end 0" expand="lg">
                 <DropdownButton size="sm" title="Añadir Apartado" drop="up" >
-                    <Dropdown.Item onClick={() => handleShowModal("Tipo Texto", examQuestionType.TEXT_ONLY)}>Tipo Texto</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal("Tipo Test Unirespuesta", examQuestionType.TEST_SINGLE_CHOICE)}>Tipo Test Unirespuesta</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal("Tipo Test Multirespuesta", examQuestionType.TEST_MULTIPLE_CHOICE)}>Tipo Test Multirespuesta</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Individual", examQuestionType.INDIVIDUAL_SCORE)}>Tipo Valoracion Individual</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal("Tipo Valoracion Grupo", examQuestionType.GRUPAL_SCORE)}>Tipo Valoracion Grupo</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY.desc, examQuestionType.TEXT_ONLY.id)}>Tipo Texto</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE.desc, examQuestionType.TEST_SINGLE_CHOICE.id)}>Tipo Test Unirespuesta</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE.desc, examQuestionType.TEST_MULTIPLE_CHOICE.id)}>Tipo Test Multirespuesta</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE.desc, examQuestionType.INDIVIDUAL_SCORE.id)}>Tipo Valoracion Individual</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE.desc, examQuestionType.GRUPAL_SCORE.id)}>Tipo Valoracion Grupo</Dropdown.Item>
                 </DropdownButton >
             </Navbar>
-            <ModalQuestion show={showModal} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
+            <ModalQuestion show={showModal} modifyQuestion={false} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
         </QuestionsContext.Provider>
     );
 }

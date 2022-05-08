@@ -43,7 +43,7 @@ function ExamHeader(props) {
                                 Fecha límite:
                             </td>
                             <td>
-                                {exam.publicationDate}
+                                {(new Date(exam.publicationDate)).toLocaleDateString()}
                             </td>
                         </tr> 
                         <tr >

@@ -3,17 +3,38 @@ import { useState, useContext, useReducer, createContext, useRef, useEffect } fr
 import { QuestionsContext, actions } from './Exam';
 import OptionsForm from './OptionsForm';
 import { examQuestionType } from "./Exam";
+import PropTypes from 'prop-types';
 
 export const OptionsContext = createContext();
 
-function ExamQuestionForm({ handleSubmit, questionType }) {
+ExamQuestionForm.propTypes = {
+    //true: modal for modifying question, false: modal for new question
+    modifyQuestion:PropTypes.bool.isRequired, 
+    //question's index, only for modification
+    questionIndex: PropTypes.number,
+    //question type
+    questionType: PropTypes.oneOf([1,2,3,4,5]),
+    //callback function for submitting form
+    handleSubmit: PropTypes.func
+  };
 
+function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, questionIndex}) {
+
+    /*
     const initOptions = [
         { id: 1, text: 'opcion 1', isTrue: false },
         { id: 2, text: 'opcion 2', isTrue: false },
         { id: 3, text: 'Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde commodi aspernatur enim, consectetur. Cumque deleniti temporibus', isTrue: true }
     ]
-    
+    */
+      
+    //const { setQuestions } = useContext(QuestionsContext);
+      const {questions, dispatch } = useContext(QuestionsContext);
+      const [enunciado, setEnunciado] = useState('');
+      const [validatedForm, setValidatedForm] = useState(false);
+      const [showAlert, setShowAlert] = useState(false);
+
+    //autoFocus not working
     const inputEnunciado = useRef(null);
     useEffect(() => {
       if (inputEnunciado.current) {
@@ -21,18 +42,12 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
       }
     }, []);
 
-    //const { setQuestions } = useContext(QuestionsContext);
-    const { dispatch } = useContext(QuestionsContext);
-    const [enunciado, setEnunciado] = useState('');
-    const [validatedForm, setValidatedForm] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
-
     function reducer(v) {
         return [...v];
     }
-
+    var initOptions = modifyQuestion?questions[questionIndex].options:[];
     //const [options, setOptions] = useState(initOptions);
-    const [options, setOptions] = useReducer(reducer, []);
+    const [options, setOptions] = useReducer(reducer, initOptions);
     const [editedOptions, setEditedOptions] = useReducer(reducer, []);
     const [disabledButtons, setDisabledButtons] = useReducer(reducer, []);
 
@@ -45,7 +60,7 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.stopPropagation();
-        } else if ((options.length === 0) && (questionType !== examQuestionType.TEXT_ONLY)) {
+        } else if ((options.length === 0) && (questionType !== examQuestionType.TEXT_ONLY.id)) {
             console.log(showAlert);
             setShowAlert(true);
             console.log(showAlert);
@@ -74,7 +89,7 @@ function ExamQuestionForm({ handleSubmit, questionType }) {
                         </Form>
                     </Col>
                 </Row>
-                {(questionType !== examQuestionType.TEXT_ONLY) &&
+                {(questionType !== examQuestionType.TEXT_ONLY.id) &&
                     <>
                         <Row className="mb-3">
                             <Col > <OptionsForm questionType={questionType} /></Col>

@@ -21,12 +21,13 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
     
     var checkType = ''
     switch (questionType){
-        case examQuestionType.TEST_MULTIPLE_CHOICE: 
+        case examQuestionType.TEST_MULTIPLE_CHOICE.id: 
             checkType="checkbox";
             break;
-        case examQuestionType.TEST_SINGLE_CHOICE: 
+        case examQuestionType.TEST_SINGLE_CHOICE.id: 
             checkType="radio";
             break;
+        default:
     }
 
     function setText(value){
@@ -35,7 +36,7 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
     }
     
     function setIsTrue(){        
-        if (checkType=='radio'){
+        if (checkType==='radio'){
             options.forEach(option=>option.isTrue=false)
             options[index].isTrue=true;
         }
@@ -102,7 +103,7 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
                 }
                 {!editedOptions[index] && options[index].text /*text*/}
             </td>
-            {!(questionType===examQuestionType.GRUPAL_SCORE||questionType===examQuestionType.INDIVIDUAL_SCORE)&&
+            {!(questionType===examQuestionType.GRUPAL_SCORE.id||questionType===examQuestionType.INDIVIDUAL_SCORE.id)&&
                 <td align="center">
                     <Form.Check type={checkType} name="true" checked={options[index].isTrue /*isTrue*/} onChange={()=>setIsTrue(/*!isTrue*/)}></Form.Check>
                 </td>

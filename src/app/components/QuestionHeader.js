@@ -4,12 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import { QuestionsContext, actions } from './Exam';
 import ConfirmDialog from './ConfirmDialog';
-import OptionForm from './OptionForm';
+import ModalQuestion from './ModalQuestion';
+import { examQuestionType } from "./Exam";
 
 function QuestionHeader({ moveButtons, question, index }) {
 
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState();
+    
+    const [showModal, setShowModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalType, setModalType] = useState();
+    
 
     const { dispatch } = useContext(QuestionsContext);
     const optionHeader = (question.options!==undefined&&question.options.length>0)?true:false;
@@ -43,15 +49,17 @@ function QuestionHeader({ moveButtons, question, index }) {
         dispatch({ type: actions.MOVE_DOWN, payload: question });
     }
 
-    function changeEditable() {
-        //props.changeEditable(true);
+    function changeEditable(question) {
+        setShowModal(true);
+        setModalType(question.type);
+        setModalTitle(examQuestionType.getDescById(question.type));
     }
 
     return (
         <Card>
             <Card.Header as="h6" className="text-white bg-secondary ">
                 <Stack direction="horizontal" gap={2}>
-                    <div className="fw-bold">Pregunta : {index + 1} </div>
+                    <div className="fw-bold">Pregunta : {index + 1} &nbsp; {examQuestionType.getDescById(question.type)}</div>
                     <OverlayTrigger placement="top" overlay={<Tooltip>Mover pregunta arriba</Tooltip>}>
                         <Button onClick={() => moveUpQuestion(question)} className="ms-auto" size="sm" disabled={moveButtons}><FontAwesomeIcon icon={solid('angles-up')} /></Button>
                     </OverlayTrigger>
@@ -72,7 +80,7 @@ function QuestionHeader({ moveButtons, question, index }) {
                                     <span className="d-inline-block">
                                         <DropdownButton title=" " drop="start" size="sm" >
                                             <Dropdown.Item onClick={() => removeQuestion(question)}>Borrar Pregunta</Dropdown.Item>
-                                            <Dropdown.Item onClick={() => changeEditable}>Modificar Pregunta</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => changeEditable(question)}>Modificar Pregunta</Dropdown.Item>
                                         </DropdownButton >
                                         <ConfirmDialog show={showConfirm} message="¿Seguro que desea borrar la pregunta?" onConfirm={handleConfirm} onCancel={handleCancel} />
                                     </span>
@@ -98,6 +106,7 @@ function QuestionHeader({ moveButtons, question, index }) {
                         }
                     </tbody>
                 </table>
+                <ModalQuestion show={showModal} modifyQuestion={true} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
             </Card.Body >
         </Card >
 

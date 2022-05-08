@@ -10,8 +10,6 @@ import { examQuestionType } from "./Exam"
 function OptionsForm({questionType}) {
 
     const { options, setOptions, editedOptions, setEditedOptions, disabledButtons, setDisabledButtons } = useContext(OptionsContext);
-    const arr = [];
-    options.map(()=>arr.push(false))
 
     const [disableAddButton, setDisableAddButton] = useState(false);
     //const [editedOption, setEditedOption] = useState(false);
@@ -56,7 +54,7 @@ function OptionsForm({questionType}) {
                         <th width="70%">
                             Enunciado opción
                         </th>
-                        {!(questionType==examQuestionType.GRUPAL_SCORE||questionType==examQuestionType.INDIVIDUAL_SCORE)&&
+                        {!(questionType===examQuestionType.GRUPAL_SCORE.id||questionType===examQuestionType.INDIVIDUAL_SCORE.id)&&
                         <th className="text-center" width="10%">
                             <OverlayTrigger placement="top" overlay={<Tooltip>Marcar pregunta verdadera</Tooltip>}>
                                 <div><FontAwesomeIcon icon={solid('check')} /></div>
