@@ -28,7 +28,7 @@ function ExamForm(props) {
     const modify = props.modify;
     var initial = {};
 
-    if (exam === null)
+    if (exam === undefined)
         initial = { type: '', name: '', instructions: '', publicationDate: '' };
     else
         initial = exam;
@@ -73,9 +73,9 @@ function ExamForm(props) {
                                     <Col>
                                         <Form.Group>
                                             <Form.Label as="strong">Tipo:&nbsp; </Form.Label>
-                                            <Form.Check type="radio" name="type" value="I" checked={values.type === 'I' ? true : false}
+                                            <Form.Check type="radio" name="type" value="I" checked={values.type == 'I' ? true : false}
                                                 inline label="Plantilla individual" onChange={handleChange} onBlur={handleBlur} />
-                                            <Form.Check type="radio" name="type" value="G" checked={values.type === 'G' ? true : false}
+                                            <Form.Check type="radio" name="type" value="G" checked={values.type ==   'G' ? true : false}
                                                 inline label="Plantilla grupal" onChange={handleChange} onBlur={handleBlur} />
                                             <ErrorMessage name="type">
                                                 {msg => <Form.Text className="text-danger">{msg}</Form.Text>}</ErrorMessage>

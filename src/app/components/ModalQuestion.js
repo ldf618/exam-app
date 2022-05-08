@@ -37,7 +37,7 @@ function ModalQuestion(props) {
     return (
         <Modal show={props.show} onHide={handleClose} backdrop="static" keyboard={false} centered size="lg" scrollable>
             <Modal.Header closeButton>
-                <Modal.Title>{text} pregunta / apartado de {props.title.toLowerCase()}</Modal.Title>
+                <Modal.Title>{text} pregunta / apartado {props.questionIndex+1} de {props.title.toLowerCase()}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <ExamQuestionForm handleSubmit={handleSubmit} 

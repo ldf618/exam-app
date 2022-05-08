@@ -30,9 +30,6 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
       
     //const { setQuestions } = useContext(QuestionsContext);
       const {questions, dispatch } = useContext(QuestionsContext);
-      const [enunciado, setEnunciado] = useState('');
-      const [validatedForm, setValidatedForm] = useState(false);
-      const [showAlert, setShowAlert] = useState(false);
 
     //autoFocus not working
     const inputEnunciado = useRef(null);
@@ -50,9 +47,16 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
     const [options, setOptions] = useReducer(reducer, initOptions);
     const [editedOptions, setEditedOptions] = useReducer(reducer, []);
     const [disabledButtons, setDisabledButtons] = useReducer(reducer, []);
+    const [enunciado, setEnunciado] = useState(modifyQuestion?questions[questionIndex].text:'');
+    const [validatedForm, setValidatedForm] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     function addQuestion(question) {
         dispatch({ type: actions.ADD, payload: question });
+    }
+
+    function modifyQuestion(question) {
+        dispatch({ type: actions.MODIFY, payload: question, index: questionIndex });
     }
 
     function submit(e) {
@@ -61,14 +65,16 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
         if (form.checkValidity() === false) {
             e.stopPropagation();
         } else if ((options.length === 0) && (questionType !== examQuestionType.TEXT_ONLY.id)) {
-            console.log(showAlert);
             setShowAlert(true);
-            console.log(showAlert);
         }
         else {
             //console.log("submit from form");
             //setQuestions(enunciado);
-            addQuestion({ text: enunciado, type: questionType, options: [...options] });
+            if (!modifyQuestion)
+                addQuestion({ text: enunciado, type: questionType, options: [...options] });
+            else
+                modifyQuestion({ text: enunciado, type: questionType, options: [...options] });
+            setEnunciado('');
             setOptions([]);
             handleSubmit();
         }
@@ -83,7 +89,7 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
                         <Form  noValidate validated={validatedForm} onSubmit={submit} id="questionForm">
                             <Form.Label className="fw-bold">Enunciado</Form.Label>
                             <Form.Control ref={inputEnunciado} required minLength={5}  id="enunciado" name="enunciado" type="text" as="textarea"
-                                rows={5} maxLength={500} placeholder="Enunciado de la pregunto o apartado"
+                                rows={5} maxLength={500} placeholder="Enunciado de la pregunto o apartado" value={enunciado}
                                 onChange={(e) => setEnunciado(e.target.value)} />
                             <Form.Control.Feedback type="invalid">Debe escribir una pregunta de al menos 5 caracteres</Form.Control.Feedback>
                         </Form>

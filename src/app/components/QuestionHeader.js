@@ -50,9 +50,9 @@ function QuestionHeader({ moveButtons, question, index }) {
     }
 
     function changeEditable(question) {
-        setShowModal(true);
         setModalType(question.type);
         setModalTitle(examQuestionType.getDescById(question.type));
+        setShowModal(true);
     }
 
     return (
@@ -106,7 +106,7 @@ function QuestionHeader({ moveButtons, question, index }) {
                         }
                     </tbody>
                 </table>
-                <ModalQuestion show={showModal} modifyQuestion={true} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
+                <ModalQuestion show={showModal} modifyQuestion={true} questionIndex={index} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
             </Card.Body >
         </Card >
 

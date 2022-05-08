@@ -47,6 +47,7 @@ export const QuestionsContext = createContext();
 export const actions = {
     ADD: "ADD",
     REMOVE: "REMOVE",
+    MODIFY: "MODIFY",
     MOVE_UP: "MOVE_UP",
     MOVE_DOWN: "MOVE_DOWN"
 };
@@ -56,6 +57,11 @@ function reducer(questions, question) {
   return [...questions, question]
 }
 */
+
+function replace (arr, item, index){
+    arr.splice(index, 1, item);
+    return arr.slice();
+}
 
 /*move questions up and down circular*/
 function move(arr, item, increment) {
@@ -76,6 +82,8 @@ function reducer(questions, action) {
             return [...questions, action.payload]
         case actions.REMOVE:
             return questions.filter((question) => question !== action.payload);
+        case actions.MODIFY:
+            return replace(questions,action.payload, action.index); /////////////////////          
         case actions.MOVE_UP:
             return move(questions, action.payload, -1);
         case actions.MOVE_DOWN:
@@ -102,9 +110,9 @@ function Exam() {
         setEditableHeader(value);
     }
 
-    function handleShowModal(title, type) {
-        setModalTitle(title);
-        setModalType(type);
+    function handleShowModal(type) {
+        setModalTitle(type.desc);
+        setModalType(type.id);
         setShowModal(true);
     }
     /*
@@ -141,11 +149,11 @@ function Exam() {
             </Card>
             <Navbar className="p-4 position-sticky bottom-0 end 0" expand="lg">
                 <DropdownButton size="sm" title="Añadir Apartado" drop="up" >
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY.desc, examQuestionType.TEXT_ONLY.id)}>Tipo Texto</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE.desc, examQuestionType.TEST_SINGLE_CHOICE.id)}>Tipo Test Unirespuesta</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE.desc, examQuestionType.TEST_MULTIPLE_CHOICE.id)}>Tipo Test Multirespuesta</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE.desc, examQuestionType.INDIVIDUAL_SCORE.id)}>Tipo Valoracion Individual</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE.desc, examQuestionType.GRUPAL_SCORE.id)}>Tipo Valoracion Grupo</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY)}>{examQuestionType.TEXT_ONLY.desc}</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE)}>{examQuestionType.TEST_SINGLE_CHOICE.desc}</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE)}>{examQuestionType.TEST_MULTIPLE_CHOICE.desc}</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE)}>{examQuestionType.INDIVIDUAL_SCORE.desc}</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE)}>{examQuestionType.GRUPAL_SCORE.desc}</Dropdown.Item>
                 </DropdownButton >
             </Navbar>
             <ModalQuestion show={showModal} modifyQuestion={false} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
