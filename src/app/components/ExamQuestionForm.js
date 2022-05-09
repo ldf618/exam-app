@@ -42,6 +42,7 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
     function reducer(v) {
         return [...v];
     }
+    console.log(modifyQuestion )
     var initOptions = modifyQuestion?questions[questionIndex].options:[];
     //const [options, setOptions] = useState(initOptions);
     const [options, setOptions] = useReducer(reducer, initOptions);
@@ -55,7 +56,7 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
         dispatch({ type: actions.ADD, payload: question });
     }
 
-    function modifyQuestion(question) {
+    function modifyQuestionF(question) {
         dispatch({ type: actions.MODIFY, payload: question, index: questionIndex });
     }
 
@@ -73,7 +74,7 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
             if (!modifyQuestion)
                 addQuestion({ text: enunciado, type: questionType, options: [...options] });
             else
-                modifyQuestion({ text: enunciado, type: questionType, options: [...options] });
+                modifyQuestionF({ text: enunciado, type: questionType, options: [...options] });
             setEnunciado('');
             setOptions([]);
             handleSubmit();

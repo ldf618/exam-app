@@ -1,20 +1,22 @@
-import { Stack, DropdownButton, Dropdown, Card, Navbar } from 'react-bootstrap';
+import { Stack, DropdownButton, Dropdown, Card, Navbar, Button } from 'react-bootstrap';
 import React, { useReducer, createContext, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro'
 import ExamHeader from './ExamHeader';
 import ExamForm from './ExamForm';
 import ModalQuestion from './ModalQuestion';
 import QuestionHeader from './QuestionHeader';
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const examQuestionType = {
-    TEXT_ONLY: {id:1,desc:"Tipo Texto"},
-    TEST_SINGLE_CHOICE: {id:2,desc:"Tipo Test Unirespuesta"},
-    TEST_MULTIPLE_CHOICE: {id:3,desc:"Tipo Test Multirespuesta"},
-    INDIVIDUAL_SCORE: {id:4,desc:"Tipo Valoracion Individual"},
-    GRUPAL_SCORE: {id:5,desc:"Tipo Valoracion Grupo"},
-    getDescById: function(id){
+    TEXT_ONLY: { id: 1, desc: "Tipo Texto" },
+    TEST_SINGLE_CHOICE: { id: 2, desc: "Tipo Test Unirespuesta" },
+    TEST_MULTIPLE_CHOICE: { id: 3, desc: "Tipo Test Multirespuesta" },
+    INDIVIDUAL_SCORE: { id: 4, desc: "Tipo Valoracion Individual" },
+    GRUPAL_SCORE: { id: 5, desc: "Tipo Valoracion Grupo" },
+    getDescById: function (id) {
         let value = Object.values(this).find(v => v.id === id);
-        if (value===undefined)
+        if (value === undefined)
             return '';
         else
             return value.desc;
@@ -49,7 +51,8 @@ export const actions = {
     REMOVE: "REMOVE",
     MODIFY: "MODIFY",
     MOVE_UP: "MOVE_UP",
-    MOVE_DOWN: "MOVE_DOWN"
+    MOVE_DOWN: "MOVE_DOWN",
+    SAVE: "SAVE"
 };
 
 /*
@@ -58,7 +61,7 @@ function reducer(questions, question) {
 }
 */
 
-function replace (arr, item, index){
+function replace(arr, item, index) {
     arr.splice(index, 1, item);
     return arr.slice();
 }
@@ -83,18 +86,20 @@ function reducer(questions, action) {
         case actions.REMOVE:
             return questions.filter((question) => question !== action.payload);
         case actions.MODIFY:
-            return replace(questions,action.payload, action.index); /////////////////////          
+            return replace(questions, action.payload, action.index); /////////////////////          
         case actions.MOVE_UP:
             return move(questions, action.payload, -1);
         case actions.MOVE_DOWN:
             return move(questions, action.payload, +1);
+        case actions.SAVE:
+            return [];
         default:
             return questions;
     }
 };
 
 function Exam() {
-    // let navigate = useNavigate();
+     let navigate = useNavigate();
 
     const [editableHeader, setEditableHeader] = useState(false);
     //    const [questions, setQuestions] = useState([]);
@@ -114,6 +119,11 @@ function Exam() {
         setModalTitle(type.desc);
         setModalType(type.id);
         setShowModal(true);
+    }
+
+    function save (){
+        dispatch({type: actions.SAVE})
+        navigate("/app/examForm");
     }
     /*
         function addQuestion(value) {
@@ -144,18 +154,22 @@ function Exam() {
                                 <QuestionHeader moveButtons={num === 1 ? true : false} question={question} index={index} key={index} />
                             )
                         })}
-                       </Stack>
+                    </Stack>
                 </Card.Body>
             </Card>
             <Navbar className="p-4 position-sticky bottom-0 end 0" expand="lg">
-                <DropdownButton size="sm" title="Añadir Apartado" drop="up" >
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY)}>{examQuestionType.TEXT_ONLY.desc}</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE)}>{examQuestionType.TEST_SINGLE_CHOICE.desc}</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE)}>{examQuestionType.TEST_MULTIPLE_CHOICE.desc}</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE)}>{examQuestionType.INDIVIDUAL_SCORE.desc}</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE)}>{examQuestionType.GRUPAL_SCORE.desc}</Dropdown.Item>
-                </DropdownButton >
+                <Stack direction="horizontal" gap={3}>
+                    <DropdownButton  size="sm" title="Añadir Apartado" drop="up" >
+                        <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY)}>{examQuestionType.TEXT_ONLY.desc}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE)}>{examQuestionType.TEST_SINGLE_CHOICE.desc}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE)}>{examQuestionType.TEST_MULTIPLE_CHOICE.desc}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE)}>{examQuestionType.INDIVIDUAL_SCORE.desc}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE)}>{examQuestionType.GRUPAL_SCORE.desc}</Dropdown.Item>
+                    </DropdownButton >
+                    <Button className="rounded-circle" onClick={()=>save()}> <FontAwesomeIcon icon={regular('floppy-disk')} /> </Button>
+                </Stack>
             </Navbar>
+
             <ModalQuestion show={showModal} modifyQuestion={false} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
         </QuestionsContext.Provider>
     );
