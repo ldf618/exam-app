@@ -19,7 +19,7 @@ function StudentMenu() {
                         </Row>
                     </Container> 
                 </NavDropdown.Item>
-                <NavDropdown.Item href="./formikexample">
+            <NavDropdown.Item href="./examSearch">
                 <Container>
                         <Row style={{flexWrap: 'nowrap'}}>
                             <Col xs={1} ><FontAwesomeIcon icon={faMagnifyingGlass} /></Col>

@@ -1,4 +1,4 @@
-import { Stack, DropdownButton, Dropdown, Card, Navbar, Button } from 'react-bootstrap';
+import { Stack, DropdownButton, Dropdown, Card, Button, Spinner, Toast } from 'react-bootstrap';
 import React, { useReducer, createContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro'
@@ -99,7 +99,7 @@ function reducer(questions, action) {
 };
 
 function Exam() {
-     let navigate = useNavigate();
+    let navigate = useNavigate();
 
     const [editableHeader, setEditableHeader] = useState(false);
     //    const [questions, setQuestions] = useState([]);
@@ -108,6 +108,8 @@ function Exam() {
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalType, setModalType] = useState();
+    const [showSpinner, setShowSpinner] = useState(false);
+    const [showToast, setShowToast] = useState(false);
 
     var exam = sessionStorage.getItem('exam');
 
@@ -121,9 +123,19 @@ function Exam() {
         setShowModal(true);
     }
 
-    function save (){
-        dispatch({type: actions.SAVE})
-        navigate("/app/examForm");
+    async function  save() {
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        setShowSpinner(true);
+        await delay(1000);
+        setShowSpinner(false);
+        //dispatch({ type: actions.SAVE })
+        setShowToast(true);
+
+    }
+
+    function closeSaveToast(){
+        setShowToast(false);
+        navigate("/app/initial");
     }
     /*
         function addQuestion(value) {
@@ -157,18 +169,26 @@ function Exam() {
                     </Stack>
                 </Card.Body>
             </Card>
-            <Navbar className="p-4 position-sticky bottom-0 end 0" expand="lg">
-                <Stack direction="horizontal" gap={3}>
-                    <DropdownButton  size="sm" title="Añadir Apartado" drop="up" >
+            <div className="p-4 position-sticky bottom-0 end 0">
+                <Stack gap={2} direction="horizontal" className="align-items-center">
+                    <DropdownButton size="sm" title="Añadir Apartado" drop="up" >
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY)}>{examQuestionType.TEXT_ONLY.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE)}>{examQuestionType.TEST_SINGLE_CHOICE.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE)}>{examQuestionType.TEST_MULTIPLE_CHOICE.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE)}>{examQuestionType.INDIVIDUAL_SCORE.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE)}>{examQuestionType.GRUPAL_SCORE.desc}</Dropdown.Item>
                     </DropdownButton >
-                    <Button className="rounded-circle" onClick={()=>save()}> <FontAwesomeIcon icon={regular('floppy-disk')} /> </Button>
+                    <Button className="rounded-circle" onClick={() => save()}> <FontAwesomeIcon icon={regular('floppy-disk')} /> </Button>
+                    {showSpinner&&<Spinner animation="border" variant="primary" size="sm" />}
+                    <Toast show={showToast} onClose={closeSaveToast} delay={3000} autohide>
+                        <Toast.Header>
+                            <strong className="me-auto">Guardado</strong>
+                        </Toast.Header>
+                        <Toast.Body>El examen se ha guardado correctamente! </Toast.Body>                       
+                        <div className ="m-3 text-end"><Button onClick={closeSaveToast} size="sm" variant="outline-primary">Aceptar</Button></div>                     
+                    </Toast>                  
                 </Stack>
-            </Navbar>
+            </div>
 
             <ModalQuestion show={showModal} modifyQuestion={false} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
         </QuestionsContext.Provider>
