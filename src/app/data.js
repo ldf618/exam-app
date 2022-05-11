@@ -1,8 +1,8 @@
 let users = [
   {
-    firstName: "Nombre1",
-    surname1: "Surname11",
-    surname2: "Surname22",
+    firstName: "Alicia",
+    surname1: "Verdu",
+    surname2: "Garrido",
     userDni: "12345678W",
     userClass: "Student",
     userName: "student1",
@@ -15,9 +15,9 @@ let users = [
     },    
   },
   {
-    firstName: "Nombre2",
-    surname1: "Surname21",
-    surname2: "Surname22",
+    firstName: "Narciso",
+    surname1: "Ruano",
+    surname2: "Matas",
     userDni: "22345678W",
     userClass: "Student",
     userName: "student2",
@@ -30,9 +30,9 @@ let users = [
     },        
   },
   {
-    firstName: "Nombre3",
-    surname1: "Surname31",
-    surname2: "Surname32",
+    firstName: "Joaquim",
+    surname1: "Arranz",
+    surname2: "Campoy",
     userDni: "32345678W",
     userClass: "Consultant",
     userName: "consultant1",
@@ -42,9 +42,9 @@ let users = [
     },  
   },
   {
-    firstName: "Nombre4",
-    surname1: "Surname41",
-    surname2: "Surname42",
+    firstName: "Silvia",
+    surname1: "Bolaños",
+    surname2: "Cuevas",
     userDni: "42345678W",
     userClass: "Consultant",
     userName: "consultant2",
@@ -164,7 +164,7 @@ export function plainObject (object) {
   Object.entries(object).forEach( 
     function([key,value]){           
       if ((typeof value)!="object")
-        resultObject+='"'+key+'"'+":"+'"'+value+'"'+",";
+        resultObject+='"'+key+'":"'+value+'",';
       }
     );
     resultObject=resultObject.slice(0,-1);
