@@ -1,7 +1,7 @@
 import { NavDropdown, Container, Row, Col } from 'react-bootstrap';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faBook, faFile } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faFile } from '@fortawesome/free-solid-svg-icons';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import {useNavigate} from "react-router-dom";
 

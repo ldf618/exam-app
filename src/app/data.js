@@ -32,7 +32,7 @@ let users = [
   {
     firstName: "Joaquim",
     surname1: "Arranz",
-    surname2: "Campoy",
+    surname2: "Campo",
     userDni: "32345678W",
     userClass: "Consultant",
     userName: "consultant1",
@@ -146,11 +146,11 @@ export function getDegrees() {
 }
 
 export function getDegree(id) {
-  return degrees.filter(degree=>degree.id==id);
+  return degrees.filter(degree=>degree.id===id);
 }
 
 export function getCourses(id) {
-  let degree = degrees.find(degree=>degree.id==id);
+  let degree = degrees.find(degree=>degree.id===id);
   if (typeof degree != 'undefined')
     return degree.courses;
   else 

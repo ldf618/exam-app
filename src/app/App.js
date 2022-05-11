@@ -15,18 +15,18 @@ function App() {
 
   //esto se ejecuta despues de cargar la pagina
   useEffect(() => {
-    if (localUser==undefined)
+    if (localUser===undefined)
       navigate("/")   
    },[localUser])
 
   
-  if (localUser!=undefined){
+  if (localUser!==undefined){
     user=JSON.parse(localUser);
   } 
 
   return (
     <div className="m-3">
-      {(localUser!=undefined)&&
+      {(localUser!==undefined)&&
       <>
         <MainMenu userClass={user.userClass}/>
         <HeaderUserInfo user={user}/>

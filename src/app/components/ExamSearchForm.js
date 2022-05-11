@@ -1,4 +1,4 @@
-import { Accordion, Form, Row, Col, Container, Card } from 'react-bootstrap';
+import { Accordion, Form, Row, Col, Container, Stack, Button } from 'react-bootstrap';
 
 function ExamSearchForm(props) {
 
@@ -9,7 +9,7 @@ function ExamSearchForm(props) {
                 <Accordion.Body>
                     <Form>
                         <Container>
-                            <Row className="mb-3">
+                            <Row className="mb-1">
                                 <Col>
                                     <Form.Group>
                                         <Form.Label as="strong">Título de la plantilla:&nbsp; </Form.Label>
@@ -17,38 +17,41 @@ function ExamSearchForm(props) {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <Row className="mb-3">
+                            <Row className="mb-1">
                                 <Col>
-                                    <Card  >
-                                        <Form.Group className="m-3">
-                                            <Form.Label as="strong">Tipo:&nbsp; </Form.Label>
-                                            <Form.Check type="radio" name="type" value="I" inline label="Plantilla individual" />
-                                            <Form.Check type="radio" name="type" value="G" inline label="Plantilla grupal" />
-                                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                                        </Form.Group>
-                                    </Card>
+                                    <Stack gap={2}>
+                                        <fieldset className="border p-2">
+                                            <legend class="float-none w-auto">Tipo:</legend>
+                                            <Form.Group >
+                                                <Form.Check type="radio" name="type" value="I" inline label="Plantilla individual" />
+                                                <Form.Check type="radio" name="type" value="G" inline label="Plantilla grupal" />
+                                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                            </Form.Group>
+                                        </fieldset>
+                                        <fieldset className="border p-2">
+                                            <legend class="float-none w-auto">Estado:</legend>
+                                            <Form.Group>
+                                                <Form.Check type="radio" name="type" value="I" inline label="Publicada" />
+                                                <Form.Check type="radio" name="type" value="G" inline label="Sin Publicar" />
+                                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                            </Form.Group>
+                                        </fieldset>
+                                    </Stack>
                                 </Col>
                                 <Col>
-                                    <Card>
-                                        <Form.Group  className="m-3">
-                                            <Form.Label as="strong">Estado:&nbsp; </Form.Label>
-                                            <Form.Check type="radio" name="type" value="I" inline label="Publicada" />
-                                            <Form.Check type="radio" name="type" value="G" inline label="Sin Publicar" />
-                                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                                        </Form.Group>
-                                    </Card>
-                                </Col>
-                                <Col>
-                                <fieldset className="border p-2">
-                                    <legend class="float-none w-auto">Fecha creación</legend>
-                                        <Form.Group  className="m-1">
+                                    <fieldset className="border p-2">
+                                        <legend class="float-none w-auto">Fecha creación</legend>
+                                        <Form.Group >
                                             <Form.Label as="strong">Desde:&nbsp; </Form.Label>
                                             <Form.Control type="date" placeholder="Título" />
                                             <Form.Label as="strong">Hasta:&nbsp; </Form.Label>
                                             <Form.Control type="date" placeholder="Título" />
-                                        </Form.Group>                                   
+                                        </Form.Group>
                                     </fieldset>
-                                </Col>
+                                </Col>                               
+                            </Row>
+                            <Row className="m-1">
+                                <Col className="row justify-content-center w-50"><Button >Buscar</Button></Col>
                             </Row>
                         </Container>
                     </Form>
