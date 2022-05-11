@@ -3,9 +3,8 @@ import React, {useEffect} from 'react';
 import { useNavigate, Outlet } from "react-router-dom";
 import HeaderUserInfo from './components/HeaderUserInfo';
 import MainMenu from './components/MainMenu';
-import TimeoutAlert from './components/TimeoutAlert';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Alert  } from 'react-bootstrap';
+
 
 
 function App() {

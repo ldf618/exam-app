@@ -9,6 +9,7 @@ import Initial from './app/components/Initial';
 import DegreeCurseSelect from './app/components/DegreeCourseSelect';
 import ExamForm from './app/components/ExamForm';
 import Exam from './app/components/Exam';
+import ExamSearchForm from './app/components/ExamSearchForm';
 
 
 ReactDOM.render(
@@ -19,7 +20,8 @@ ReactDOM.render(
           <Route path="/app/degreeselect" element={<DegreeCurseSelect/>}/>
           <Route path="/app/initial" element={<Initial/>}/>
           <Route path="/app/examform" element={<ExamForm/>}/>
-          <Route path="/app/exam" element={<Exam/>}/>          
+          <Route path="/app/exam" element={<Exam/>}/>  
+          <Route path="/app/examSearch" element={<ExamSearchForm/>}/>        
         </Route>
         <Route
           path="*"
