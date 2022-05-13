@@ -146,11 +146,11 @@ export function getDegrees() {
 }
 
 export function getDegree(id) {
-  return degrees.filter(degree=>degree.id===id);
+  return degrees.filter(degree=>degree.id===parseInt(id));
 }
 
 export function getCourses(id) {
-  let degree = degrees.find(degree=>degree.id===id);
+  let degree = degrees.find(degree=>degree.id===parseInt(id));
   if (typeof degree != 'undefined')
     return degree.courses;
   else 
