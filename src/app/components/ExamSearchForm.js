@@ -60,7 +60,7 @@ function ExamSearchForm(props) {
                 </Accordion.Body>
             </Accordion.Item>
         </Accordion>
-        <ExamList></ExamList>
+        <ExamList pageSize={5}></ExamList>
 </>
     );
 
