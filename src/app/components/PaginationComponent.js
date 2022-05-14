@@ -15,7 +15,7 @@ PaginationComponent.propTypes = {
     onPageFirst: PropTypes.func,
     //callback function for pageLast click
     onPageLast: PropTypes.func,
-    //callback function for pageNext click
+    //callback function for pagePrev click
     onPagePrev: PropTypes.func,
     //callback function for pageNext click
     onPageNext: PropTypes.func        
@@ -23,7 +23,6 @@ PaginationComponent.propTypes = {
 
 function PaginationComponent({pages, activePage, totalPages, onPageClick, onPageFirst, onPageLast, onPagePrev, onPageNext}){
     return (
-            <div className="mt-3 d-flex align-items-center justify-content-center">
                 <Pagination >
                     <Pagination.First disabled={activePage===1} onClick={()=>onPageFirst()} />
                     <Pagination.Prev disabled={activePage===1} onClick={()=>onPagePrev()} />
@@ -38,7 +37,6 @@ function PaginationComponent({pages, activePage, totalPages, onPageClick, onPage
                     <Pagination.Next onClick={()=>onPageNext(totalPages)} disabled={activePage===totalPages}/>
                     <Pagination.Last onClick={()=>onPageLast()} disabled={activePage===totalPages}/>
                 </Pagination>
-            </div>  
     )
 }
 

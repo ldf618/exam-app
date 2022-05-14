@@ -34,7 +34,7 @@ function ExamHeader(props) {
                             <td className="fw-bold">
                                 Descripción:
                             </td>
-                            <td>
+                            <td style={{ whiteSpace: "pre-wrap" }}>
                                 {exam.instructions}
                             </td>
                         </tr>                                                

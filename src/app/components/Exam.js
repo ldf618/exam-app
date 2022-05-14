@@ -171,14 +171,14 @@ function Exam() {
             </Card>
             <div className="p-4 position-sticky bottom-0 end 0">
                 <Stack gap={2} direction="horizontal" className="align-items-center">
-                    <DropdownButton size="sm" title="Añadir Apartado" drop="up" >
+                    <DropdownButton disabled={editableHeader} size="sm" title="Añadir Apartado" drop="up" >
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEXT_ONLY)}>{examQuestionType.TEXT_ONLY.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_SINGLE_CHOICE)}>{examQuestionType.TEST_SINGLE_CHOICE.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.TEST_MULTIPLE_CHOICE)}>{examQuestionType.TEST_MULTIPLE_CHOICE.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.INDIVIDUAL_SCORE)}>{examQuestionType.INDIVIDUAL_SCORE.desc}</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleShowModal(examQuestionType.GRUPAL_SCORE)}>{examQuestionType.GRUPAL_SCORE.desc}</Dropdown.Item>
                     </DropdownButton >
-                    <Button className="rounded-circle" onClick={() => save()}> <FontAwesomeIcon icon={regular('floppy-disk')} /> </Button>
+                    <Button disabled={editableHeader} className="rounded-circle" onClick={() => save()}> <FontAwesomeIcon icon={regular('floppy-disk')} /> </Button>
                     {showSpinner&&<Spinner animation="border" variant="primary" size="sm" />}
                     <Toast show={showToast} onClose={closeSaveToast} delay={3000} autohide>
                         <Toast.Header>

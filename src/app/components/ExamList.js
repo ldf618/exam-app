@@ -1,8 +1,11 @@
-import { Table, Dropdown, DropdownButton, Pagination, Popover, OverlayTrigger, Stack } from 'react-bootstrap';
-import { getExams, getPageExams, getNumExams} from './../examData.js';
+import { Table, Dropdown, DropdownButton, Popover, OverlayTrigger } from 'react-bootstrap';
+import {getPageExams, getNumExams} from './../examData.js';
+import PaginationComponent from './PaginationComponent.js';
 import { useState} from 'react';
+import { useNavigate} from 'react-router-dom';
 
 function ExamList({pageSize}) {
+    const navigate = useNavigate();
 
     //Number of visible pages in pagination component
     const paginationPages = 5;
@@ -62,23 +65,24 @@ function ExamList({pageSize}) {
         pageClicked(totalPages);
     }
 
+    function publish(index){
+        let newExams =[...exams]
+        newExams[index].published=true;
+        //Here it should be persisted
+        setExams(newExams);        
+    }
+
+    function modify(index){
+        sessionStorage.setItem('exam', JSON.stringify(exams[index]));
+        navigate("/app/exam");
+    }
+
+
     return (
         <>
             <div className="mt-3 d-flex align-items-center justify-content-center">
-                <Pagination >
-                    <Pagination.First disabled={activePage===1} onClick={()=>pageFirst()} />
-                    <Pagination.Prev disabled={activePage===1} onClick={()=>pagePrev()} />
-                    {
-                    pages.map((page,index) =>{
-                            return(
-                                <Pagination.Item key={index} active={page === activePage}  onClick={()=>pageClicked(page)}>
-                                {page}
-                                </Pagination.Item>
-                            )})
-                    }
-                    <Pagination.Next onClick={()=>pageNext(totalPages)} disabled={activePage===totalPages}/>
-                    <Pagination.Last onClick={()=>pageLast()} disabled={activePage===totalPages}/>
-                </Pagination>
+            <PaginationComponent pages={pages} activePage={activePage} totalPages={totalPages} 
+                onPageClick={pageClicked} onPageFirst={pageFirst} onPageLast={pageLast} onPagePrev={pagePrev} onPageNext={pageNext} /> 
             </div>        
             <Table striped bordered responsive>
                 <thead>
@@ -111,18 +115,18 @@ function ExamList({pageSize}) {
                                                 <td>{exam.creationDate}</td>
                                                 <td>{exam.changeDate}</td>
                                                 <td>{exam.type}</td>
-                                                <td>{exam.publised?"Si":"No"}</td>
+                                                <td>{exam.published?"Si":"No"}</td>
                                                 </tr></tbody>
                                             </Table>                                           
                                         </Popover.Body>
                                       </Popover>}>                 
-                                    <td>{exam.title}</td>
+                                    <td>{exam.name}</td>
                                     </OverlayTrigger>                                    
                                     <td>{exam.consultant}</td>
                                     <td>
                                         <DropdownButton title=" " drop="start" size="sm" >
-                                            <Dropdown.Item >Publicar</Dropdown.Item>
-                                            <Dropdown.Item >Modificar</Dropdown.Item>
+                                            <Dropdown.Item disabled={exam.published} onClick={()=>publish(index)} >Publicar</Dropdown.Item>
+                                            <Dropdown.Item onClick={()=>modify(index)} >Modificar</Dropdown.Item>
                                         </DropdownButton >
                                     </td>                                    
                                 </tr>                              
@@ -133,17 +137,8 @@ function ExamList({pageSize}) {
                 </tbody>
             </Table>
             <div className="d-flex align-items-center justify-content-center">
-                <Pagination >
-                    <Pagination.First />
-                    <Pagination.Prev onClick={()=>pagePrev()} />
-                    <Pagination.Item key={1} onClick={()=>pageClicked(1)}>{1}</Pagination.Item>
-                    <Pagination.Item key={2} onClick={()=>pageClicked(2)}>{2}</Pagination.Item>
-                    <Pagination.Item key={3} onClick={()=>pageClicked(3)}>{3}</Pagination.Item>
-                    <Pagination.Item key={4} onClick={()=>pageClicked(4)}>{4}</Pagination.Item>
-                    <Pagination.Item key={5} onClick={()=>pageClicked(5)}>{5}</Pagination.Item>
-                    <Pagination.Next onClick={()=>pageNext()} />
-                    <Pagination.Last/>
-                </Pagination>
+            <PaginationComponent pages={pages} activePage={activePage} totalPages={totalPages} 
+                onPageClick={pageClicked} onPageFirst={pageFirst} onPageLast={pageLast} onPagePrev={pagePrev} onPageNext={pageNext} />
             </div>
         </>
     );
