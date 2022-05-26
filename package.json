@@ -30,6 +30,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "comentario":"para saber la ip wsl hacer--> grep nameserver /etc/resolv.conf | awk '{print $2}'",
+  "proxyFuera":"http://172.18.224.1:8080", 
   "eslintConfig": {
     "extends": [
       "react-app",

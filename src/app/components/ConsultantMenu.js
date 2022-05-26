@@ -30,6 +30,7 @@ function ConsultantMenu() {
             <NavDropdown title="Estadísticas">
                     <NavDropdown.Item onClick={()=>navigate("./fetchExample")}>Total informes recibidos</NavDropdown.Item>
                     <NavDropdown.Item onClick={()=>navigate("./reduxExample")}>Valoraciones alumnos</NavDropdown.Item>
+                    <NavDropdown.Item onClick={()=>navigate("./degreesTable")}>Titulaciones</NavDropdown.Item>
                     <NavDropdown.Item href="#action/4.3">Estadísticas de los informes test de una asignatura</NavDropdown.Item>
                     <NavDropdown.Item href="#action/4.4">Estadísticas de un informe test</NavDropdown.Item>
                     <NavDropdown.Item href="#action/4.5">Estadísticas de valoraciones de un alumno</NavDropdown.Item>

@@ -87,7 +87,7 @@ const longw = {width: '400px'}
             </Col>
           </Row>
         </Container>      
-      </Form>
+      </Form> 
     </div>
     </>    
   );

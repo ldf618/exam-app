@@ -14,6 +14,7 @@ import Exam from './app/components/Exam';
 import ExamSearchForm from './app/components/ExamSearchForm';
 import FetchExample from './app/components/FetchExample';
 import {ReduxExample} from './app/components/ReduxExample';
+import DegreesTable from './app/components/DegreesTable';
 
 
 ReactDOM.render(
@@ -29,6 +30,7 @@ ReactDOM.render(
           <Route path="/app/examSearch" element={<ExamSearchForm />} />
           <Route path="/app/fetchExample" element={<FetchExample />} />
           <Route path="/app/reduxExample" element={<ReduxExample/>} />
+          <Route path="/app/degreesTable" element={<DegreesTable/>} />
         </Route>
         <Route
           path="*"
