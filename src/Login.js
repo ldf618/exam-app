@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { faAngry } from '@fortawesome/free-regular-svg-icons';
 import {useNavigate} from "react-router-dom";
 import { authenticate } from "./app/data";
+import { authenticateUser, userByName } from './app/apiCalls/api';
 /*
 <FontAwesomeIcon icon={solid('user-secret')} />
 <FontAwesomeIcon icon={faAngry} />                
@@ -21,6 +22,7 @@ function Login() {
   const [userPass, setUserPass] = useState();
   const [incorrectUser, setIncorrectUser] = useState(false);
 
+  /*
   function submit (event) {
       event.preventDefault();        
       //alert('A user and password were submitted: '+userName+" "+userPass);
@@ -36,6 +38,37 @@ function Login() {
       }
 
     }
+    */
+
+    function submit(event){
+      event.preventDefault(); 
+      authenticateUser({"username":userName,"password":userPass})
+      .then(
+          function(res){ 
+              if(res){
+                userByName (userName)
+                .then(
+                  function (authUser){
+                    sessionStorage.setItem('localUser',JSON.stringify(authUser));
+                    navigate("/app/degreeselect");
+                  },
+                  function(err2) {
+                    //Promise.resolve(err) 'cause err can be a Promise or not
+                    Promise.resolve(err2).then(err2=>{console.log(err2.toString())})
+                }
+                )
+              }
+              else{
+                   setIncorrectUser(true);
+                    setTimeout(() => {setIncorrectUser(false)}, 5000);
+              }
+          },      
+          function(err) {
+              //Promise.resolve(err) 'cause err can be a Promise or not
+              Promise.resolve(err).then(err=>{setIncorrectUser(true);console.log(err.toString())})
+          }
+      )
+  }
 /*
     function handleVisible () { 
       setTimeout(() => {setIncorrectUser(false)}, 5000);

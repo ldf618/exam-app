@@ -28,7 +28,7 @@ function App() {
     <div className="m-3">
       {(localUser!==undefined)&&
       <>
-        <MainMenu userClass={user.userClass}/>
+        <MainMenu userClass={user.type}/>
         <HeaderUserInfo user={user}/>
       </>
       }

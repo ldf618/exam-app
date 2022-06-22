@@ -21,7 +21,18 @@ async function checkError (response){
 
 async function fetchGet (url){
     let signal = abortTimeout(); 
-    return fetch(baseURL+url,{signal}).then(checkError)
+    const options = {
+        method: "GET",
+        headers:{
+          "Accept":"application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        mode:"cors",
+        credentials: 'include',
+        signal:signal
+    };
+    return fetch(baseURL+url,options/*{signal}*/).then(checkError)
 }
 
 async function fetchPost (url, data){
@@ -30,9 +41,12 @@ async function fetchPost (url, data){
         method: "POST",
         headers:{
           "Content-Type": "application/json", 
-          //"Accept":"application/json",
-          //"mode":"no-cors",
+          "Accept":"application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
         },
+        mode:"cors",
+        credentials: 'include',
         body:JSON.stringify(data)//, signal:signal
     };
 
@@ -54,3 +68,55 @@ export async function countByDegreeName (data)  {
 export async function existsByDegreeName (data)  {
     return fetchGet("/degree/existsbyname/"+data);
 }
+/*
+export async function degreesByStudentId (data)  {
+    return fetchGet("/degree/degreesByStudentId/"+data);
+}
+*/
+
+export async function degreesByUserId (id,userType)  {
+    return fetchGet("/degree/degreesByUserId/"+id+"/"+userType);
+}
+
+export async function authenticateUser (data)  {
+    return fetchPost("/auth/loginCookie",data);
+}
+
+export async function userByName (data)  {
+    return fetchGet("/user/"+data);
+}
+
+export async function coursesByStudentIdDegreeId (studentId, degreeId)  {
+    return fetchGet("/course/coursesStudentDegree/"+studentId+"/"+degreeId);
+}
+/*
+export async function coursesByConsultantIdDegreeId (consultantId, degreeId)  {
+    return fetchGet("/course/coursesConsultantDegree/"+consultantId+"/"+degreeId);
+}
+*/
+
+export async function coursesByUserIdDegreeId (consultantId, degreeId, userType)  {
+    return fetchGet("/course/coursesUserDegree/"+consultantId+"/"+degreeId+"/"+userType);
+} 
+/*
+export async function classroomByStudentIdAndCourseId (studentId, courseId)  {
+    return fetchGet("/classroom/classroomStudentCourse/"+studentId+"/"+courseId);
+}
+
+export async function classroomByConsultantIdAndCourseId (consultantId, courseId)  {
+    return fetchGet("/classroom/classroomConsultantCourse/"+consultantId+"/"+courseId);
+}
+*/
+
+export async function classroomByUserIdAndCourseId (consultantId, courseId, userType)  {
+    return fetchGet("/classroom/classroomUserCourse/"+consultantId+"/"+courseId+"/"+userType);
+}
+
+export async function groupByStudentIdAndCourseId (studentId, courseId)  {
+    return fetchGet("/group/groupStudentCourse/"+studentId+"/"+courseId);
+}
+
+export async function groupByConsultantIdAndCourseId (consultantId, courseId)  {
+    return fetchGet("/group/groupConsultantCourse/"+consultantId+"/"+courseId);
+}
+

@@ -1,20 +1,63 @@
 import { Card, Form, Container, Col, Row, Button, Alert } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
-import { getDegrees, getCourses } from "./../data";
+import { degreesByUserId, coursesByUserIdDegreeId, groupByStudentIdAndCourseId, classroomByUserIdAndCourseId } from '../apiCalls/api';
+//import { getCourses } from "./../data";
 
 function DegreeCurseSelect() {
-    let degrees = getDegrees();
     let navigate = useNavigate();
+    var localUser = sessionStorage.getItem('localUser');
+
+    const [degrees,setDegrees] = useState([]);
     const [selectedDegree, setSelectedDegree] = useState(-1);
     const [selectedCourse, setSelectedCourse] = useState(-1);
     const [courses, setCourses] = useState([]);
     const [show, setShow] = useState(true);
+    const [user, setUser] = useState(localUser!==undefined?JSON.parse(localUser):{});
+
+    const getDegrees = () => {
+
+        degreesByUserId(user.id, user.type)
+            .then((data) => {
+                setDegrees(data);
+            })
+            .catch((err) => {
+                Promise.resolve(err).then(err=>{console.log(err)/*setFetchError(err.toString())*/})
+                //setIsLoading(false);
+            });
+    };
+
+    useEffect(() => {
+        getDegrees();
+    }, []);
+
+    const getCourses = (courseId) => {
+        console.log(user)
+        coursesByUserIdDegreeId(user.id,courseId, user.type)
+            .then((data) => {
+                setCourses(data);
+            })
+            .catch((err) => {
+                Promise.resolve(err).then(err=>{console.log(err)/*setFetchError(err.toString())*/})
+                //setIsLoading(false);
+            });
+    };
+
+    async function storeClassroomAndGroup (studentId, courseId){
+        let response;
+        if (user.type==='Student'){
+            response = await groupByStudentIdAndCourseId(studentId, courseId)
+            sessionStorage.setItem('group',JSON.stringify({'id':response[0][0],'name':response[0][1]}));
+        }
+        response = await classroomByUserIdAndCourseId(studentId, courseId, user.type)
+        sessionStorage.setItem('classroom',JSON.stringify({'id':response[0][0],'name':response[0][1]}));        
+        navigate("/app/initial");             
+    }        
 
 
     function selectDegree(event){     
         setSelectedDegree(event.target.value);
-        setCourses(getCourses(event.target.value));
+        getCourses(event.target.value);
         setSelectedCourse(-1);
     }
 
@@ -24,9 +67,9 @@ function DegreeCurseSelect() {
             setShow(true);
             const degree = degrees.find(degree=>degree.id==selectedDegree);
             const course = courses.find(course=>course.id==selectedCourse);
+            storeClassroomAndGroup(user.id,selectedCourse);
             sessionStorage.setItem('degree',degree.name);     
             sessionStorage.setItem('course',course.name);     
-            navigate("/app/initial");             
         }
         else{
             setShow(false);
