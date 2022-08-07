@@ -8,6 +8,7 @@ import ModalQuestion from './ModalQuestion';
 import { examQuestionType } from "./Exam";
 
 function QuestionHeader({ moveButtons, question, index }) {
+    //console.log(question)
 
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState();
@@ -18,7 +19,7 @@ function QuestionHeader({ moveButtons, question, index }) {
     
 
     const { dispatch } = useContext(QuestionsContext);
-    const optionHeader = (question.options!==undefined&&question.options.length>0)?true:false;
+    const optionHeader = (question.examQuestionOptions!==undefined&&question.examQuestionOptions.length>0)?true:false;
 
     function handleConfirm() {
         setSelectedQuestion();
@@ -50,8 +51,9 @@ function QuestionHeader({ moveButtons, question, index }) {
     }
 
     function changeEditable(question) {
-        setModalType(question.type);
-        setModalTitle(examQuestionType.getDescById(question.type));
+        setModalType(question.category);
+//        console.log(question)
+        setModalTitle(examQuestionType.getDescById(question.category));
         setShowModal(true);
     }
 
@@ -59,7 +61,7 @@ function QuestionHeader({ moveButtons, question, index }) {
         <Card>
             <Card.Header as="h6" className="text-white bg-secondary ">
                 <Stack direction="horizontal" gap={2}>
-                    <div className="fw-bold">Pregunta : {index + 1} &nbsp; {examQuestionType.getDescById(question.type)}</div>
+                    <div className="fw-bold">Pregunta : {index + 1} &nbsp; {examQuestionType.getDescById(question.category)}</div>
                     <OverlayTrigger placement="top" overlay={<Tooltip>Mover pregunta arriba</Tooltip>}>
                         <Button onClick={() => moveUpQuestion(question)} className="ms-auto" size="sm" disabled={moveButtons}><FontAwesomeIcon icon={solid('angles-up')} /></Button>
                     </OverlayTrigger>
@@ -73,7 +75,7 @@ function QuestionHeader({ moveButtons, question, index }) {
                     <tbody>
                         <tr >
                             <td>
-                                {question.text}
+                                {question.wording}
                             </td>
                             <td align="right">
                                 <OverlayTrigger placement="bottom" overlay={<Tooltip>...</Tooltip>}>
@@ -98,7 +100,15 @@ function QuestionHeader({ moveButtons, question, index }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {question.options.map((option, index) => { return (<tr key={index}><td>{option.text}</td><td align='center'>{option.isTrue&&<FontAwesomeIcon icon={solid('check')} />}</td></tr>) })}
+                                        {question.examQuestionOptions.map(
+                                            (option, index) => { 
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{option.answer}</td>
+                                                        <td align='center'>{option.isTrue&&<FontAwesomeIcon icon={solid('check')} />}</td>
+                                                        </tr>) 
+                                                    }
+                                            )}
                                     </tbody>
                                 </Table>
                             </td>

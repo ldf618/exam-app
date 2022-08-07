@@ -120,3 +120,7 @@ export async function groupByConsultantIdAndCourseId (consultantId, courseId)  {
     return fetchGet("/group/groupConsultantCourse/"+consultantId+"/"+courseId);
 }
 
+export async function saveExam (data)  {
+    return fetchPost("/exam/exam",data);
+}
+

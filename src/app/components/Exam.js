@@ -7,39 +7,49 @@ import ExamForm from './ExamForm';
 import ModalQuestion from './ModalQuestion';
 import QuestionHeader from './QuestionHeader';
 import { useNavigate } from "react-router-dom";
+import { saveExam } from '../apiCalls/api';
 
 export const examQuestionType = {
-    TEXT_ONLY: { id: 1, desc: "Tipo Texto" },
-    TEST_SINGLE_CHOICE: { id: 2, desc: "Tipo Test Unirespuesta" },
-    TEST_MULTIPLE_CHOICE: { id: 3, desc: "Tipo Test Multirespuesta" },
-    INDIVIDUAL_SCORE: { id: 4, desc: "Tipo Valoracion Individual" },
-    GRUPAL_SCORE: { id: 5, desc: "Tipo Valoracion Grupo" },
+    TEXT_ONLY: { id: 1, desc: "Tipo Texto", type:"FREETEXT" },
+    TEST_SINGLE_CHOICE: { id: 2, desc: "Tipo Test Unirespuesta", type:"OPTIONS" },
+    TEST_MULTIPLE_CHOICE: { id: 3, desc: "Tipo Test Multirespuesta", type:"OPTIONS" },
+    INDIVIDUAL_SCORE: { id: 4, desc: "Tipo Valoracion Individual", type:"INDIVIDUAL_EVALUATION" },
+    GRUPAL_SCORE: { id: 5, desc: "Tipo Valoracion Grupo", type:"GROUP_EVALUATION" },
     getDescById: function (id) {
         let value = Object.values(this).find(v => v.id === id);
         if (value === undefined)
             return '';
         else
             return value.desc;
+    },
+    getTypeById: function (id) {
+        console.log(id);
+        let value = Object.values(this).find(v => v.id === id);
+        console.log(value.type)
+        if (value === undefined)
+            return '';
+        else
+            return value.type;
     }
 };
 
 const initQuestions = [
     {
-        text: 'Texto de la pregunta 1',
-        type: examQuestionType.TEST_SINGLE_CHOICE.id,
-        options: [
-            { id: 1, text: 'opcion 1', isTrue: false },
-            { id: 2, text: 'opcion 2', isTrue: false },
-            { id: 3, text: 'opcion 3', isTrue: true }
+        wording: 'Texto de la pregunta 1',
+        category: examQuestionType.TEST_SINGLE_CHOICE.id,
+        examQuestionOptions: [
+            { answer: 'opcion 1', isTrue: false },
+            { answer: 'opcion 2', isTrue: false },
+            { answer: 'opcion 3', isTrue: true }
         ]
     },
     {
-        text: 'Texto de la pregunta 2',
-        type: examQuestionType.TEST_MULTIPLE_CHOICE.id,
-        options: [
-            { id: 1, text: 'opcion 1', isTrue: false },
-            { id: 2, text: 'opcion 2', isTrue: true },
-            { id: 3, text: 'opcion 3', isTrue: true }
+        wording: 'Texto de la pregunta 2',
+        category: examQuestionType.TEST_MULTIPLE_CHOICE.id,
+        examQuestionOptions: [
+            { answer: 'opcion 1', isTrue: false },
+            { answer: 'opcion 2', isTrue: true },
+            { answer: 'opcion 3', isTrue: true }
         ]
     }
 ]
@@ -92,7 +102,8 @@ function reducer(questions, action) {
         case actions.MOVE_DOWN:
             return move(questions, action.payload, +1);
         case actions.SAVE:
-            return [];
+            //return [];
+            return questions;
         default:
             return questions;
     }
@@ -112,6 +123,7 @@ function Exam() {
     const [showToast, setShowToast] = useState(false);
 
     var exam = sessionStorage.getItem('exam');
+    var user = JSON.parse(sessionStorage.getItem('localUser'));
 
     function changeEditableHeader(value) {
         setEditableHeader(value);
@@ -123,19 +135,46 @@ function Exam() {
         setShowModal(true);
     }
 
-    async function  save() {
-        const delay = ms => new Promise(res => setTimeout(res, ms));
-        setShowSpinner(true);
-        await delay(1000);
-        setShowSpinner(false);
-        //dispatch({ type: actions.SAVE })
-        setShowToast(true);
+    function  save() {
+        setShowSpinner(true); 
+        questions.forEach((question,i)=>{
+                question.category===examQuestionType.TEST_MULTIPLE_CHOICE.id
+                    ?question.isMultipleSelection=true
+                    :question.isMultipleSelection=false;
+                question.type =examQuestionType.getTypeById(question.category);
+                question.position=i;
+                question.examQuestionOptions.forEach((option,idx)=>option.position=idx);
+        });
+        exam.examQuestions=questions;
+        exam.type==='I'?exam.type='INDIVIDUAL':exam.type='GROUP';
+        let exams;
+        ({exams, ...user} = user);
+        exam.consultant=user;
+        exam.course={id:1};
+    //  console.log(questions);
+    //  const delay = ms => new Promise(res => setTimeout(res, ms));
+    //  setShowSpinner(true);
+    //  await delay(1000);
+        console.log(exam)
 
+        saveExam(exam)
+        .then(
+            function(res){ 
+                setShowSpinner(false);
+                dispatch({ type: actions.SAVE })
+                setShowToast(true);
+            },
+            function(err) {
+                setShowSpinner(false);
+                //Promise.resolve(err) 'cause err can be a Promise or not
+                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+            }
+        )
     }
 
     function closeSaveToast(){
         setShowToast(false);
-        navigate("/app/initial");
+        //navigate("/app/initial");
     }
     /*
         function addQuestion(value) {
@@ -190,7 +229,7 @@ function Exam() {
                 </Stack>
             </div>
 
-            <ModalQuestion show={showModal} modifyQuestion={false} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
+            <ModalQuestion show={showModal} questionIndex={questions.length} modifyQuestion={false} title={modalTitle} type={modalType} onHide={() => setShowModal(false)} />
         </QuestionsContext.Provider>
     );
 }

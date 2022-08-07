@@ -7,7 +7,7 @@ import { examQuestionType } from "./Exam";
 
 function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallback /*, edited = true*/ }) {
     /*
-    const [text, setText] = useState(option.text); 
+    const [text, setText] = useState(option.answer); 
     const [isTrue, setIsTrue] = useState(option.isTrue); 
     */
 
@@ -31,7 +31,7 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
     }
 
     function setText(value){
-        options[index].text=value;
+        options[index].answer=value;
         setOptions(options);
     }
     
@@ -48,7 +48,7 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
 
     function modifyQuestion (){
         setValidatedForm(false);
-        setInitialText(options[index].text);
+        setInitialText(options[index].answer);
         editedOptions[index]=true;
         disabledButtons.forEach((v,i,a)=>a[i] = true)  
         setEditedOptions(...editedOptions);
@@ -61,14 +61,14 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
         disabledButtons.forEach((v,i,a)=>a[i] = false)
         setEditedOptions(...editedOptions);
         //setShowEdit(false);
-        options[index].text=initialText;        
+        options[index].answer=initialText;        
         editCallback(false);
     }
 
     function confirmModify (e){ 
         const form = e.currentTarget;
+        e.preventDefault();
         if (form.checkValidity() === false) {
-            e.preventDefault();
             e.stopPropagation();
         }
         else{
@@ -94,14 +94,14 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
                     editedOptions[index] &&
                     <Stack className="align-items-start" direction="horizontal" gap={2}>
                         <Form noValidate validated={validatedForm} id={'optionForm'+index} onSubmit={confirmModify}>
-                            <Form.Control autoFocus as="textarea" rows={1} size="sm" cols="70" required value={options[index].text/*text*/} onChange={(e)=>setText(e.target.value)}></Form.Control>
+                            <Form.Control autoFocus as="textarea" rows={1} size="sm" cols="70" required value={options[index].answer} onChange={(e)=>setText(e.target.value)}></Form.Control>
                             <Form.Control.Feedback type="invalid">Debe escribir una opción</Form.Control.Feedback>
                         </Form>
                         <Button size="sm" variant="secondary" onClick={cancelModify}><FontAwesomeIcon icon={solid('xmark')} /></Button>
                         <Button size="sm" type="submit" form={'optionForm'+index}><FontAwesomeIcon icon={solid('check')} /></Button>                        
                     </Stack>                    
                 }
-                {!editedOptions[index] && options[index].text /*text*/}
+                {!editedOptions[index] && options[index].answer /*text*/}
             </td>
             {!(questionType===examQuestionType.GRUPAL_SCORE.id||questionType===examQuestionType.INDIVIDUAL_SCORE.id)&&
                 <td align="center">

@@ -42,13 +42,16 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
     function reducer(v) {
         return [...v];
     }
-    console.log(modifyQuestion )
-    var initOptions = modifyQuestion?questions[questionIndex].options:[];
+    var initOptions = modifyQuestion?JSON.parse(JSON.stringify(questions[questionIndex].examQuestionOptions)):[];//DeepCopy
+    const initEditedOptions = modifyQuestion?Array.from(questions[questionIndex].examQuestionOptions,()=>false):[];
+    const initDisabledButtons = modifyQuestion?Array.from(questions[questionIndex].examQuestionOptions,()=>false):[];
+        
+
     //const [options, setOptions] = useState(initOptions);
     const [options, setOptions] = useReducer(reducer, initOptions);
-    const [editedOptions, setEditedOptions] = useReducer(reducer, []);
-    const [disabledButtons, setDisabledButtons] = useReducer(reducer, []);
-    const [enunciado, setEnunciado] = useState(modifyQuestion?questions[questionIndex].text:'');
+    const [editedOptions, setEditedOptions] = useReducer(reducer,initEditedOptions);
+    const [disabledButtons, setDisabledButtons] = useReducer(reducer, initDisabledButtons);
+    const [enunciado, setEnunciado] = useState(modifyQuestion?questions[questionIndex].wording:'');
     const [validatedForm, setValidatedForm] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -72,9 +75,9 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
             //console.log("submit from form");
             //setQuestions(enunciado);
             if (!modifyQuestion)
-                addQuestion({ text: enunciado, type: questionType, options: [...options] });
+                addQuestion({ wording: enunciado, category: questionType, examQuestionOptions: [...options] });
             else
-                modifyQuestionF({ text: enunciado, type: questionType, options: [...options] });
+                modifyQuestionF({ wording: enunciado, category: questionType, examQuestionOptions: [...options] });
             setEnunciado('');
             setOptions([]);
             handleSubmit();

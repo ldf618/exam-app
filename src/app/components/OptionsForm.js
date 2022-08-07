@@ -20,7 +20,8 @@ function OptionsForm({questionType}) {
         setDisabledButtons(disabledButtons.push(true));
         console.log(editedOptions)
         setEditedOptions(editedOptions.push(true));
-        options.push({ text: '', isTrue: false })
+        console.log(editedOptions)
+        options.push({ answer: '', isTrue: false })
         setDisableAddButton(true);
     }
 

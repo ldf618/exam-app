@@ -20,7 +20,7 @@ ModalQuestion.propTypes = {
   };
 
 function ModalQuestion(props) {
-    //console.log(props.show);
+ //   console.log(props);
  
     function handleClose () {
         props.onHide();
@@ -32,7 +32,7 @@ function ModalQuestion(props) {
     }
 
     const text = props.modifyQuestion?'Modificar':'Añadir';
-
+    
     /*dialogClassName="modal"*/
     return (
         <Modal show={props.show} onHide={handleClose} backdrop="static" keyboard={false} centered size="lg" scrollable>
