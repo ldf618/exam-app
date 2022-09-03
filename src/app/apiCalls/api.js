@@ -124,3 +124,7 @@ export async function saveExam (data)  {
     return fetchPost("/exam/exam",data);
 }
 
+export async function searchExam (data)  {
+    return fetchPost("/exam/examSearch",data);
+}
+

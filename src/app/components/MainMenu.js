@@ -40,6 +40,7 @@ function MainMenu(props) {
                                 </div>
                         </Nav.Link>
                     }
+                    <Nav.Link onClick={() => { navigate("./test"); }} >Test</Nav.Link>
                     <Nav.Link onClick={() => { sessionStorage.clear(); navigate("/"); }} >Salir</Nav.Link>
                     <Nav.Link >{count}</Nav.Link>
                 </Nav>

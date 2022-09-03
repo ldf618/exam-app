@@ -1,4 +1,4 @@
-import { Stack, DropdownButton, Dropdown, Card, Button, Spinner, Toast } from 'react-bootstrap';
+import { Stack, DropdownButton, Dropdown, Card, Button, Spinner, Toast, ToastHeader } from 'react-bootstrap';
 import React, { useReducer, createContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro'
@@ -6,6 +6,7 @@ import ExamHeader from './ExamHeader';
 import ExamForm from './ExamForm';
 import ModalQuestion from './ModalQuestion';
 import QuestionHeader from './QuestionHeader';
+import CustomToastMsg from './CustomToastMsg';
 import { useNavigate } from "react-router-dom";
 import { saveExam } from '../apiCalls/api';
 
@@ -121,6 +122,10 @@ function Exam() {
     const [modalType, setModalType] = useState();
     const [showSpinner, setShowSpinner] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    const [toastHeader, setToastHeader] = useState('');
+    const [toastBody, setToastBody] = useState('');
+    const [toastBg, setToastBg] = useState('primary');
+    const [saveError, setSaveError] = useState(false);
 
     var exam = sessionStorage.getItem('exam');
     var user = JSON.parse(sessionStorage.getItem('localUser'));
@@ -162,11 +167,20 @@ function Exam() {
             function(res){ 
                 setShowSpinner(false);
                 dispatch({ type: actions.SAVE })
+                setToastHeader('Guardado');
+                setToastBody('El examen se ha guardado correctamente!');
+                setToastBg('light');
+                setSaveError(false);
                 setShowToast(true);
             },
             function(err) {
                 setShowSpinner(false);
                 //Promise.resolve(err) 'cause err can be a Promise or not
+                setToastHeader('Error');
+                setToastBody('Ha ocurrido un error, el examen NO se ha guardado correctamente');
+                setToastBg('danger');
+                setShowToast(true);
+                setSaveError(true);
                 Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
             }
         )
@@ -174,7 +188,8 @@ function Exam() {
 
     function closeSaveToast(){
         setShowToast(false);
-        //navigate("/app/initial");
+        if (!saveError)
+            navigate("/app/initial");
     }
     /*
         function addQuestion(value) {
@@ -219,13 +234,7 @@ function Exam() {
                     </DropdownButton >
                     <Button disabled={editableHeader} className="rounded-circle" onClick={() => save()}> <FontAwesomeIcon icon={regular('floppy-disk')} /> </Button>
                     {showSpinner&&<Spinner animation="border" variant="primary" size="sm" />}
-                    <Toast show={showToast} onClose={closeSaveToast} delay={3000} autohide>
-                        <Toast.Header>
-                            <strong className="me-auto">Guardado</strong>
-                        </Toast.Header>
-                        <Toast.Body>El examen se ha guardado correctamente! </Toast.Body>                       
-                        <div className ="m-3 text-end"><Button onClick={closeSaveToast} size="sm" variant="outline-primary">Aceptar</Button></div>                     
-                    </Toast>                  
+                    <CustomToastMsg show={showToast} onClose={closeSaveToast} delay={3000} header={toastHeader} body={toastBody} bg={toastBg}/>
                 </Stack>
             </div>
 
