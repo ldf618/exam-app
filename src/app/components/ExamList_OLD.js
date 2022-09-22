@@ -1,62 +1,67 @@
 import { Table, Dropdown, DropdownButton, Popover, OverlayTrigger } from 'react-bootstrap';
+import {getPageExams, getNumExams} from './../examData.js';
 import PaginationComponent from './PaginationComponent.js';
 import { useState} from 'react';
 import { useNavigate} from 'react-router-dom';
-import { searchExam } from '../apiCalls/api';
 
-function ExamList({pageSize, initExams, searchCriteria}) {
+function ExamList({pageSize}) {
     const navigate = useNavigate();
 
-    //Exams shown in Table
-    const [exams,setExams]=useState(initExams);
-
-    //Max visible pages in pagination component
+    //Number of visible pages in pagination component
     const paginationPages = 5;
 
     //total pages searched
-    const totalPages = exams.totalPages>paginationPages?paginationPages:exams.totalPages;
+    const totalPages = getNumExams()/pageSize;//getExams();
 
     //[1,2, ... paginationPages]
-    const initPages = Array.from({length: totalPages}, (v, i) => i+1);
-   
+    const initPages = Array.from({length: paginationPages}, (v, i) => i+1);
+
+    //Exams shown in Table
+    const [exams,setExams]=useState(getPageExams(1, pageSize));
+    
     //active page in pagination component
     const [activePage,setActivePage]=useState(1);
 
     //visible pages in pagination component
     const [pages, setPages]=useState(initPages);
-
-    function searchExams(){
-        searchExam(searchCriteria)
-        .then(
-            function(data){ 
-                setExams(data);
-//                setIsLoading(false);
-            },
-            function(err) {
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
-            }
-        )
-    }
       
     function pageClicked(page){
         setActivePage(page)
-        searchCriteria.pageNumber=page-1;
-        searchExams();
+        setExams(getPageExams(page, parseInt(pageSize)));
     }
 
     function pageNext(){
+        if(pages.at(-1)!==totalPages){
+            //array shift to the right
+            let newPages = [...pages]
+            newPages.push(newPages.at(-1)+1); //add last+1
+            newPages.shift(); //delete first
+            setPages(newPages);
+        }
         pageClicked(activePage+1);
     }
 
     function pagePrev(){
+        if(pages.at(0)!==1){
+            let newPages = [...pages]
+            newPages.pop(); //delete last        
+            newPages.splice(0,0,newPages[0]-1); //add on first position first value-1
+            setPages(newPages);
+        }
         pageClicked(activePage-1);
     }
 
     function pageFirst(){
+        setPages(initPages)
         pageClicked(1);
     }
 
     function pageLast(){
+        let newPages = Array(paginationPages).fill().map((_, i) => (totalPages-4) + i);
+        console.log(newPages);
+        console.log(totalPages);
+        console.log(getNumExams());
+        setPages(newPages)
         pageClicked(totalPages);
     }
 
@@ -88,7 +93,7 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                     </tr>
                 </thead>
                 <tbody>
-                    {exams.content
+                    {exams
                         .map((exam, index) => {
                             return (
 
@@ -101,7 +106,7 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                                                 <thead>
                                                     <tr>
                                                         <th>Creado</th>
-                                                        <th>Modificado</th>
+                                                        <th>Moficado</th>
                                                         <th>Tipo</th>
                                                         <th>Publicado</th>
                                                     </tr>
@@ -117,7 +122,7 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                                       </Popover>}>                 
                                     <td>{exam.name}</td>
                                     </OverlayTrigger>                                    
-                                    <td>{exam.consultant.username}</td>
+                                    <td>{exam.consultant}</td>
                                     <td>
                                         <DropdownButton title=" " drop="start" size="sm" >
                                             <Dropdown.Item disabled={exam.published} onClick={()=>publish(index)} >Publicar</Dropdown.Item>

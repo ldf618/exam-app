@@ -13,10 +13,13 @@ private LocalDate endDate;
 
 const criteria = {
     "name": "Exam"
-    ,"type": "INDIVIDUAL"//"GROUP"
-    ,"startDate": "2022-08-02"
-    ,"endDate": "2022-09-02"
-    ,"published": true
+   // ,"type": "INDIVIDUAL"//"GROUP"
+   // ,"startDate": "2022-08-02"
+   // ,"endDate": "2022-09-02"
+   // ,"published": true
+//      ,"pageNumber":0
+//      ,"pageSize":2
+      
   }
 
 function Test (){
@@ -48,7 +51,7 @@ function Test (){
             </thead>
             {!isLoading &&
             <tbody>
-                {exams.map(exam => { return (<tr key={exam.id}><td>{exam.id}</td><td>{exam.name}</td></tr>) })}
+                {exams.content.map(exam => { return (<tr key={exam.id}><td>{exam.id}</td><td>{exam.name}</td></tr>) })}
             </tbody>
             }
         </Table>
