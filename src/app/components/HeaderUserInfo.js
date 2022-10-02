@@ -5,7 +5,8 @@ function HeaderUserInfo(props) {
     const user = props.user;
     //const colspan = user.userClass === "Student" ? 3 : 0;
     const degree = sessionStorage.getItem('degree');
-    const course = sessionStorage.getItem('course');
+    var course = sessionStorage.getItem('course');
+    course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" }
     var sessionClassroom = sessionStorage.getItem('classroom');
     var sessionGroup = sessionStorage.getItem('group');
     var classroom = sessionClassroom !== 'undefined' ? JSON.parse(sessionClassroom) : { "id": 0, "name": "" }
@@ -57,7 +58,7 @@ function HeaderUserInfo(props) {
                         </td>
                         <td className="fw-bold" width="10%">Asignatura:</td>
                         <td >
-                            {course}
+                            {course.name}
                         </td>
                     </tr>
                 }

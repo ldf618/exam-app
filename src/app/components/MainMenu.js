@@ -14,7 +14,8 @@ function MainMenu(props) {
 
     const userClass = props.userClass;
     const navigate = useNavigate();
-    const course = sessionStorage.getItem('course');
+    var course = sessionStorage.getItem('course');
+    course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" };
 
     return (
         <Navbar sticky="top" className="p-1" bg="dark" variant="dark" expand="lg">

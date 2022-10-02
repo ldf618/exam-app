@@ -1,85 +1,15 @@
 import { Table, Dropdown, DropdownButton, Popover, OverlayTrigger } from 'react-bootstrap';
 import PaginationComponent from './PaginationComponent.js';
-import { useState} from 'react';
-import { useNavigate} from 'react-router-dom';
-import { searchExam } from '../apiCalls/api';
 
-function ExamList({pageSize, initExams, searchCriteria}) {
-    const navigate = useNavigate();
-
-    //Exams shown in Table
-    const [exams,setExams]=useState(initExams);
-
-    //Max visible pages in pagination component
-    const paginationPages = 5;
-
-    //total pages searched
-    const totalPages = exams.totalPages>paginationPages?paginationPages:exams.totalPages;
-
-    //[1,2, ... paginationPages]
-    const initPages = Array.from({length: totalPages}, (v, i) => i+1);
-   
-    //active page in pagination component
-    const [activePage,setActivePage]=useState(1);
-
-    //visible pages in pagination component
-    const [pages, setPages]=useState(initPages);
-
-    function searchExams(){
-        searchExam(searchCriteria)
-        .then(
-            function(data){ 
-                setExams(data);
-//                setIsLoading(false);
-            },
-            function(err) {
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
-            }
-        )
-    }
-      
-    function pageClicked(page){
-        setActivePage(page)
-        searchCriteria.pageNumber=page-1;
-        searchExams();
-    }
-
-    function pageNext(){
-        pageClicked(activePage+1);
-    }
-
-    function pagePrev(){
-        pageClicked(activePage-1);
-    }
-
-    function pageFirst(){
-        pageClicked(1);
-    }
-
-    function pageLast(){
-        pageClicked(totalPages);
-    }
-
-    function publish(index){
-        let newExams =[...exams]
-        newExams[index].published=true;
-        //Here it should be persisted
-        setExams(newExams);        
-    }
-
-    function modify(index){
-        sessionStorage.setItem('exam', JSON.stringify(exams[index]));
-        navigate("/app/exam");
-    }
-
+function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, pagePrev, pageNext, publishExam, modifyExam, deleteExam}) {
 
     return (
         <>
             <div className="mt-3 d-flex align-items-center justify-content-center">
-            <PaginationComponent pages={pages} activePage={activePage} totalPages={totalPages} 
+            <PaginationComponent pages={pages} activePage={activePage} totalPages={exams.totalPages} 
                 onPageClick={pageClicked} onPageFirst={pageFirst} onPageLast={pageLast} onPagePrev={pagePrev} onPageNext={pageNext} /> 
-            </div>        
-            <Table striped bordered responsive>
+            </div> 
+            <Table striped bordered responsive size="sm">
                 <thead>
                     <tr>
                         <th minwidth="75%">Título</th>
@@ -87,9 +17,9 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {exams.content
-                        .map((exam, index) => {
+                <tbody style={{'height': '250px'}}>
+                    {//(exams!==undefined) && 
+                        exams.content.map((exam, index) => {
                             return (
 
                                 <tr key={index}>
@@ -110,7 +40,7 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                                                 <td>{exam.creationDate}</td>
                                                 <td>{exam.changeDate}</td>
                                                 <td>{exam.type}</td>
-                                                <td>{exam.published?"Si":"No"}</td>
+                                                <td>{exam.publicationDate!==null?"Si":"No"}</td>
                                                 </tr></tbody>
                                             </Table>                                           
                                         </Popover.Body>
@@ -120,8 +50,9 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                                     <td>{exam.consultant.username}</td>
                                     <td>
                                         <DropdownButton title=" " drop="start" size="sm" >
-                                            <Dropdown.Item disabled={exam.published} onClick={()=>publish(index)} >Publicar</Dropdown.Item>
-                                            <Dropdown.Item onClick={()=>modify(index)} >Modificar</Dropdown.Item>
+                                            <Dropdown.Item disabled={exam.publicationDate!==null} onClick={()=>publishExam(index)} >Publicar</Dropdown.Item>
+                                            <Dropdown.Item onClick={()=>modifyExam(index)} >Modificar</Dropdown.Item>
+                                            <Dropdown.Item onClick={()=>deleteExam(index)} >Eliminar</Dropdown.Item>
                                         </DropdownButton >
                                     </td>                                    
                                 </tr>                              
@@ -132,7 +63,7 @@ function ExamList({pageSize, initExams, searchCriteria}) {
                 </tbody>
             </Table>
             <div className="d-flex align-items-center justify-content-center">
-            <PaginationComponent pages={pages} activePage={activePage} totalPages={totalPages} 
+            <PaginationComponent pages={pages} activePage={activePage} totalPages={exams.totalPages} 
                 onPageClick={pageClicked} onPageFirst={pageFirst} onPageLast={pageLast} onPagePrev={pagePrev} onPageNext={pageNext} />
             </div>
         </>

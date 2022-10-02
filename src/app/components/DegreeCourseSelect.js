@@ -69,7 +69,7 @@ function DegreeCurseSelect() {
             const course = courses.find(course=>course.id==selectedCourse);
             storeClassroomAndGroup(user.id,selectedCourse);
             sessionStorage.setItem('degree',degree.name);     
-            sessionStorage.setItem('course',course.name);     
+            sessionStorage.setItem('course',JSON.stringify(course));     
         }
         else{
             setShow(false);

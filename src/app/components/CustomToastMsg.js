@@ -11,7 +11,7 @@ CustomToastMsg.propTypes = {
     //show delay 
     delay: PropTypes.number,
     //variant
-    bg: PropTypes.oneOf<String>(['Primary','Secondary','Success','Danger', 'Warning', 'Info', 'Light', 'Dark']),
+    bg: PropTypes.oneOf(['primary','secondary','success','danger', 'warning', 'info', 'light', 'dark']),
     //callback function for modal hide
     onClose: PropTypes.func
   };

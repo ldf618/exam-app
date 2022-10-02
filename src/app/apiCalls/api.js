@@ -10,8 +10,13 @@ function abortTimeout(){
 
 async function checkError (response){
     return await new Promise ((resolve,reject)=>{
-        if (response.ok){
+
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        //status 204 = NO_CONTENT
+        if (response.ok && response.status!==204 && isJson ){
             resolve(response.json());
+        }else if (response.status===204 || !isJson){
+            resolve(response.text());
         }else{
             reject(response.text());
         }       
@@ -128,3 +133,14 @@ export async function searchExam (data)  {
     return fetchPost("/exam/examSearch",data);
 }
 
+export async function updatePublicationDate (data)  {
+    return fetchPost("/exam/updatePublicationDate",data);
+}
+
+export async function deleteExam (data)  {
+    return fetchPost("/exam/deleteExam",data);
+}
+
+export async function test (data)  {
+    return fetchPost("/exam/test",data);
+}
