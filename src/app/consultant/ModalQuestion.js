@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import ExamQuestionForm from './ExamQuestionForm';
-import './modal.css'
+//import './modal.css'
 import PropTypes from 'prop-types';
 
 ModalQuestion.propTypes = {
@@ -37,7 +37,7 @@ function ModalQuestion(props) {
     return (
         <Modal show={props.show} onHide={handleClose} backdrop="static" keyboard={false} centered size="lg" scrollable>
             <Modal.Header closeButton>
-                <Modal.Title>{text} pregunta / apartado {props.questionIndex+1} de {props.title.toLowerCase()}</Modal.Title>
+                <Modal.Title>{text} pregunta / apartado {props.questionIndex+1} de {props.title===undefined?'':props.title.toLowerCase()}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <ExamQuestionForm handleSubmit={handleSubmit} 

@@ -8,7 +8,8 @@ function ExamHeader(props) {
     switch(exam.type){
         case 'I': type = 'Individual'; break;
         case 'G': type = 'Grupal'; break;
-        default: type ='';
+        case 'INDIVIDUAL': type = 'Individual'; break;
+        case 'GRUPAL': type = 'Grupal'; break;        
     }
 
     function changeEditable(){
@@ -26,7 +27,7 @@ function ExamHeader(props) {
                             <td className="fw-bold">
                                 Tipo examen:
                             </td>
-                            <td>
+                            <td colSpan={3}>
                                 {type}
                             </td>
                         </tr>
@@ -34,25 +35,28 @@ function ExamHeader(props) {
                             <td className="fw-bold">
                                 Descripción:
                             </td>
-                            <td style={{ whiteSpace: "pre-wrap" }}>
+                            <td colSpan={3} style={{ whiteSpace: "pre-wrap" }}>
                                 {exam.instructions}
                             </td>
                         </tr>                                                
                         <tr>
-                            <td className="fw-bold">
+                            <td className="fw-bold" width="15%">
                                 Fecha límite:
                             </td>
-                            <td>
-                                {(new Date(exam.publicationDate)).toLocaleDateString()}
+                            <td width="35%">
+                                {(new Date(exam.deadline)).toLocaleDateString()}
+                            </td>
+                            <td className="fw-bold" width="15%">
+                                Fecha creación:
+                            </td>
+                            <td width="35%">
+                                {exam.publicationDate===undefined?(new Date()).toLocaleDateString():(new Date(exam.publicationDate)).toLocaleDateString()}
                             </td>
                         </tr> 
-                        <tr >
-                            <td colSpan={2}>
-
-                            </td>
-                        </tr>  
+        
                         </tbody>                      
                     </table>
+                    <br/>
                     <Button  variant="primary" size="sm" onClick={changeEditable}>Modificar</Button>                                                
                 </Card.Body>
         </Card>

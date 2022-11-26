@@ -29,6 +29,7 @@ function OptionForm({ /*option,*/ questionType, index, deleteCallback, editCallb
             break;
         default:
     }
+    console.log(questionType);
 
     function setText(value){
         options[index].answer=value;

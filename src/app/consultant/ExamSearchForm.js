@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Accordion, Form, Row, Col, Container, Stack, Button, Alert, ToastContainer } from 'react-bootstrap';
 import ExamList from './ExamList';
 import { useNavigate} from 'react-router-dom';
 import { searchExam, updatePublicationDate, deleteExam as delExam, test } from '../apiCalls/api';
-import CustomToastMsg from './CustomToastMsg';
+import CustomToastMsg from '../components/CustomToastMsg';
+import {firstPageArray, lastPageArray, nextPageArray, prevPageArray, pageClickedArray} from '../components/PaginationComponent';
 
 function ExamSearchForm() {   
     
+    const messagesEndRef = useRef(null)
+
     var course = sessionStorage.getItem('course');
     course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" }
     
@@ -21,96 +24,52 @@ function ExamSearchForm() {
     const [toastHeader, setToastHeader] = useState('');
     const [toastBody, setToastBody] = useState('');
     const [toastBg, setToastBg] = useState('primary');
-
-    //Max visible pages in pagination component. Must be an odd number
-    const paginationPages = 5;
-    
+   
     //Number of element data in each page
     const pageSize=6;
-
-    var pageNumber=0;
-        
+       
     //active page in pagination component 
     const [activePage,setActivePage]=useState(1);
 
     //visible page buttons in pagination component [1,2, ... paginationPages]
     const [pages, setPages]=useState([]);
 
-    //returns the number of pages in the pagination component 
-    function totalInitialPages(totalPages){
-        return totalPages>paginationPages?paginationPages:totalPages;
-    }
 
-    //returns the initial array of pages for the pagination component
-    function initArrayPages(totalPages){
-        let vTotalPages=totalInitialPages(totalPages);
-        return Array.from({length: vTotalPages}, (v, i) => i+1);
-    }
-
-/*    function handleShowModal(type) {
-        setModalTitle(type.desc);
-        setModalType(type.id);
-        setShowModal(true);
-    }*/
+    function scrollToBottom () {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }   
 
     function closeSaveToast(){
         setShowToast(false);
     }
     
-    function goToPage(page){
+    function goToPage(page) {
         setActivePage(page);
-        pageNumber=page-1;
-        searchExams();
+        searchExams(page -1);
     }
 
-    function pageClick(page){
-        let vTotalPages=totalInitialPages(exams.totalPages);
-        let offset = (Math.trunc(vTotalPages/2));
-        let lastPage = page+offset;
-        let firstPage = page-offset;
-        if (lastPage>exams.totalPages){
-            lastPage=exams.totalPages; 
-            firstPage=exams.totalPages-vTotalPages+1; 
-        }
-        if (firstPage<1){
-            lastPage=vTotalPages; 
-            firstPage=1; 
-        }
-        let newPages = Array.from({length: lastPage-firstPage+1}, (v, i) => i+firstPage);
-        setPages(newPages);
+    function pageClick(page) {
+        setPages(pageClickedArray(page,exams.totalPages));
         goToPage(page)
     }
 
-    function pageNext(){
-        if(pages.at(-1)!==exams.totalPages){
-            //array shifts to the right
-            let newPages = [...pages]
-            newPages.push(newPages.at(-1)+1); //add last+1
-            newPages.shift(); //delete first
-            setPages(newPages);
-        }
-        goToPage(activePage+1);
+    function pageNext() {
+        setPages(nextPageArray(pages,exams.totalPages));
+        goToPage(activePage + 1);
     }
 
-    function pagePrev(){
-        if(pages.at(0)!==1){
-            let newPages = [...pages]
-            newPages.pop(); //delete last        
-            newPages.splice(0,0,newPages[0]-1); //add on first position first value-1
-            setPages(newPages);
-        }
-        goToPage(activePage-1);
+    function pagePrev() {
+        setPages(prevPageArray(pages));
+        goToPage(activePage - 1);
     }
 
-    function pageFirst(){
-        setPages(initArrayPages(exams.totalPages))
+    function pageFirst() {
+        setPages(firstPageArray(exams.totalPages));
         goToPage(1);
     }
 
-    function pageLast(){
-        let vTotalPages=totalInitialPages(exams.totalPages);
-        let newPages = Array(vTotalPages).fill().map((_, i) => (exams.totalPages-vTotalPages+1) + i);
-        setPages(newPages);        
+    function pageLast() {
+        setPages(lastPageArray(exams.totalPages));
         goToPage(exams.totalPages);
     }
 
@@ -139,9 +98,10 @@ function ExamSearchForm() {
     }
 
     function deleteExam(index){
-
+        console.log(index);
         let newExams ={...exams}
-        test(newExams.content[index])
+        //test(newExams.content[index])
+        delExam(newExams.content[index])
         .then(
             function(data){ 
                 setToastHeader('Examen eliminado!');
@@ -163,7 +123,7 @@ function ExamSearchForm() {
     }
 
     function modifyExam(index){
-        sessionStorage.setItem('exam', JSON.stringify(exams[index]));
+        sessionStorage.setItem('exam', JSON.stringify(exams.content[index]));
         navigate("/app/exam");
     }
 
@@ -175,15 +135,15 @@ function ExamSearchForm() {
         }
         else{
             setActivePage(1);            
-            searchExams();
+            searchExams(0);
         }
-        setValidatedForm(true);        
+        setValidatedForm(true); 
     }
 
-    function searchExams(){
+    function searchExams(page){
         const criteria = {};
         for (var member in params) if (params[member]!=='') criteria[member]=params[member];      
-        criteria.pageNumber=pageNumber;
+        criteria.pageNumber=page;
         criteria.pageSize=pageSize;
         criteria.course = course;
 
@@ -191,9 +151,10 @@ function ExamSearchForm() {
         .then(
             function(data){ 
                 setExams(data);
-                if (criteria.pageNumber===0) setPages(initArrayPages(data.totalPages));
+                if (criteria.pageNumber===0) setPages(firstPageArray(data.totalPages));
                 setIsLoading(false);
                 console.log(data);
+                scrollToBottom();
             },
             function(err) {
                 Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
@@ -301,6 +262,8 @@ function ExamSearchForm() {
             La búsqueda no ha encontrado ningún examen para la asignatura {course.name} !
         </Alert>
         }
+
+        <div ref={messagesEndRef} />
 </>
     );
 

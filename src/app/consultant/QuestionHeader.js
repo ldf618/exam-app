@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import { QuestionsContext, actions } from './Exam';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../components/ConfirmDialog';
 import ModalQuestion from './ModalQuestion';
 import { examQuestionType } from "./Exam";
 

@@ -1,8 +1,7 @@
-
 import React, {useEffect} from 'react';
 import { useNavigate, Outlet } from "react-router-dom";
-import HeaderUserInfo from './components/HeaderUserInfo';
-import MainMenu from './components/MainMenu';
+import HeaderUserInfo from './menu/HeaderUserInfo';
+import MainMenu from './menu/MainMenu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 

@@ -1,21 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import store from './app/store/store'
 import { Provider } from 'react-redux'
-import Login from "./Login"
+import Login from "./app/login/Login"
 import App from './app/App';
-import Initial from './app/components/Initial';
+import Initial from './app/menu/Initial';
 import DegreeCurseSelect from './app/components/DegreeCourseSelect';
-import ExamForm from './app/components/ExamForm';
-import Exam from './app/components/Exam';
-import ExamSearchForm from './app/components/ExamSearchForm';
-import FetchExample from './app/components/FetchExample';
+import ExamForm from './app/consultant/ExamForm';
+import Exam from './app/consultant/Exam';
+import ExamSearchForm from './app/consultant/ExamSearchForm';
+import StudentExamSearchForm from './app/student/ExamSearchForm';
+import FetchExample from './app/test/FetchExample';
 import {ReduxExample} from './app/components/ReduxExample';
 import DegreesTable from './app/components/DegreesTable';
-import Test from './app/components/Test';
+import Test from './app/test/Test';
 
 
 ReactDOM.render(
@@ -33,6 +33,7 @@ ReactDOM.render(
           <Route path="/app/reduxExample" element={<ReduxExample/>} />
           <Route path="/app/degreesTable" element={<DegreesTable/>} />
           <Route path="/app/test" element={<Test/>} />
+          <Route path="/app/studentExamSearch" element={<StudentExamSearchForm />} />
         </Route>
         <Route
           path="*"

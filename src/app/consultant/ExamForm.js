@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
         .min(10, "*Debe tener al menos 10 caracteres")
         .max(1000, "*Debe tener como máximo 1000 caracteres")
         .required("*Es obligatorio escribir las instrucciones"),
-    publicationDate: Yup.date()
+    deadline: Yup.date()
         .nullable()
         .required("*Debe escribir una fecha de publicación")
         .min(new Date() + 1, "debe ser posterior a la fecha actual")
@@ -29,7 +29,7 @@ function ExamForm(props) {
     var initial = {};
 
     if (exam === undefined)
-        initial = { type: '', name: '', instructions: '', publicationDate: '' };
+        initial = { type: '', name: '', instructions: '', deadline: '' };
     else
         initial = exam;
 
@@ -73,9 +73,9 @@ function ExamForm(props) {
                                     <Col>
                                         <Form.Group>
                                             <Form.Label as="strong">Tipo:&nbsp; </Form.Label>
-                                            <Form.Check type="radio" name="type" value="I" checked={values.type == 'I' ? true : false}
+                                            <Form.Check type="radio" name="type" value="INDIVIDUAL" checked={values.type == 'INDIVIDUAL' ? true : false}
                                                 inline label="Plantilla individual" onChange={handleChange} onBlur={handleBlur} />
-                                            <Form.Check type="radio" name="type" value="G" checked={values.type ==   'G' ? true : false}
+                                            <Form.Check type="radio" name="type" value="GROUP" checked={values.type ==   'GROUP' ? true : false}
                                                 inline label="Plantilla grupal" onChange={handleChange} onBlur={handleBlur} />
                                             <ErrorMessage name="type">
                                                 {msg => <Form.Text className="text-danger">{msg}</Form.Text>}</ErrorMessage>
@@ -105,9 +105,9 @@ function ExamForm(props) {
                                 <Row className="mb-3">
                                     <Col lg="2">
                                         <Form.Label as="strong">Fecha Límite:&nbsp; </Form.Label>
-                                        <Form.Control name="publicationDate" id="publicationDate" type="date" value={values.publicationDate}
+                                        <Form.Control name="deadline" id="deadline" type="date" value={values.deadline}
                                             onChange={handleChange} onBlur={handleBlur} />
-                                        {errors.publicationDate && touched.publicationDate && <Form.Text className="text-danger">{errors.publicationDate}</Form.Text>}
+                                        {errors.deadline && touched.deadline && <Form.Text className="text-danger">{errors.deadline}</Form.Text>}
                                     </Col>
                                 </Row>
                                 <Row>

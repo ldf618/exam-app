@@ -2,12 +2,12 @@
 import { Button, Form, Row, Col, Container, Alert } from 'react-bootstrap';
 import React, { useState }    from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
+import { solid, /*regular, brands*/ } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { faAngry } from '@fortawesome/free-regular-svg-icons';
+//import { faAngry } from '@fortawesome/free-regular-svg-icons';
 import {useNavigate} from "react-router-dom";
-import { authenticate } from "./app/data";
-import { authenticateUser, userByName } from './app/apiCalls/api';
+//import { authenticate } from "../testData/data";
+import { authenticateUser, userByName } from '../apiCalls/api';
 /*
 <FontAwesomeIcon icon={solid('user-secret')} />
 <FontAwesomeIcon icon={faAngry} />                

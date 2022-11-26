@@ -24,6 +24,23 @@ async function checkError (response){
     )
 }
 
+async function checkError2 (response){
+    const text = await response.text(); // Parse it as text        
+    return await new Promise ((resolve,reject)=>{      
+        if (response.ok){
+            try {                
+                const data = JSON.parse(text); // Try to parse it as json
+                resolve(data);
+            } catch(err) {
+                // This probably means your response is text, do you text handling here
+                resolve(text);
+            }
+        }else{
+            reject(text);
+        }
+    })
+}
+
 async function fetchGet (url){
     let signal = abortTimeout(); 
     const options = {
@@ -37,7 +54,7 @@ async function fetchGet (url){
         credentials: 'include',
         signal:signal
     };
-    return fetch(baseURL+url,options/*{signal}*/).then(checkError)
+    return fetch(baseURL+url,options/*{signal}*/).then(checkError2)
 }
 
 async function fetchPost (url, data){
@@ -55,7 +72,7 @@ async function fetchPost (url, data){
         body:JSON.stringify(data)//, signal:signal
     };
 
-    return  fetch(baseURL+url,options).then(checkError)
+    return  fetch(baseURL+url,options).then(checkError2)
 }
 
 export async function findAllDegrees ()  {

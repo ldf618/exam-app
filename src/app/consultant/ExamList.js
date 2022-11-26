@@ -1,7 +1,30 @@
+import {useState} from 'react';
 import { Table, Dropdown, DropdownButton, Popover, OverlayTrigger } from 'react-bootstrap';
-import PaginationComponent from './PaginationComponent.js';
+import PaginationComponent from '../components/PaginationComponent.js';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, pagePrev, pageNext, publishExam, modifyExam, deleteExam}) {
+
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [selectedExam, setSelectedExam] = useState();
+
+    function handleConfirm() {
+        setShowConfirm(false);
+        setSelectedExam();
+        deleteExam(selectedExam); //dispatch({ type: actions.REMOVE, payload: selectedQuestion });        
+    }
+
+    function handleCancel() {
+        //console.log("handleCancel");
+        setSelectedExam();
+        setShowConfirm(false);
+    }
+
+    function showDeleteConfirm(index) {
+        //show confirm
+        setSelectedExam(index);
+        setShowConfirm(true);
+    }
 
     return (
         <>
@@ -12,7 +35,7 @@ function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, p
             <Table striped bordered responsive size="sm">
                 <thead>
                     <tr>
-                        <th minwidth="75%">Título</th>
+                        <th width="75%">Título</th>
                         <th>Autor</th>
                         <th>Acciones</th>
                     </tr>
@@ -37,8 +60,8 @@ function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, p
                                                     </tr>
                                                 </thead>
                                                 <tbody><tr>
-                                                <td>{exam.creationDate}</td>
-                                                <td>{exam.changeDate}</td>
+                                                <td>{new Date (exam.creationDate).toLocaleDateString()}</td>
+                                                <td>{new Date (exam.changeDate).toLocaleDateString()}</td>
                                                 <td>{exam.type}</td>
                                                 <td>{exam.publicationDate!==null?"Si":"No"}</td>
                                                 </tr></tbody>
@@ -52,7 +75,8 @@ function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, p
                                         <DropdownButton title=" " drop="start" size="sm" >
                                             <Dropdown.Item disabled={exam.publicationDate!==null} onClick={()=>publishExam(index)} >Publicar</Dropdown.Item>
                                             <Dropdown.Item onClick={()=>modifyExam(index)} >Modificar</Dropdown.Item>
-                                            <Dropdown.Item onClick={()=>deleteExam(index)} >Eliminar</Dropdown.Item>
+                                            <Dropdown.Item onClick={()=>showDeleteConfirm(index)} >Eliminar</Dropdown.Item>
+                                            <ConfirmDialog show={showConfirm} message="¿Seguro que desea eliminar la plantilla?" onConfirm={handleConfirm} onCancel={handleCancel} />
                                         </DropdownButton >
                                     </td>                                    
                                 </tr>                              

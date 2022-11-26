@@ -1,4 +1,4 @@
-import { Modal, Button, Card } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import React from 'react';
 
 function ConfirmDialog({ show, message, onConfirm, onCancel }) {

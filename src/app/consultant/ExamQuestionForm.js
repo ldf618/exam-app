@@ -56,10 +56,12 @@ function ExamQuestionForm({ handleSubmit, questionType, modifyQuestion, question
     const [showAlert, setShowAlert] = useState(false);
 
     function addQuestion(question) {
+        //console.log("add")
         dispatch({ type: actions.ADD, payload: question });
     }
 
     function modifyQuestionF(question) {
+        //console.log("modify")
         dispatch({ type: actions.MODIFY, payload: question, index: questionIndex });
     }
 
