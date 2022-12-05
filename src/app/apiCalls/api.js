@@ -161,3 +161,7 @@ export async function deleteExam (data)  {
 export async function test (data)  {
     return fetchPost("/exam/test",data);
 }
+
+export async function saveExamAnswer (data)  {
+    return fetchPost("/examAnswer/examAnswer",data);
+}

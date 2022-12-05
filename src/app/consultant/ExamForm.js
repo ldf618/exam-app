@@ -2,6 +2,7 @@ import { Card, Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { Formik, ErrorMessage } from 'formik';
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
+import StateManager from '../utils/StateManager';
 
 const validationSchema = Yup.object().shape({
     type: Yup.string()
@@ -54,7 +55,7 @@ function ExamForm(props) {
             onSubmit={
                 (values, { setSubmitting }) => {
                     setSubmitting(true);
-                    sessionStorage.setItem('exam', JSON.stringify(values));
+                    StateManager.saveState('exam', values);
                     if (modify) {
                         props.changeEditable(false);
                     } else {

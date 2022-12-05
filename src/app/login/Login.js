@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {useNavigate} from "react-router-dom";
 //import { authenticate } from "../testData/data";
 import { authenticateUser, userByName } from '../apiCalls/api';
+import StateManager from '../utils/StateManager';
 /*
 <FontAwesomeIcon icon={solid('user-secret')} />
 <FontAwesomeIcon icon={faAngry} />                
@@ -33,7 +34,7 @@ function Login() {
       }
       else{
           setIncorrectUser(false);
-          sessionStorage.setItem('localUser',JSON.stringify(authUser));
+          StateManager.saveState('localUser',authUser);
           navigate("/app/degreeselect");
       }
 
@@ -49,7 +50,7 @@ function Login() {
                 userByName (userName)
                 .then(
                   function (authUser){
-                    sessionStorage.setItem('localUser',JSON.stringify(authUser));
+                    StateManager.saveState('localUser',authUser);
                     navigate("/app/degreeselect");
                   },
                   function(err2) {

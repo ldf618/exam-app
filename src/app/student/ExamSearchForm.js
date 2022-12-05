@@ -2,16 +2,19 @@ import { useState, useRef } from 'react';
 import { Accordion, Form, Row, Col, Container, Stack, Button, Alert, ToastContainer } from 'react-bootstrap';
 import ExamList from './ExamList';
 import { useNavigate } from 'react-router-dom';
-import { searchExam, updatePublicationDate, deleteExam as delExam, test } from '../apiCalls/api';
+import { searchExam } from '../apiCalls/api';
 import CustomToastMsg from '../components/CustomToastMsg';
 import {firstPageArray, lastPageArray, nextPageArray, prevPageArray, pageClickedArray} from '../components/PaginationComponent';
+import StateManager from '../utils/StateManager';
+import ModalExamView from './ModalExamView';
+import createExamAnswer from './CreateExamAnswer';
+import { saveExamAnswer } from '../apiCalls/api';
 
 function StudentExamSearchForm() {
 
     const messagesEndRef = useRef(null)
 
-    var course = sessionStorage.getItem('course');
-    course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" }
+    var course = StateManager.loadState('course')??{ "id": 0, "name": "" };
 
     const navigate = useNavigate();
 
@@ -24,6 +27,9 @@ function StudentExamSearchForm() {
     const [toastHeader, setToastHeader] = useState('');
     const [toastBody, setToastBody] = useState('');
     const [toastBg, setToastBg] = useState('primary');
+
+    const [showExam, setShowExam] = useState(false);
+    const [selectedExam, setSelectedExam] = useState();
 
     //Number of element data in each page
     const pageSize = 2;
@@ -80,57 +86,50 @@ function StudentExamSearchForm() {
         goToPage(exams.totalPages);
     }
 
-    function publishExam(index) {
-        let newExams = { ...exams }
-        newExams.content[index].publicationDate = new Date().toISOString().slice(0, 10);
-        //saveExam(newExams.content[index])
-        updatePublicationDate({ id: newExams.content[index].id, publicationDate: newExams.content[index].publicationDate })
-            .then(
-                function (data) {
-                    //console.log(data);
-                    setExams(newExams);
-                    setToastHeader('Examen publicado!');
-                    setToastBody('Se ha publicado el examen ' + newExams.content[index].name);
-                    setToastBg('info');
-                    setShowToast(true);
-                },
-                function (err) {
-                    Promise.resolve(err).then(err => { console.error(err.toString())/*setSaveError(err.toString())*/ })
-                    setToastHeader('Error al publicar el examen!');
-                    setToastBody('No se ha podido publicar el examen ' + newExams.content[index].name);
-                    setToastBg('danger');
-                    setShowToast(true);
-                }
-            )
+    function viewExam(index) {
+        console.log(exams.content[index]);
+        setSelectedExam(exams.content[index]);
+        setShowExam(true);
     }
 
-    function deleteExam(index) {
-        console.log(index);
-        let newExams = { ...exams }
-        //test(newExams.content[index])
-        delExam(newExams.content[index])
-            .then(
-                function (data) {
-                    setToastHeader('Examen eliminado!');
-                    setToastBody('Se ha eliminado el examen ' + newExams.content[index].name);
-                    setToastBg('info');
-                    newExams.content.splice(index, 1);
-                    setExams(newExams);
-                    setShowToast(true);
-                },
-                function (err) {
-                    Promise.resolve(err).then(err => { console.error(err.toString()) })
-                    setToastHeader('Error al borar el examen!');
-                    setToastBody('No se ha podido borrar el examen ' + newExams.content[index].name);
-                    setToastBg('danger');
-                    setShowToast(true);
-                }
-            )
+    function saveExamAnswers(index) {
+        console.log(exams.content[index]);
+        let examAnswer = createExamAnswer(exams.content[index]);
+        saveExamAnswer(examAnswer)
+        .then(
+            function(res){ 
+                console.log('save ok');
+                /*
+                setShowSpinner(false);
+                dispatch({ type: actions.SAVE })
+                setToastHeader('Guardado');
+                setToastBody('El examen se ha guardado correctamente!');
+                setToastBg('light');
+                setSaveError(false);
+                setShowToast(true);
+                */
+            },
+            function(err) {
+                /*
+                setShowSpinner(false);
+                //Promise.resolve(err) 'cause err can be a Promise or not
+                setToastHeader('Error');
+                setToastBody('Ha ocurrido un error, el examen NO se ha guardado correctamente');
+                setToastBg('danger');
+                setShowToast(true);
+                setSaveError(true);
+                */
+                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+            }
+        )
 
+        //create and save ExamAnswer
+        //setSelectedExam(exams.content[index]);
+        //setShowExam(true);
     }
 
     function modifyExam(index) {
-        sessionStorage.setItem('exam', JSON.stringify(exams.content[index]));
+        StateManager.saveState('exam', exams.content[index]);
         navigate("/app/exam");
     }
 
@@ -254,7 +253,7 @@ function StudentExamSearchForm() {
                     <ExamList
                         pages={pages} exams={exams} activePage={activePage}
                         pageClicked={pageClick} pageFirst={pageFirst} pageLast={pageLast} pagePrev={pagePrev} pageNext={pageNext}
-                        publishExam={publishExam} modifyExam={modifyExam} deleteExam={deleteExam} >
+                        viewExam={viewExam} saveExamAnswers={saveExamAnswers}      >
                     </ExamList>
                     <ToastContainer className="position-fixed" style={{ zIndex: "1000" }} position="middle-center">
                         <CustomToastMsg show={showToast} onClose={closeSaveToast} delay={3000} header={toastHeader} body={toastBody} bg={toastBg} />
@@ -265,9 +264,9 @@ function StudentExamSearchForm() {
                 <Alert className="mt-2" variant="info">
                     La búsqueda no ha encontrado ningún examen para la asignatura {course.name} !
                 </Alert>
-            }
-
+            }            
             <div ref={messagesEndRef} />
+            <ModalExamView show={showExam} exam={selectedExam} onHide={()=>setShowExam(false)}/>
         </>
     );
 

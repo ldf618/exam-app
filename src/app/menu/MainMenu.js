@@ -1,12 +1,13 @@
 import { Navbar, Nav } from 'react-bootstrap';
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'; // <-- import styles to be used
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from "react-router-dom";
-import ConsultantMenu from './ConsultantMenu'
-import StudentMenu from './StudentMenu'
+import ConsultantMenu from './ConsultantMenu';
+import StudentMenu from './StudentMenu';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '../slices/counterSlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { decrement, increment } from '../slices/counterSlice';
+import StateManager from '../utils/StateManager';
 
 function MainMenu(props) {
     const count = useSelector((state) => state.counter.value)
@@ -14,8 +15,7 @@ function MainMenu(props) {
 
     const userClass = props.userClass;
     const navigate = useNavigate();
-    var course = sessionStorage.getItem('course');
-    course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" };
+    var course = StateManager.loadState('course')??{ "id": 0, "name": "" };
 
     return (
         <Navbar sticky="top" className="p-1" bg="dark" variant="dark" expand="lg">
@@ -31,8 +31,8 @@ function MainMenu(props) {
                     }
                     {userClass !== undefined && course != null && 
                         <Nav.Link onClick={() => {
-                            sessionStorage.removeItem('degree');
-                            sessionStorage.removeItem('course');
+                            StateManager.removeState('degree');
+                            StateManager.removeState('course');
                             navigate('./degreeSelect');
                         }}>
                                 <div style={{ flexWrap: 'nowrap' }}>
@@ -42,7 +42,7 @@ function MainMenu(props) {
                         </Nav.Link>
                     }
                     <Nav.Link onClick={() => { navigate("./test"); }} >Test</Nav.Link>
-                    <Nav.Link onClick={() => { sessionStorage.clear(); navigate("/"); }} >Salir</Nav.Link>
+                    <Nav.Link onClick={() => { StateManager.removeState(); navigate("/"); }} >Salir</Nav.Link>
                     <Nav.Link >{count}</Nav.Link>
                 </Nav>
             </Navbar.Collapse>

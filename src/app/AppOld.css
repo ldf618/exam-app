@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+body {
+	background-color: #FFFFFF;
+	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 24px;
+	color: #336699;
+}
+
+.cabeceraTitulo{
+	background-color:#000099;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color:#FFFFFF;
+	font-style: normal;
+	font-weight: bold;
+	border: 0;
+}
+td, th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 1px;
+	color: #333333;
+  border-collapse:separate;
+  border-radius:6px;
+}
+
+a {
+	color: #3366CC;
+	text-decoration: underline;
+}
+
+.title {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 30px;
+	line-height: 30px;
+	color: #0000CC;
+	text-align: center;
+	border-width: 2;
+	border-color: #D2E1F2;
+}
+
+.subtitle {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	line-height: 22px;
+	font-weight: bold;
+	color: #0000FF;
+	background-color: #FFFFFF;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.cabeceraPag {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #DCDCDC;
+}
+.cabeceraPeq1 {
+	font-family: Verdana, Geneva, Tahoma;
+	font-size: 13px;
+	color: #000000;
+	background-color: #D2E1F2;
+	font-weight: bold;
+}
+
+.cabeceraPeq2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	background-color: #D2E1F2;
+}
+
+.cabeceraNormal1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #000000;
+	background-color: #D2E1F2;
+	text-align: center;
+}
+
+.table{
+	font-family: Arial, Helvetica, sans-serif;
+	border-style: solid;
+	border-width: 1;
+  border-color: #0000CC;
+	background-color: #D2E1F2;  
+}
+
+table.reference
+{
+	font-family: Arial, Helvetica, sans-serif;
+  border-color: #0000CC;
+	border-style: solid;
+	border-width: 0;
+  border-collapse:separate;
+  border-radius:6px;
+	background-color: #D2E1F2;
+	width:100%;
+  height: 100%;
+}
+
+table.reference th
+{
+	background-color:#D2E1F2;
+	border:1px solid #0000CC;
+	padding:2px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	text-align: center;
+}
+
+table.reference td 
+{
+border:1px solid #0000CC;
+
+}
+
+.button{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 36px;
+	line-height: 36px;
+	color: #000000;
+	text-align: center;
+	border-width: 2;
+	border-color: #000066;
+	border-style: solid;
+}
+
+.negrita{
+	font-weight:bold;
+}
+
+.div800{
+width:800px
+}
+
+.div800Borde{
+	width:800px;
+	border-color:#0000CC;
+	border-width: 1px;
+	border-style: solid;
+}
+.div100PorcBorde{
+	width:100%;
+	border-color:#0000CC;
+	border-width: 1px;
+	border-style: solid;
+}
+.table100porc{
+	width:100%;
+}
+hr{
+	width:100%;
+	border-color:#0000CC;
+	border-width: 1px;
+	border-style: solid;
+}
+
+frame{
+	width:100%;
+	border-color:#0000CC;
+	border-width: 1px;
+	border-style: solid;
+}
+.resaltado{
+	font-weight:bold;
+	color:#FF0000;
+}
+
+.thinformacion{
+	font-style:italic;
+	font-size:12px;
+	color:#0000CC;
+	background-color: #C5C5C5;
+	text-align: center;
+}
+
+.thValoracion{
+	font-style:italic;
+	font-weight:bold;
+	font-size:14px;
+	color:#0000CC;
+	background-color: #C5C5C5;
+	text-align: center;
+}
+a.menu {
+	color: #0066FF;
+	text-decoration: underline;
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 0px;
+}
+
+/* From cssbuttons.io by @ke1221 */
+.button {
+  --background: #2358b9; /*#e8e8e8*/
+  --shadow: #6484c4; /*#c5c5c5*/
+  --text: #ffffff; /*#090909*/
+  --text-active: #acacac; /*#666*/
+  border: none;
+  color: var(--text);
+  padding: 0.7em 1.7em;
+  font-size: 15px;
+  border-radius: 0.5em;
+  background: var(--background);
+  border: 1px solid var(--background);
+  transition: all .3s;
+  box-shadow: 6px 6px 12px  var(--shadow),-6px -6px 12px #ffffff;
+  cursor:pointer;
+  width:100%
+ }
+ 
+.button:active {
+  color: var(--text-active);
+  box-shadow: inset 4px 4px 12px var(--shadow), inset -4px -4px 12px #ffffff;
+ }
+
+.button svg {
+	fill:var(--text);
+    float: inline-start;
+    width: 20px;
+    height: 20px;	
+}
+.button:active svg {
+	fill: var(--text-active);
+}
+
+.divinline{
+	display:inline-block;
+	white-space:nowrap;
+}
+
+input{
+	border-radius: 0.5em;
+	border: 1px solid #0000FF;
+	font-size: 15px;
+	width:100%;
+	height: 15mm;
+}
+
+input:focus{
+	border-color: #0000CC;
+	box-shadow: 0 0 10px #719ECE;
+	font-size: 25px;
+}
+
+.fondo{
+	position: absolute; 
+	top: 10%; 
+	left:0%;
+	right:0%; 
+	bottom: 10%;
+	background-color: #D2E1F2;
+	width: 450px;
+	margin: auto;
+	border: 1px solid #0000CC;
+	border-radius: 0.5em;
+	padding: 50px;
+ }
+
+
+

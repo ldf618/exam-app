@@ -12,8 +12,9 @@ import ExamForm from './app/consultant/ExamForm';
 import Exam from './app/consultant/Exam';
 import ExamSearchForm from './app/consultant/ExamSearchForm';
 import StudentExamSearchForm from './app/student/ExamSearchForm';
-import FetchExample from './app/test/FetchExample';
-import {ReduxExample} from './app/components/ReduxExample';
+import FetchExample from './app/student/ExamResponse';
+import ExamResponse from './app/test/FetchExample';
+import {ReduxExample} from './app/test/ReduxExample';
 import DegreesTable from './app/components/DegreesTable';
 import Test from './app/test/Test';
 
@@ -34,6 +35,7 @@ ReactDOM.render(
           <Route path="/app/degreesTable" element={<DegreesTable/>} />
           <Route path="/app/test" element={<Test/>} />
           <Route path="/app/studentExamSearch" element={<StudentExamSearchForm />} />
+          <Route path="/app/examResponse" element={<ExamResponse />} />
         </Route>
         <Route
           path="*"

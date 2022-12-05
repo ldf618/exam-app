@@ -9,6 +9,7 @@ import QuestionHeader from './QuestionHeader';
 import CustomToastMsg from '../components/CustomToastMsg';
 import { useNavigate } from "react-router-dom";
 import { saveExam } from '../apiCalls/api';
+import StateManager from '../utils/StateManager';
 
 export const examQuestionType = {
     TEXT_ONLY: { id: 1, desc: "Tipo Texto", type:"FREETEXT" },
@@ -112,37 +113,34 @@ function reducer(questions, action) {
 
 function Exam() {
     let navigate = useNavigate();
-    var exam = sessionStorage.getItem('exam');
-    if (exam !== undefined){
-        exam = JSON.parse(exam);
-        if (exam.examQuestions!==undefined){
-            let modifiedQuestions = 
-                exam.examQuestions.map(function(q){
-                    switch(q.type){                        
-                        case 'OPTIONS':
-                            q.category=q.isMultipleSelection?examQuestionType.TEST_MULTIPLE_CHOICE.id:examQuestionType.TEST_SINGLE_CHOICE.id;
-                            break;
-                        case 'FREETEXT':
-                            q.category=examQuestionType.TEXT_ONLY.id;
-                            break;
-                        case 'INDIVIDUAL_EVALUATION':
-                            q.category=examQuestionType.INDIVIDUAL_SCORE.id;
-                            break;
-                        case 'GROUP_EVALUATION':
-                            q.category=examQuestionType.GRUPAL_SCORE.id;                           
-                            break;
-                    }
-                    return q;
-                });
-                exam.examQuestions=modifiedQuestions;
-        }
+    var user = StateManager.loadState('localUser');
+    var course = StateManager.loadState('course');
+    var exam = StateManager.loadState('exam');
+
+    if (exam.examQuestions!==undefined){
+        let modifiedQuestions = 
+            exam.examQuestions.map(function(q){
+                switch(q.type){                        
+                    case 'OPTIONS':
+                        q.category=q.isMultipleSelection?examQuestionType.TEST_MULTIPLE_CHOICE.id:examQuestionType.TEST_SINGLE_CHOICE.id;
+                        break;
+                    case 'FREETEXT':
+                        q.category=examQuestionType.TEXT_ONLY.id;
+                        break;
+                    case 'INDIVIDUAL_EVALUATION':
+                        q.category=examQuestionType.INDIVIDUAL_SCORE.id;
+                        break;
+                    case 'GROUP_EVALUATION':
+                        q.category=examQuestionType.GRUPAL_SCORE.id;                           
+                        break;
+                }
+                return q;
+            });
+            exam.examQuestions=modifiedQuestions;
     }
-    else
-        exam = null;
 
     //console.log(exam)
-    var user = JSON.parse(sessionStorage.getItem('localUser'));
-    var course = JSON.parse(sessionStorage.getItem('course'));
+
 
     const [editableHeader, setEditableHeader] = useState(false);
     //    const [questions, setQuestions] = useState([]);

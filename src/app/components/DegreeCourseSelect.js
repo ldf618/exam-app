@@ -2,18 +2,19 @@ import { Card, Form, Container, Col, Row, Button, Alert } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import { degreesByUserId, coursesByUserIdDegreeId, groupByStudentIdAndCourseId, classroomByUserIdAndCourseId } from '../apiCalls/api';
+import StateManager from '../utils/StateManager';
 //import { getCourses } from "./../data";
 
 function DegreeCurseSelect() {
     let navigate = useNavigate();
-    var localUser = sessionStorage.getItem('localUser');
+    var localUser = StateManager.loadState('localUser');
 
     const [degrees,setDegrees] = useState([]);
     const [selectedDegree, setSelectedDegree] = useState(-1);
     const [selectedCourse, setSelectedCourse] = useState(-1);
     const [courses, setCourses] = useState([]);
     const [show, setShow] = useState(true);
-    const [user, setUser] = useState(localUser!==undefined?JSON.parse(localUser):{});
+    const [user, setUser] = useState(localUser??{}); //localUser!==null:localUser?{}
 
     const getDegrees = () => {
 
@@ -47,10 +48,10 @@ function DegreeCurseSelect() {
         let response;
         if (user.type==='Student'){
             response = await groupByStudentIdAndCourseId(studentId, courseId)
-            sessionStorage.setItem('group',JSON.stringify({'id':response[0][0],'name':response[0][1]}));
+            StateManager.saveState('group',{'id':response[0][0],'name':response[0][1]});
         }
         response = await classroomByUserIdAndCourseId(studentId, courseId, user.type)
-        sessionStorage.setItem('classroom',JSON.stringify({'id':response[0][0],'name':response[0][1]}));        
+        StateManager.saveState('classroom',{'id':response[0][0],'name':response[0][1]});        
         navigate("/app/initial");             
     }        
 
@@ -68,8 +69,8 @@ function DegreeCurseSelect() {
             const degree = degrees.find(degree=>degree.id==selectedDegree);
             const course = courses.find(course=>course.id==selectedCourse);
             storeClassroomAndGroup(user.id,selectedCourse);
-            sessionStorage.setItem('degree',degree.name);     
-            sessionStorage.setItem('course',JSON.stringify(course));     
+            StateManager.saveState('degree',degree.name);     
+            StateManager.saveState('course',course);     
         }
         else{
             setShow(false);

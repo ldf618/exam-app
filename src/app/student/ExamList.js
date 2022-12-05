@@ -1,11 +1,8 @@
-import {useState} from 'react';
 import { Table, Popover, OverlayTrigger } from 'react-bootstrap';
 import PaginationComponent from '../components/PaginationComponent.js';
 import ExamListMenu from './ExamListMenu';
 
-function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, pagePrev, pageNext, viewExam, createExamAnswers}) {
-
-    const [selectedExam, setSelectedExam] = useState();
+function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, pagePrev, pageNext, viewExam, saveExamAnswers}) {
 
     return (
         <>
@@ -47,7 +44,7 @@ function ExamList({exams, pages, activePage, pageClicked, pageFirst, pageLast, p
                                     <td>{exam.name}</td>
                                     </OverlayTrigger>                                    
                                     <td>
-                                        <ExamListMenu index={index} viewExam={viewExam} createExamAnswers={createExamAnswers}/>
+                                        <ExamListMenu index={index} viewExam={viewExam} saveExamAnswers={saveExamAnswers}/>
                                     </td>                                    
                                 </tr>                              
                                 )

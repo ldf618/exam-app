@@ -5,13 +5,14 @@ import { useNavigate} from 'react-router-dom';
 import { searchExam, updatePublicationDate, deleteExam as delExam, test } from '../apiCalls/api';
 import CustomToastMsg from '../components/CustomToastMsg';
 import {firstPageArray, lastPageArray, nextPageArray, prevPageArray, pageClickedArray} from '../components/PaginationComponent';
+import StateManager from '../utils/StateManager';
 
 function ExamSearchForm() {   
     
     const messagesEndRef = useRef(null)
 
-    var course = sessionStorage.getItem('course');
-    course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" }
+    var course = StateManager.loadState('course')??{ "id": 0, "name": "" };
+    //course = course !== 'undefined' ? JSON.parse(course) : { "id": 0, "name": "" }
     
     const navigate = useNavigate();
 
@@ -123,7 +124,7 @@ function ExamSearchForm() {
     }
 
     function modifyExam(index){
-        sessionStorage.setItem('exam', JSON.stringify(exams.content[index]));
+        StateManager.saveState('exam', exams.content[index]);
         navigate("/app/exam");
     }
 
