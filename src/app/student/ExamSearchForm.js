@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Accordion, Form, Row, Col, Container, Stack, Button, Alert, ToastContainer } from 'react-bootstrap';
+import { Accordion, Form, Row, Col, Container, Stack, Button, Alert, ToastContainer, Spinner } from 'react-bootstrap';
 import ExamList from './ExamList';
 import { useNavigate } from 'react-router-dom';
 import { searchExam } from '../apiCalls/api';
@@ -10,9 +10,13 @@ import ModalExamView from './ModalExamView';
 import createExamAnswer from './CreateExamAnswer';
 import { saveExamAnswer } from '../apiCalls/api';
 
-function StudentExamSearchForm() {
+import { useDispatch, useSelector } from 'react-redux'
+import { set } from '../slices/answerSlice'
 
-    const messagesEndRef = useRef(null)
+function StudentExamSearchForm() {
+    const ea = useSelector((state) => state.answer.value);
+
+    const messagesEndRef = useRef(null);
 
     var course = StateManager.loadState('course')??{ "id": 0, "name": "" };
 
@@ -31,6 +35,9 @@ function StudentExamSearchForm() {
     const [showExam, setShowExam] = useState(false);
     const [selectedExam, setSelectedExam] = useState();
 
+    const [showSpinner, setShowSpinner] = useState(false);
+    const dispatch = useDispatch();        
+
     //Number of element data in each page
     const pageSize = 2;
 
@@ -38,8 +45,7 @@ function StudentExamSearchForm() {
     const [activePage, setActivePage] = useState(1);
 
     //visible page buttons in pagination component [1,2, ... paginationPages]
-    const [pages, setPages] = useState([]);
-
+    const [pages, setPages] = useState([]);    
 
     function scrollToBottom() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -93,26 +99,23 @@ function StudentExamSearchForm() {
     }
 
     function saveExamAnswers(index) {
+        setShowSpinner(true);
         console.log(exams.content[index]);
         let examAnswer = createExamAnswer(exams.content[index]);
         saveExamAnswer(examAnswer)
         .then(
             function(res){ 
-                console.log('save ok');
-                /*
+                console.log("Response",res);
+                dispatch(set(res));
+                console.log("state:",ea);
                 setShowSpinner(false);
-                dispatch({ type: actions.SAVE })
-                setToastHeader('Guardado');
-                setToastBody('El examen se ha guardado correctamente!');
-                setToastBg('light');
-                setSaveError(false);
-                setShowToast(true);
-                */
+                navigate("/app/examResponse");
             },
             function(err) {
-                /*
+
                 setShowSpinner(false);
                 //Promise.resolve(err) 'cause err can be a Promise or not
+                /*
                 setToastHeader('Error');
                 setToastBody('Ha ocurrido un error, el examen NO se ha guardado correctamente');
                 setToastBg('danger');
@@ -130,7 +133,7 @@ function StudentExamSearchForm() {
 
     function modifyExam(index) {
         StateManager.saveState('exam', exams.content[index]);
-        navigate("/app/exam");
+        navigate("/app/examResponse");
     }
 
     function submitSearch(e) {
@@ -250,6 +253,9 @@ function StudentExamSearchForm() {
             </Accordion>
             {(!isLoading && exams.totalElements > 0) &&
                 <>
+                    <div className="position-absolute top-75 start-50 translate-middle" style={{ zIndex: "1000" }}>
+                        {showSpinner&&<Spinner animation="border" variant="primary" />}
+                    </div>
                     <ExamList
                         pages={pages} exams={exams} activePage={activePage}
                         pageClicked={pageClick} pageFirst={pageFirst} pageLast={pageLast} pagePrev={pagePrev} pageNext={pageNext}
@@ -264,9 +270,9 @@ function StudentExamSearchForm() {
                 <Alert className="mt-2" variant="info">
                     La búsqueda no ha encontrado ningún examen para la asignatura {course.name} !
                 </Alert>
-            }            
+            } 
             <div ref={messagesEndRef} />
-            <ModalExamView show={showExam} exam={selectedExam} onHide={()=>setShowExam(false)}/>
+            <ModalExamView show={showExam} exam={selectedExam} onHide={()=>setShowExam(false)}/>            
         </>
     );
 

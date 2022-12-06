@@ -1,6 +1,17 @@
-import { Stack, Card, ListGroup, Alert, Badge, Form } from 'react-bootstrap';
-import { showQuestionType, isFreetextQuestion,questionCheckType } from '../utils/Utils.js'
-export default function ExamResponse({ exam }) {
+import { Stack, Card, ListGroup, Alert, Badge, Form, Button } from 'react-bootstrap';
+import { showQuestionType, isFreetextQuestion,questionCheckType, isIndividualEvalQuestion, isOptionsQuestion } from '../utils/Utils.js'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+export default function ExamResponse(/*{ exam }*/) {
+    
+    const examAnswer = useSelector((state) => state.answer.value);
+    console.log(examAnswer);
+    const exam = examAnswer.exam;
+    const navigate = useNavigate();
+
+    const handleChange = (event) => {
+        //setParams({ ...params, [event.target.name]: event.target.value });
+    };    
 
     return (
         <>
@@ -16,7 +27,7 @@ export default function ExamResponse({ exam }) {
                     return (
                         <>
                             <Card>
-                                <Card.Header key={index}>
+                                <Card.Header >
                                     <Stack direction="horizontal" gap={3}>
                                         <strong>{question.wording}</strong>
                                         <Badge className="ms-auto" bg="secondary">{showQuestionType(question.type, question.isMultipleSelection)}</Badge>
@@ -29,12 +40,15 @@ export default function ExamResponse({ exam }) {
                                             /*onChange={handleChange} onBlur={handleBlur}*/ />
                                     </>
                                 }
-                                <ListGroup as="ol" numbered>
+                                <ListGroup key={index} as="ol">
                                     {question.examQuestionOptions.map((option, index2) => {
                                         return (
-                                            <ListGroup.Item key={index2} as="li">
-                                                <Form.Check type={questionCheckType(question.type)}></Form.Check>
-                                                {option.answer}                                        
+                                            <ListGroup.Item key={index2} as="li" /*className="d-flex flex-row "*/>
+                                                <Stack direction="horizontal" gap={3} /*className="align-items-start"*/>
+                                                    {isOptionsQuestion(question.type)&&<Form.Check name={"p"+index} type={questionCheckType(question.isMultipleSelection)}></Form.Check>}
+                                                    <span>{option.answer}</span>
+                                                    {isIndividualEvalQuestion(question.type)&&<Form.Control className="w-auto" maxLength={5} type="number" step={1} min={0} max={10}/>}
+                                                </Stack>
                                             </ListGroup.Item>
                                         )
                                     })
@@ -47,6 +61,11 @@ export default function ExamResponse({ exam }) {
                 }
                 )
             }
+        </Stack>
+        <Stack direction="horizontal" gap={3}>
+            <Button>Guardar</Button>
+            <Button>Enviar Examen</Button>
+            <Button className="ms-auto" variant="secondary" onClick={()=>navigate('/app/initial')}>Salir</Button>
         </Stack>
         </>
     )
