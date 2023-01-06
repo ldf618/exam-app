@@ -65,3 +65,30 @@ export function isGroupEvalQuestion(type) {
     else
         return false;
 }
+
+/*returns a complete copy of an object with no references to the original object*/
+export function deepCopyObject (object){
+    return JSON.parse(JSON.stringify(object));//DeepCopy { ...object};
+}
+
+export function getCurrentDate(){
+    let d = new Date();
+    d.setTime( d.getTime() - new Date().getTimezoneOffset()*60*1000 );
+    return d;
+}
+
+export function getBaseUrl (){
+    return process.env.REACT_APP_API_URL;
+}
+
+export function getBase64ImageType (content){
+    switch (content?.charAt(0)){
+        case '/' : return 'jpg';
+        case 'i' : return 'png';
+        case 'R' : return 'gif';
+        case 'U' : return 'webp';
+        default: return null;
+    }
+}
+
+

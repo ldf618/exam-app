@@ -11,7 +11,6 @@ import './App.css'
 function App() {
   let navigate = useNavigate();
   var localUser = StateManager.loadState('localUser');
- 
   //esto se ejecuta despues de cargar la pagina
   useEffect(() => {
   if (localUser==null)

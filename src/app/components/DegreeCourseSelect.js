@@ -1,4 +1,4 @@
-import { Card, Form, Container, Col, Row, Button, Alert } from 'react-bootstrap';
+import { Card, Form, Container, Col, Row, Button, Alert, Figure } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import { degreesByUserId, coursesByUserIdDegreeId, groupByStudentIdAndCourseId, classroomByUserIdAndCourseId } from '../apiCalls/api';
@@ -126,7 +126,7 @@ function DegreeCurseSelect() {
                     </Container>
                 </Form>
             </Card.Body>
-        </Card>
+        </Card>        
     );
 }
 

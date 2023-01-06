@@ -11,4 +11,5 @@ export default configureStore({
         user: userReducer,
         answer: answerReducer,
       },
+      middleware: getDefaultMiddleware => getDefaultMiddleware({serializableCheck: false,}),
 })

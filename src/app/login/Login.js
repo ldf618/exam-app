@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, /*regular, brands*/ } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import { faAngry } from '@fortawesome/free-regular-svg-icons';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 //import { authenticate } from "../testData/data";
 import { authenticateUser, userByName } from '../apiCalls/api';
 import StateManager from '../utils/StateManager';
@@ -51,7 +51,7 @@ function Login() {
                 .then(
                   function (authUser){
                     StateManager.saveState('localUser',authUser);
-                    navigate("/app/degreeselect");
+                    navigate("/app/degreeSelect");
                   },
                   function(err2) {
                     //Promise.resolve(err) 'cause err can be a Promise or not
@@ -120,7 +120,18 @@ const longw = {width: '400px'}
               </Button>
             </Col>
           </Row>
-        </Container>      
+
+        </Container>
+        <Container className="mt-5">
+        <Row>
+            <Col>
+              <p>¿Nuevo usuario?...</p>
+            </Col>
+            <Col align="right">
+              <Link to="/register">Registrate</Link>
+            </Col>
+        </Row>
+          </Container>      
       </Form> 
     </div>
     </>    

@@ -39,7 +39,7 @@ export default class StateManager {
         sessionStorage.removeItem(item);
     }
 
-    static removeState (){
+    static clearState (){        
         sessionStorage.clear();
     }
 }

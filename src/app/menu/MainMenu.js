@@ -15,7 +15,7 @@ function MainMenu(props) {
 
     const userClass = props.userClass;
     const navigate = useNavigate();
-    var course = StateManager.loadState('course')??{ "id": 0, "name": "" };
+    var course = StateManager.loadState('course');//??{ "id": 0, "name": "" };
 
     return (
         <Navbar sticky="top" className="p-1" bg="dark" variant="dark" expand="lg">
@@ -23,17 +23,17 @@ function MainMenu(props) {
             <Navbar.Toggle />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    {userClass === "Student" && course != null &&
+                    {userClass === "Student" && course &&
                         <StudentMenu />
                     }
-                    {userClass === "Consultant" && course != null &&
+                    {userClass === "Consultant" && course &&
                         <ConsultantMenu />
                     }
-                    {userClass !== undefined && course != null && 
+                    {userClass !== undefined && course && 
                         <Nav.Link onClick={() => {
                             StateManager.removeState('degree');
                             StateManager.removeState('course');
-                            navigate('./degreeSelect');
+                            navigate('/app/degreeSelect');
                         }}>
                                 <div style={{ flexWrap: 'nowrap' }}>
                                     <FontAwesomeIcon icon={solid('right-left')} />
@@ -42,7 +42,7 @@ function MainMenu(props) {
                         </Nav.Link>
                     }
                     <Nav.Link onClick={() => { navigate("./test"); }} >Test</Nav.Link>
-                    <Nav.Link onClick={() => { StateManager.removeState(); navigate("/"); }} >Salir</Nav.Link>
+                    <Nav.Link onClick={() => { StateManager.clearState(); navigate("/"); }} >Salir</Nav.Link>
                     <Nav.Link >{count}</Nav.Link>
                 </Nav>
             </Navbar.Collapse>

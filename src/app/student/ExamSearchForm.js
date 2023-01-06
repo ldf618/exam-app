@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { set } from '../slices/answerSlice'
 
 function StudentExamSearchForm() {
-    const ea = useSelector((state) => state.answer.value);
+//    const ea = useSelector((state) => state.answer.value);
 
     const messagesEndRef = useRef(null);
 
@@ -107,7 +107,7 @@ function StudentExamSearchForm() {
             function(res){ 
                 console.log("Response",res);
                 dispatch(set(res));
-                console.log("state:",ea);
+                //console.log("state:",ea);
                 setShowSpinner(false);
                 navigate("/app/examResponse");
             },

@@ -7,10 +7,11 @@ export const answerSlice = createSlice({
   },
   reducers: {
     del: (state) => {
-        state.value={}
+        state.value={};
     },
     set: (state, action) => {
-        state.value = action.payload
+        console.log(action);
+        state.value = action.payload;
     },
   },
 })
