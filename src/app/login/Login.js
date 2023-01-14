@@ -66,7 +66,7 @@ function Login() {
           },      
           function(err) {
               //Promise.resolve(err) 'cause err can be a Promise or not
-              Promise.resolve(err).then(err=>{setIncorrectUser(true);console.log(err.toString())})
+              Promise.resolve(err).then(err=>{setIncorrectUser(true);console.log(err.msg)})
           }
       )
   }

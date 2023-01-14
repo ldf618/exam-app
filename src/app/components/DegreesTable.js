@@ -52,7 +52,7 @@ function DegreesTable() {
                 console.log(degrees);
             })
             .catch((err) => {
-                Promise.resolve(err).then(err=>{setFetchError(err.toString())})
+                Promise.resolve(err).then(err=>{setFetchError(err.msg)})
                 setIsLoading(false);
             });
     };
@@ -72,7 +72,7 @@ function DegreesTable() {
             },
             function(err) {
                 //Promise.resolve(err) 'cause err can be a Promise or not
-                Promise.resolve(err).then(err=>{setSaveError(err.toString())})
+                Promise.resolve(err).then(err=>{setSaveError(err.msg)})
             }
         )
     }
@@ -90,7 +90,7 @@ function DegreesTable() {
             },      
             function(err) {
                 //Promise.resolve(err) 'cause err can be a Promise or not
-                Promise.resolve(err).then(err=>{setSaveError(err.toString())})
+                Promise.resolve(err).then(err=>{setSaveError(err.msg)})
             }
         )
     }

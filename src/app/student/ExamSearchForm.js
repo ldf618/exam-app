@@ -122,7 +122,7 @@ function StudentExamSearchForm() {
                 setShowToast(true);
                 setSaveError(true);
                 */
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.error(err.msg)/*setSaveError(err.toString())*/})
             }
         )
 
@@ -167,7 +167,7 @@ function StudentExamSearchForm() {
                     scrollToBottom();
                 },
                 function (err) {
-                    Promise.resolve(err).then(err => { console.error(err.toString())/*setSaveError(err.toString())*/ })
+                    Promise.resolve(err).then(err => { console.error(err.msg)/*setSaveError(err.toString())*/ })
                 }
             )
     }

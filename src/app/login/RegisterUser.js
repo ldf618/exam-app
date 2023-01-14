@@ -1,8 +1,23 @@
 import { useState } from 'react';
-import { Button, Form, Row, Col, Container, Figure } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Button, Form, Row, Col, Container, Figure, ToastContainer } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import { registerUser, registerUserMultipart } from '../apiCalls/api';
+import CustomToastMsg from '../components/CustomToastMsg';
+import { dniValidation } from '../utils/Utils';
+import StateManager from '../utils/StateManager';
+
+
+Yup.addMethod(Yup.string, "dniValidation", function (errorMessage) {
+    return this.test("test-dni-validation", errorMessage, function (value) {
+      const { path, createError } = this;
+      return (
+        dniValidation(value) ||
+        createError({ path, message: errorMessage })
+      );
+    });
+  });
 
 const validationSchema = Yup.object().shape({
     type: Yup.string()
@@ -29,13 +44,37 @@ const validationSchema = Yup.object().shape({
     surname2: Yup.string()
         .max(50, "*Debe tener como máximo 50 caracteres"),
     dni: Yup.string()
-        .min(9, "*Debe tener al menos 9 caracteres")
+        .trim()
+        .min(2, "*Debe tener al menos 2 caracteres")
         .max(9, "*Debe tener como máximo 9 caracteres")
-        .required("*Es obligatorio escribir un DNI"),
+        .required("*Es obligatorio escribir un DNI")
+        .matches(/^\d{1,8}[a-zA-Z]$/,"*Formato incorrecto")
+        .dniValidation("Letra incorrecta")
+        /*.test("test-name", "Letra incorrecta", 
+            function(dni) {
+                let dniNumbers = dni.substring(0,dni.length-1);
+                let dniLetter = dni.substring(dni.length-1,1);
+                let remainder = dniNumbers % 23;
+                let validLetters='TRWAGMYFPDXBNJZSQVHLCKET';
+                let correctDniLetter=validLetters.substring(remainder,remainder+1);
+                console.log(correctDniLetter);
+                if (correctDniLetter!=dniLetter.toUpperCase())
+                    return false;
+                else
+                    return true;
+            })*/
 });
 
 export default function RegisterUser() {
+    let navigate = useNavigate();
+
     const [imageSrc, setImageSrc] = useState();
+    const [imageFile, setImageFile] = useState();
+    const [showToast, setShowToast] = useState(false);
+    const [toastHeader, setToastHeader] = useState('');
+    const [toastBody, setToastBody] = useState('');
+    const [toastBg, setToastBg] = useState('primary');
+    const [saveError, setSaveError] = useState(false);
 
     var initial = { type: '', username: '', password1: '', password2: '', firstname: '', surname1: '', surname2: '', dni: '', photo:'' };
 
@@ -45,10 +84,11 @@ export default function RegisterUser() {
         let content = fileReader.result;
         setImageSrc(content);
     }
-
+    
     function uploadFile(event) {
     
         let file = event.target.files[0];
+        setImageFile(file);
 
         if (file) {
             //let data = new FormData();
@@ -61,23 +101,50 @@ export default function RegisterUser() {
         else setImageSrc();
     }
 
+    function closeSaveToast(){
+        setShowToast(false);
+        if (!saveError)
+            navigate("/app/initial");
+    }
+
     return (
         <Formik
             initialValues={initial}
             enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={
-                (values, { setSubmitting }) => {
-                    setSubmitting(true);
-                    console.log(values);
-                    console.log(imageSrc);
-                    setSubmitting(false);
-                    /*StateManager.saveState('exam', values);
-                    if (modify) {
-                        props.changeEditable(false);
-                    } else {
-                        navigate("/app/exam");
-                    }*/
+                (values, { setSubmitting, setFieldError }) => {
+                    setSubmitting(true);                    
+//                    const {password1, password2, ...user}=values;
+                    const {password1, password2, photo, ...user}=values;
+                    if (imageFile) user.photo=imageFile;
+                    user.password=password1;
+                    console.log(user);
+                   
+                    registerUserMultipart(user)
+                    .then(
+                        function(res){ 
+                            console.log(res);
+                            StateManager.saveState('localUser',res);
+                            navigate("/app/degreeSelect");
+                            setSubmitting(false);                    
+                        },      
+                        function(err) {
+                            Promise.resolve(err).then(err=>{
+                                console.log(err.code)
+                                if (err.code===409)
+                                    setFieldError('username',err.msg);
+                                else{
+                                    setShowToast(true);
+                                    setToastHeader('Error interno');
+                                    setToastBody(err.msg);
+                                    setToastBg('danger');
+                                    setSaveError(true);
+                                    }
+                                })
+                            setSubmitting(false);
+                        }
+                    )
                 }
             }
         >
@@ -99,14 +166,14 @@ export default function RegisterUser() {
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>Usuario:</Form.Label>
-                                            <Form.Control id="username" type="text" placeholder="Usuario" value={values.username} isInvalid={!!errors.username} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="username" type="text" placeholder="Usuario" value={values.username} isInvalid={touched.username && !!errors.username} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.username}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Tipo usuario:</Form.Label>
-                                            <Form.Select id="type" defaultValue={-1} /*value={values.type}*/ isInvalid={!!errors.type} onChange={handleChange} onBlur={handleBlur}>
+                                            <Form.Select id="type" defaultValue={-1} /*value={values.type}*/ isInvalid={touched.type && !!errors.type} onChange={handleChange} onBlur={handleBlur}>
                                                 <option disabled value={-1}></option>
                                                 <option key="Consultant" value={"Consultant"}>Consultor</option>
                                                 <option key="Student" value={"Student"}>Alumno</option>
@@ -119,14 +186,14 @@ export default function RegisterUser() {
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>Clave:</Form.Label>
-                                            <Form.Control id="password1" type="password" value={values.password1} isInvalid={!!errors.password1} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="password1" type="password" value={values.password1} isInvalid={touched.password1 && !!errors.password1} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.password1}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>Confirmar clave:</Form.Label>
-                                            <Form.Control id="password2" type="password" value={values.password2} isInvalid={!!errors.password2} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="password2" type="password" value={values.password2} isInvalid={touched.password2 && !!errors.password2} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.password2}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
@@ -135,28 +202,28 @@ export default function RegisterUser() {
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>Nombre:</Form.Label>
-                                            <Form.Control id="firstname" type="text" placeholder="Nombre" value={values.firstname} isInvalid={!!errors.firstname} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="firstname" type="text" placeholder="Nombre" value={values.firstname} isInvalid={touched.firstname && !!errors.firstname} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.firstname}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>1<sup>er</sup> apellido:</Form.Label>
-                                            <Form.Control id="surname1" type="text" placeholder="Primer apellido" value={values.surname1} isInvalid={!!errors.surname1} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="surname1" type="text" placeholder="Primer apellido" value={values.surname1} isInvalid={touched.surname1 && !!errors.surname1} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.surname1}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>2<sup>do</sup> apellido:</Form.Label>
-                                            <Form.Control id="surname2" type="text" placeholder="Segundo apellido" value={values.surname2} isInvalid={!!errors.surname2} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="surname2" type="text" placeholder="Segundo apellido" value={values.surname2} isInvalid={touched.surname2 && !!errors.surname2} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.surname2}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Group className="mb-3" >
                                             <Form.Label>Dni:</Form.Label>
-                                            <Form.Control id="dni" type="text" value={values.dni} isInvalid={!!errors.dni} onChange={handleChange} onBlur={handleBlur} />
+                                            <Form.Control id="dni" type="text" value={values.dni} isInvalid={touched.dni && !!errors.dni} onChange={handleChange} onBlur={handleBlur} />
                                             <Form.Control.Feedback type="invalid" >{errors.dni}</Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
@@ -174,10 +241,13 @@ export default function RegisterUser() {
                                     <Col className="row justify-content-center">
                                         <Button className="w-50 mb-3" variant="primary" type="submit" disabled={isSubmitting}>
                                             Registrarse
-                                        </Button>
-                                    </Col>
+                                        </Button>                                        
+                                    </Col>                                    
                                 </Row>
                             </Container>
+                            <ToastContainer  className="position-fixed" style={{zIndex: "1000"}} position="middle-center">        
+                                <CustomToastMsg show={showToast} onClose={closeSaveToast} delay={3000} header={toastHeader} body={toastBody} bg={toastBg}/>
+                            </ToastContainer>
                             <Container className="d-flex justify-content-center mt-5">
                                 <Row>
                                     <Col>

@@ -23,7 +23,7 @@ function DegreeCurseSelect() {
                 setDegrees(data);
             })
             .catch((err) => {
-                Promise.resolve(err).then(err=>{console.log(err)/*setFetchError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.log(err.msg)/*setFetchError(err.toString())*/})
                 //setIsLoading(false);
             });
     };
@@ -39,7 +39,7 @@ function DegreeCurseSelect() {
                 setCourses(data);
             })
             .catch((err) => {
-                Promise.resolve(err).then(err=>{console.log(err)/*setFetchError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.log(err.msg)/*setFetchError(err.toString())*/})
                 //setIsLoading(false);
             });
     };

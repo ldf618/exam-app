@@ -91,4 +91,20 @@ export function getBase64ImageType (content){
     }
 }
 
+export function dniValidation(dni){
+
+    if (!dni) return false;
+    if (dni.length<2) return false;
+    let dniNumbers = dni.slice(0,dni.length-1);
+    let dniLetter = dni.slice(-1);
+    let remainder = dniNumbers % 23;
+    let validLetters='TRWAGMYFPDXBNJZSQVHLCKET';
+    let correctDniLetter=validLetters.slice(remainder,remainder+1);
+
+    if (correctDniLetter!=dniLetter.toUpperCase())
+        return false;
+    else
+        return true;
+}
+
 

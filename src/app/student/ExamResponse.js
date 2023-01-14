@@ -98,7 +98,7 @@ export default function ExamResponse() {
                 setToastBg('danger');
                 setShowToast(true);
                 setSaveError(true);
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.error(err.msg)/*setSaveError(err.toString())*/})
             }
         )
     }

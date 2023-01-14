@@ -35,7 +35,7 @@ function Test (){
                 setIsLoading(false);
             },
             function(err) {
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.error(err.msg)/*setSaveError(err.toString())*/})
             }
         )
     }

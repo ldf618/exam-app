@@ -89,7 +89,7 @@ function ExamSearchForm() {
                 setShowToast(true);
             },
             function(err) {
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.error(err.msg)/*setSaveError(err.toString())*/})
                 setToastHeader('Error al publicar el examen!');
                 setToastBody('No se ha podido publicar el examen '+newExams.content[index].name);   
                 setToastBg('danger');   
@@ -113,7 +113,7 @@ function ExamSearchForm() {
                 setShowToast(true);
             },
             function(err) {
-                Promise.resolve(err).then(err=>{console.error(err.toString())})
+                Promise.resolve(err).then(err=>{console.error(err.msg)})
                 setToastHeader('Error al borar el examen!');
                 setToastBody('No se ha podido borrar el examen '+newExams.content[index].name);   
                 setToastBg('danger');   
@@ -158,7 +158,7 @@ function ExamSearchForm() {
                 scrollToBottom();
             },
             function(err) {
-                Promise.resolve(err).then(err=>{console.error(err.toString())/*setSaveError(err.toString())*/})
+                Promise.resolve(err).then(err=>{console.error(err.msg)/*setSaveError(err.toString())*/})
             }
         )
     }
