@@ -19,6 +19,8 @@ export default class StateManager {
 
     static saveState(item, state) {
         try {
+            console.log("state", state)
+            console.log("item", item)
             let serializedState = JSON.stringify(state);
             sessionStorage.setItem(item, serializedState);
   /*          if (item==='localUser'){

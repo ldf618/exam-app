@@ -51,6 +51,7 @@ function Login() {
                 .then(
                   function (authUser){
                     StateManager.saveState('localUser',authUser);
+                    console.log("loadUser",StateManager.loadState('localUser'));
                     navigate("/app/degreeSelect");
                   },
                   function(err2) {

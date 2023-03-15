@@ -13,6 +13,8 @@ function App() {
   var localUser = StateManager.loadState('localUser');
   //esto se ejecuta despues de cargar la pagina
   useEffect(() => {
+    localUser = StateManager.loadState('localUser');
+    console.log(localUser);
   if (localUser==null)
       navigate("/")   
    },[localUser])
